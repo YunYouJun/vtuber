@@ -28,3 +28,7 @@
 即通过 WebRTC 读取视频、Tensorflow.js 捕捉特征点、映射到 Live2D Web，最后通过 OBS 加载浏览器资源实现直播。（~~总感觉有很多坑要踩~~）
 
 > 因为技术力有限，本仓库主要用于记录学习尝试中的过程，但不保证一定能实现预想中的目标。（~~勿谓言之不预也~~）
+
+## Base
+
+- [face-api.js](https://github.com/justadudewhohacks/face-api.js/)

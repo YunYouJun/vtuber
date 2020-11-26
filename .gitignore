@@ -1,7 +1,11 @@
 # custom
-.DS_Store
 package-lock.json
 yarn.lock
+
+node_modules
+.DS_Store
+dist
+*.local
 
 # Created by https://www.toptal.com/developers/gitignore/api/node
 # Edit at https://www.toptal.com/developers/gitignore?templates=node

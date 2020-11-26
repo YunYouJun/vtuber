@@ -1,0 +1,20 @@
+{
+  "name": "vtuber",
+  "version": "0.0.1",
+  "author": "YunYouJun <me@yunyoujun.cn>",
+  "repository": "https://github.com/YunYouJun/vtuber.git",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "face-api.js": "^0.22.2",
+    "vue": "^3.0.2"
+  },
+  "devDependencies": {
+    "@vue/compiler-sfc": "^3.0.2",
+    "sass": "^1.29.0",
+    "vite": "^1.0.0-rc.8"
+  }
+}
