@@ -1,27 +1,46 @@
 <template>
-  <div id="rects"></div>
-  <video
-    id="webcam"
-    ref="webcamVideo"
-    width="1280"
-    height="720"
-    autoplay
-    controls
-  ></video>
-  <canvas id="overlay" ref="overlay"></canvas>
+  <div :class="['video-container', flip ? 'flip' : '']">
+    <video
+      id="webcam"
+      class="video-card"
+      ref="webcamVideo"
+      autoplay
+      controls
+    ></video>
+    <canvas id="overlay" class="webcam-overlay" ref="overlay"></canvas>
+  </div>
+  <div class="video-control">
+    <button class="agm-button" @click="debug = !debug">DEBUG</button>
+    <button class="agm-button" @click="flip = !flip">翻转</button>
+    <button class="agm-button" @click="withFaceLandmarks = !withFaceLandmarks">
+      标记
+    </button>
+    <button class="agm-button" @click="withLandmarkIndex = !withLandmarkIndex">
+      索引
+    </button>
+  </div>
 </template>
 
 <script>
 import * as faceapi from "face-api.js";
-import { changeWebcamStream } from "../lib/js/webcam";
+import { Webcam } from "../lib/webcam";
 export default {
   data() {
     return {
+      debug: false,
+
+      webcam: null,
+
       videoEl: null,
       overlay: null,
+      ctx: null,
 
       minConfidence: 0.5,
-      withBoxes: true,
+      withBoxes: false,
+      withFaceLandmarks: true,
+      withLandmarkIndex: true,
+
+      flip: false,
     };
   },
 
@@ -30,6 +49,8 @@ export default {
 
     this.videoEl = this.$refs.webcamVideo;
     this.overlay = this.$refs.overlay;
+    this.ctx = this.overlay.getContext("2d");
+    this.ctx.font = "100px serif";
 
     this.initWebcam();
   },
@@ -41,17 +62,17 @@ export default {
       const weightFolder = "/weights";
       await faceapi.nets.ssdMobilenetv1.loadFromUri(weightFolder);
       await faceapi.loadFaceLandmarkModel(weightFolder);
-
-      faceapi;
     },
 
     /**
      * 初始化 Webcam
      */
     async initWebcam() {
-      await changeWebcamStream();
       const videoEl = this.videoEl;
-      videoEl.onloadedmetadata = () => {
+      this.webcam = new Webcam(videoEl);
+      await this.webcam.init();
+
+      this.videoEl.onloadedmetadata = () => {
         this.onPlay();
       };
     },
@@ -67,8 +88,10 @@ export default {
         minConfidence: this.minConfidence,
       });
 
+      // we only need single face
+      // .detectAllFaces(videoEl, options)
       const results = await faceapi
-        .detectAllFaces(videoEl, options)
+        .detectSingleFace(videoEl, options)
         .withFaceLandmarks();
 
       const canvas = this.overlay;
@@ -86,10 +109,27 @@ export default {
       const dims = faceapi.matchDimensions(canvas, videoEl, true);
       const resizedResults = faceapi.resizeResults(results, dims);
 
+      if (this.debug) {
+        console.log(resizedResults);
+      }
+
+      // draw detections
       if (this.withBoxes) {
         faceapi.draw.drawDetections(canvas, resizedResults);
       }
-      faceapi.draw.drawFaceLandmarks(canvas, resizedResults);
+
+      if (this.withFaceLandmarks) {
+        faceapi.draw.drawFaceLandmarks(canvas, resizedResults);
+        // draw text number
+        const points = resizedResults.landmarks.positions;
+        this.$store.commit("face/setPoints", points);
+
+        if (this.withLandmarkIndex) {
+          points.forEach((point, i) => {
+            this.ctx.fillText(i, point.x, point.y);
+          });
+        }
+      }
     },
   },
 };
@@ -97,25 +137,44 @@ export default {
 
 <style lang="scss">
 video {
-  position: absolute;
-  left: 0px;
-  top: 0px;
+  outline: none;
 }
 
-#rects {
+.video-container {
   position: relative;
+  width: 640px;
+  height: 360px;
+  margin: 0 auto;
 }
 
-.rect {
+.video-card {
+  border-radius: 5px;
+}
+
+#webcam {
   position: absolute;
-  border: 2px dashed;
+  inset: 0;
+  width: 640px;
+  height: 360px;
 }
 
-.text {
-  font-size: 1em;
-  padding: 5px;
-  @media screen and (max-width: 600px) {
-    font-size: 0.8em;
-  }
+.webcam-overlay {
+  position: absolute;
+  inset: 0;
+  width: 640px;
+  height: 360px;
+}
+
+.flip {
+  transform: rotateY(180deg);
+}
+
+// augma
+.agm-button {
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 1rem;
+  border-radius: 4px;
+  border: 1px solid black;
+  background: white;
 }
 </style>
