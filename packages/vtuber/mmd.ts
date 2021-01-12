@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
-// import { GUI } from "three/examples/jsm/libs/dat.gui.module";
+// @ts-ignore
+import { GUI } from "three/examples/jsm/libs/dat.gui.module.js";
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { OutlineEffect } from "three/examples/jsm/effects/OutlineEffect.js";
@@ -18,6 +19,8 @@ let container = document.createElement("div");
 let stats: Stats;
 
 let helper: MMDAnimationHelper;
+let ikHelper: any;
+let physicsHelper: any;
 
 let mesh: THREE.SkinnedMesh;
 let camera: THREE.PerspectiveCamera;
@@ -101,15 +104,11 @@ export function init() {
 
       helper.add(mesh, { animation: mmd.animation, physics: true });
 
-      const ikHelper = (helper as any).objects
-        .get(mesh)
-        .ikSolver.createHelper();
+      ikHelper = (helper as any).objects.get(mesh).ikSolver.createHelper();
       ikHelper.visible = false;
       scene.add(ikHelper);
 
-      const physicsHelper = (helper as any).objects
-        .get(mesh)
-        .physics.createHelper();
+      physicsHelper = (helper as any).objects.get(mesh).physics.createHelper();
       physicsHelper.visible = false;
       scene.add(physicsHelper);
 
@@ -129,7 +128,60 @@ export function init() {
    * GUI
    */
   function initGui() {
-    // const gui = new GUI();
+    const params = {
+      animation: true,
+      ik: true,
+      outline: true,
+      physics: true,
+      showIkBones: false,
+      showRigidBodies: false,
+    };
+
+    GUI.TEXT_OPEN = "打开控制面板";
+    GUI.TEXT_CLOSED = "关闭控制面板";
+    const gui = new GUI();
+    gui
+      .add(params, "animation")
+      .name("动画")
+      .onChange(function () {
+        helper.enable("animation", params["animation"]);
+      });
+
+    gui
+      .add(params, "ik")
+      .name("反向动力学")
+      .onChange(function () {
+        helper.enable("ik", params["ik"]);
+      });
+
+    gui
+      .add(params, "outline")
+      .name("描边")
+      .onChange(function () {
+        effect.enabled = params["outline"];
+      });
+
+    gui
+      .add(params, "physics")
+      .name("物理")
+      .onChange(function () {
+        helper.enable("physics", params["physics"]);
+      });
+
+    gui
+      .add(params, "showIkBones")
+      .name("显示骨骼")
+      .onChange(function () {
+        ikHelper.visible = params["showIkBones"];
+      });
+
+    gui
+      .add(params, "showRigidBodies")
+      .name("显示刚体")
+      .onChange(function () {
+        if (physicsHelper !== undefined)
+          physicsHelper.visible = params["showRigidBodies"];
+      });
   }
 }
 
