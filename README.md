@@ -19,3 +19,7 @@ yarn dev
 ## Base
 
 - [face-api.js](https://github.com/justadudewhohacks/face-api.js/)
+
+## Thanks
+
+- [Kizuna AI official website](https://kizunaai.com/): 非商业模型免费使用

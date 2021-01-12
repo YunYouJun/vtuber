@@ -34,3 +34,25 @@
 face_landmark_68_mode 仅 350KB。
 
 而我们将这些点坐标与其代表含义建立对应关系即可。
+
+### 三二一，茄子
+
+总之，咱们得先有一个 Vtuber 形象用于映射。
+
+[使用 canvas 来绘制图形 - MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes) 中的笑脸是个不错的例子。
+
+本质便是由弧线、圆圈组成，我们就绘制它来作为我们的初始形象吧。
+
+Python 里有 [NumPy](https://numpy.org/)，JavaScript 里就用 [mathjs](https://github.com/josdejong/mathjs) 凑合一下吧。
+
+#### 统计特征点
+
+已知 30 是鼻子的中心点，而我们需要使用眉毛的中心与下巴的中心构成三角形，以计算头部的左右旋转角度。
+
+#### 头的左右旋转
+
+那么首先我们需要获取
+
+---
+
+- [webgl_loader_mmd | three.js](https://threejs.org/examples/?q=mmd#webgl_loader_mmd)

@@ -10,6 +10,7 @@
     <canvas id="overlay" class="webcam-overlay" ref="overlay"></canvas>
   </div>
   <div class="video-control">
+    <button class="agm-button" @click="onPlay">开始</button>
     <button class="agm-button" @click="debug = !debug">DEBUG</button>
     <button class="agm-button" @click="flip = !flip">翻转</button>
     <button class="agm-button" @click="withFaceLandmarks = !withFaceLandmarks">
@@ -21,37 +22,53 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import * as faceapi from "face-api.js";
+import { defineComponent, ref } from "vue";
 import { Webcam } from "../lib/webcam";
-export default {
+
+import { PositionPoint } from "../../packages/vtuber/types/index";
+
+export default defineComponent({
+  setup() {
+    const debug = ref(false);
+    const webcam = ref<Webcam | null>(null);
+    return {
+      debug,
+      webcam,
+    };
+  },
   data() {
     return {
-      debug: false,
-
-      webcam: null,
-
-      videoEl: null,
-      overlay: null,
-      ctx: null,
+      videoEl: <HTMLVideoElement | null>null,
+      overlay: <HTMLCanvasElement | null>null,
+      ctx: <null | CanvasRenderingContext2D>null,
 
       minConfidence: 0.5,
       withBoxes: false,
       withFaceLandmarks: true,
       withLandmarkIndex: true,
-
-      flip: false,
     };
   },
 
+  computed: {
+    flip: {
+      get() {
+        return this.$store.state.webcam.flip;
+      },
+      set(val) {
+        return this.$store.commit("webcam/setFlip", val);
+      },
+    },
+  },
+
   async mounted() {
+    this.videoEl = this.$refs.webcamVideo as HTMLVideoElement;
+    this.overlay = this.$refs.overlay as HTMLCanvasElement;
+
     await this.loadModel();
-
-    this.videoEl = this.$refs.webcamVideo;
-    this.overlay = this.$refs.overlay;
-    this.ctx = this.overlay.getContext("2d");
-    this.ctx.font = "100px serif";
-
+    this.ctx = (this.$refs.overlay as HTMLCanvasElement).getContext("2d");
+    (this.ctx as CanvasRenderingContext2D).font = "100px serif";
     this.initWebcam();
   },
 
@@ -69,20 +86,23 @@ export default {
      */
     async initWebcam() {
       const videoEl = this.videoEl;
+      if (!videoEl) return;
+
       this.webcam = new Webcam(videoEl);
       await this.webcam.init();
 
-      this.videoEl.onloadedmetadata = () => {
-        this.onPlay();
-      };
+      // videoEl.onloadedmetadata = () => {
+      //   this.onPlay();
+      // };
     },
 
     async onPlay() {
       const videoEl = this.videoEl;
       if (!videoEl) return;
 
-      if (videoEl.paused || videoEl.ended)
-        return setTimeout(() => this.onPlay(), 100);
+      if (videoEl.paused || videoEl.ended) {
+        setTimeout(() => this.onPlay(), 100);
+      }
 
       const options = new faceapi.SsdMobilenetv1Options({
         minConfidence: this.minConfidence,
@@ -102,9 +122,11 @@ export default {
       setTimeout(() => this.onPlay());
     },
 
-    drawFaceRecognitionResults(results) {
+    drawFaceRecognitionResults(results: any) {
       const videoEl = this.videoEl;
       const canvas = this.overlay;
+
+      if (!canvas || !videoEl) return;
 
       const dims = faceapi.matchDimensions(canvas, videoEl, true);
       const resizedResults = faceapi.resizeResults(results, dims);
@@ -125,14 +147,16 @@ export default {
         this.$store.commit("face/setPoints", points);
 
         if (this.withLandmarkIndex) {
-          points.forEach((point, i) => {
-            this.ctx.fillText(i, point.x, point.y);
+          points.forEach((point: PositionPoint, i: number) => {
+            if (this.ctx) {
+              this.ctx.fillText(i.toString(), point.x, point.y);
+            }
           });
         }
       }
     },
   },
-};
+});
 </script>
 
 <style lang="scss">
@@ -163,10 +187,7 @@ video {
   inset: 0;
   width: 640px;
   height: 360px;
-}
-
-.flip {
-  transform: rotateY(180deg);
+  pointer-events: none;
 }
 
 // augma

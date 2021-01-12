@@ -1,7 +1,7 @@
 <template>
   <div class="vtuber-container">
     <canvas
-      class="vtuber-canvas"
+      :class="['vtuber-canvas', flip ? 'flip' : null]"
       ref="vtuberCanvas"
       width="640"
       height="360"
@@ -9,12 +9,13 @@
   </div>
 </template>
 
-<script>
-import { mapState } from "vuex";
-export default {
+<script lang="ts">
+import { computed, defineComponent } from "vue";
+import { useStore } from "vuex";
+export default defineComponent({
   data() {
     return {
-      ctx: null,
+      ctx: <null | CanvasRenderingContext2D>null,
 
       center: [75, 75],
       radius: 50,
@@ -22,25 +23,29 @@ export default {
       ratio: 2,
     };
   },
+  setup() {
+    const store = useStore();
+    return {
+      facePoints: computed(() => store.state.face.points),
+      flip: computed(() => store.state.webcam.flip),
+    };
+  },
   mounted() {
     this.initVtuber();
   },
-  computed: {
-    ...mapState({
-      facePoints: (state) => state.face.points,
-    }),
-  },
   methods: {
     initVtuber() {
-      const canvas = this.$refs.vtuberCanvas;
+      const canvas = this.$refs.vtuberCanvas as HTMLCanvasElement;
       const ctx = canvas.getContext("2d");
       this.ctx = ctx;
+
+      if (!ctx) return;
 
       // setInterval
       setInterval(() => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        if (this.facePoints[30]) {
+        if (this.facePoints && this.facePoints[30]) {
           this.center = [
             this.facePoints[30].x / this.ratio,
             this.facePoints[30].y / this.ratio,
@@ -53,6 +58,7 @@ export default {
 
     drawVtuber() {
       const ctx = this.ctx;
+      if (!ctx) return;
 
       const center = this.center;
       const radius = this.radius;
@@ -67,7 +73,7 @@ export default {
       // arc 默认顺时针
 
       ctx.beginPath();
-      ctx.arc(...center, radius, 0, Math.PI * 2, true);
+      ctx.arc(center[0], center[1], radius, 0, Math.PI * 2, true);
 
       // draw mouth
       ctx.moveTo(center[0] + mouthRadius, center[1] + mouthHeight);
@@ -104,7 +110,7 @@ export default {
       ctx.stroke();
     },
   },
-};
+});
 </script>
 
 <style lang="scss">
