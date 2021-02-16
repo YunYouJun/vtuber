@@ -1,19 +1,41 @@
 <template>
-  <face-detection />
-  <vtuber-canvas />
+  <div class="home text-center">
+    <h1>从零开始的 Vtuber</h1>
+    <hr style="margin: 2rem" />
+    <a :href="pkg.repository" target="_blank">
+      <i-carbon-logo-github class="github" style="margin: auto" />
+    </a>
+  </div>
 </template>
 
 <script lang="ts">
+import { isDev } from "vtuber/utils";
 import { defineComponent } from "vue";
-
-import FaceDetection from "../components/FaceDetection.vue";
-import VtuberCanvas from "../components/VtuberCanvas.vue";
-
+import pkg from "../../package.json";
 export default defineComponent({
-  name: "App",
-  components: {
-    FaceDetection,
-    VtuberCanvas,
+  data() {
+    return {
+      pkg,
+    };
+  },
+  mounted() {
+    if (isDev()) {
+      console.info("当前处于开发模式下...");
+    }
   },
 });
 </script>
+
+<style lang="scss">
+.home {
+  margin-top: 5rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.github {
+  font-size: 2rem;
+}
+</style>

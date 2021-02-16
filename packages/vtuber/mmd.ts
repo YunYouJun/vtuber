@@ -8,6 +8,9 @@ import { OutlineEffect } from "three/examples/jsm/effects/OutlineEffect.js";
 import { MMDLoader } from "three/examples/jsm/loaders/MMDLoader.js";
 import { MMDAnimationHelper } from "three/examples/jsm/animation/MMDAnimationHelper.js";
 
+import { generateResult, DetectResult } from "./parse";
+import face from "../../src/store/modules/face";
+
 /**
  * Webcam 检测得到的数据
  */
@@ -15,7 +18,6 @@ export interface ResultData {
   [propName: string]: any;
 }
 
-let container = document.createElement("div");
 let stats: Stats;
 
 let helper: MMDAnimationHelper;
@@ -32,12 +34,26 @@ const clock = new THREE.Clock();
 
 const modelFile = "models/kizunaai/kizunaai.pmx";
 
+export interface VtuberOptions {
+  /**
+   * 加载动画
+   */
+  withAnimation?: boolean;
+}
+
 /**
  * init vtuber mmd
  */
-export function init() {
-  container = document.createElement("div");
-  document.body.appendChild(container);
+export function initVtuber(
+  container: HTMLElement,
+  options: VtuberOptions = {}
+) {
+  window.inited = true;
+  const defaultOptions = {
+    withAnimation: false,
+  };
+
+  options = Object.assign(defaultOptions, options);
 
   camera = new THREE.PerspectiveCamera(
     20,
@@ -89,34 +105,56 @@ export function init() {
     }
   }
 
-  const vmdFiles = ["models/mmd/vmds/wavefile_v2.vmd"];
   helper = new MMDAnimationHelper();
 
   const mmdLoader = new MMDLoader();
-  mmdLoader.loadWithAnimation(
-    modelFile,
-    vmdFiles,
-    function (mmd) {
-      mesh = mmd.mesh;
+  if (options.withAnimation) {
+    const vmdFiles = ["models/mmd/vmds/wavefile_v2.vmd"];
+    mmdLoader.loadWithAnimation(
+      modelFile,
+      vmdFiles,
+      (mmd) => {
+        mesh = mmd.mesh;
+        mesh.position.y = gridHelper.position.y;
+
+        scene.add(mesh);
+
+        helper.add(mesh, { animation: mmd.animation, physics: true });
+
+        createIkHelper();
+        createPhysicsHelper();
+
+        initGui();
+      },
+      onProgress,
+      undefined
+    );
+  } else {
+    mmdLoader.load(modelFile, (object) => {
+      mesh = object;
       mesh.position.y = gridHelper.position.y;
 
       scene.add(mesh);
 
-      helper.add(mesh, { animation: mmd.animation, physics: true });
+      helper.add(mesh, { physics: true });
 
-      ikHelper = (helper as any).objects.get(mesh).ikSolver.createHelper();
-      ikHelper.visible = false;
-      scene.add(ikHelper);
-
-      physicsHelper = (helper as any).objects.get(mesh).physics.createHelper();
-      physicsHelper.visible = false;
-      scene.add(physicsHelper);
-
+      createIkHelper();
+      createPhysicsHelper();
       initGui();
-    },
-    onProgress,
-    undefined
-  );
+    });
+  }
+
+  function createIkHelper() {
+    ikHelper = (helper as any).objects.get(mesh).ikSolver.createHelper();
+    ikHelper.visible = false;
+    scene.add(ikHelper);
+  }
+
+  function createPhysicsHelper() {
+    physicsHelper = (helper as any).objects.get(mesh).physics.createHelper();
+    physicsHelper.visible = false;
+    scene.add(physicsHelper);
+  }
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.minDistance = 10;
@@ -128,6 +166,10 @@ export function init() {
    * GUI
    */
   function initGui() {
+    // 如果已经存在
+    const $gui = document.querySelector(".dg.ac");
+    if ($gui) return;
+
     const params = {
       animation: true,
       ik: true,
@@ -207,15 +249,64 @@ function render() {
  *
  * @param result
  */
-export function animate() {
-  requestAnimationFrame(animate);
+export function animate(result?: DetectResult) {
+  requestAnimationFrame(() => {
+    let result;
+    if (window.face) {
+      result = generateResult();
+    } else {
+      result = window.vtuberResult;
+    }
+    animate(result);
+  });
   stats.begin();
-  render();
+  if (result) {
+    renderWithResult(result);
+  } else {
+    render();
+  }
   stats.end();
 }
 
-// export function run(result: ResultData) {
-//   requestAnimationFrame(() => {
-//     run(result);
-//   });
-// }
+export function renderWithResult(result: DetectResult) {
+  const { mouth } = result;
+  if (!mesh.morphTargetInfluences) return;
+  const mouthIndex = getMouthIndex(mouth);
+
+  if (mouthIndex) {
+    mesh.morphTargetInfluences[mouthIndex] = 1;
+  }
+
+  render();
+
+  // reset
+  if (mouthIndex) {
+    mesh.morphTargetInfluences[mouthIndex] = 0;
+  }
+}
+
+/**
+ * 根据张开百分比 设置嘴形
+ * mouth: 9 -> 13 -> 14 -> 12 -> 16 -> 17 -> 11
+ * 生气：17
+ * 疑惑：16
+ * 惊讶：14
+ * 小开：11
+ * 半开：12
+ * 大开：13
+ * 大笑：9
+ * @param mouth
+ */
+function getMouthIndex(mouth: number) {
+  let mouthIndex = 0;
+  if (mouth > 0.4) {
+    mouthIndex = 9;
+  } else if (mouth > 0.3) {
+    mouthIndex = 13;
+  } else if (mouth > 0.2) {
+    mouthIndex = 12;
+  } else if (mouth > 0.1) {
+    mouthIndex = 11;
+  }
+  return mouthIndex;
+}

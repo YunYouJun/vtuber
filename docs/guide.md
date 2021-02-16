@@ -35,6 +35,10 @@ face_landmark_68_mode 仅 350KB。
 
 而我们将这些点坐标与其代表含义建立对应关系即可。
 
+![dlib 68 point](../public/images/face-68-landmarks.jpg)
+
+我们可以看到 dlib 给出的 68 个点对应的位置。
+
 ### 三二一，茄子
 
 总之，咱们得先有一个 Vtuber 形象用于映射。

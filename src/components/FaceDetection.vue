@@ -25,9 +25,10 @@
 <script lang="ts">
 import * as faceapi from "face-api.js";
 import { defineComponent, ref } from "vue";
-import { Webcam } from "../lib/webcam";
+import { Webcam } from "vtuber/utils/webcam";
+import { loadModel } from "vtuber/detect";
 
-import { PositionPoint } from "../../packages/vtuber/types/index";
+import { PositionPoint } from "vtuber/types/index";
 
 export default defineComponent({
   setup() {
@@ -66,21 +67,15 @@ export default defineComponent({
     this.videoEl = this.$refs.webcamVideo as HTMLVideoElement;
     this.overlay = this.$refs.overlay as HTMLCanvasElement;
 
-    await this.loadModel();
-    this.ctx = (this.$refs.overlay as HTMLCanvasElement).getContext("2d");
-    (this.ctx as CanvasRenderingContext2D).font = "100px serif";
+    await loadModel();
+    if (this.$refs.overlay) {
+      this.ctx = (this.$refs.overlay as HTMLCanvasElement).getContext("2d");
+      (this.ctx as CanvasRenderingContext2D).font = "100px serif";
+    }
     this.initWebcam();
   },
 
   methods: {
-    async loadModel() {
-      // load face detection and face landmark models
-      // await changeFaceDetector(SSD_MOBILENETV1);s
-      const weightFolder = "/weights";
-      await faceapi.nets.ssdMobilenetv1.loadFromUri(weightFolder);
-      await faceapi.loadFaceLandmarkModel(weightFolder);
-    },
-
     /**
      * 初始化 Webcam
      */
@@ -122,7 +117,14 @@ export default defineComponent({
       setTimeout(() => this.onPlay());
     },
 
-    drawFaceRecognitionResults(results: any) {
+    drawFaceRecognitionResults(
+      results: faceapi.WithFaceLandmarks<
+        {
+          detection: faceapi.FaceDetection;
+        },
+        faceapi.FaceLandmarks68
+      >
+    ) {
       const videoEl = this.videoEl;
       const canvas = this.overlay;
 
@@ -144,7 +146,12 @@ export default defineComponent({
         faceapi.draw.drawFaceLandmarks(canvas, resizedResults);
         // draw text number
         const points = resizedResults.landmarks.positions;
-        this.$store.commit("face/setPoints", points);
+        // this.$store.commit("face/setPoints", points);
+        // 挂载到全局
+        window.face = {
+          enable: true,
+          points,
+        };
 
         if (this.withLandmarkIndex) {
           points.forEach((point: PositionPoint, i: number) => {
