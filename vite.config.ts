@@ -1,16 +1,18 @@
 import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
+import Vue from "@vitejs/plugin-vue";
 import path from "path";
 import Components from "vite-plugin-components";
 import Icons, { ViteIconsResolver } from "vite-plugin-icons";
+import Pages from "vite-plugin-pages";
 
 export default defineConfig({
   plugins: [
-    vue(),
+    Vue(),
     Components({
       customComponentResolvers: ViteIconsResolver(),
     }),
     Icons(),
+    Pages(),
   ],
   resolve: {
     alias: {

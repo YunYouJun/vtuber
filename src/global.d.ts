@@ -1,9 +1,9 @@
-import { defineComponent } from "vue";
 import * as faceapi from "face-api.js";
 import { DetectResult } from "vtuber/parse";
 
 declare module "*.vue" {
-  const component: ReturnType<typeof defineComponent>;
+  import type { DefineComponent } from "vue";
+  const component: DefineComponent<{}, {}, any>;
   export default component;
 }
 

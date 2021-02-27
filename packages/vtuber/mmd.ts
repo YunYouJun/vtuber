@@ -9,7 +9,6 @@ import { MMDLoader } from "three/examples/jsm/loaders/MMDLoader.js";
 import { MMDAnimationHelper } from "three/examples/jsm/animation/MMDAnimationHelper.js";
 
 import { generateResult, DetectResult } from "./parse";
-import face from "../../src/store/modules/face";
 
 /**
  * Webcam 检测得到的数据

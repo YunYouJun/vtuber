@@ -31,7 +31,7 @@ export function generateResult(): DetectResult | undefined {
   const percent = height / width;
 
   // debug
-  console.log(width, height, percent);
+  // console.log(width, height, percent);
 
   return {
     mouth: percent,
