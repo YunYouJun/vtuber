@@ -6,6 +6,8 @@
       ref="webcamVideo"
       autoplay
       controls
+      width="640"
+      height="480"
     ></video>
     <canvas id="overlay" class="webcam-overlay" ref="overlay"></canvas>
   </div>

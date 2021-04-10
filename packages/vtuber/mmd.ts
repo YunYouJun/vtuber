@@ -29,6 +29,8 @@ let scene: THREE.Scene;
 let renderer: THREE.WebGLRenderer;
 let effect: OutlineEffect;
 
+let head: any;
+
 const clock = new THREE.Clock();
 
 const modelFile = "models/kizunaai/kizunaai.pmx";
@@ -122,6 +124,7 @@ export function initVtuber(
 
         createIkHelper();
         createPhysicsHelper();
+        bindBones();
 
         initGui();
       },
@@ -139,6 +142,8 @@ export function initVtuber(
 
       createIkHelper();
       createPhysicsHelper();
+      bindBones();
+
       initGui();
     });
   }
@@ -153,6 +158,13 @@ export function initVtuber(
     physicsHelper = (helper as any).objects.get(mesh).physics.createHelper();
     physicsHelper.visible = false;
     scene.add(physicsHelper);
+  }
+
+  function bindBones() {
+    // bind bones
+    const bones = physicsHelper.physics.mesh.skeleton.bones;
+    // 头部
+    head = bones[8];
   }
 
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -272,6 +284,11 @@ export function renderWithResult(result: DetectResult) {
   if (!mesh.morphTargetInfluences) return;
   const mouthIndex = getMouthIndex(mouth);
 
+  // 旋转
+  head.rotation.x = result.head.rotation.x * 5;
+  head.rotation.y = result.head.rotation.y * 5;
+  head.rotation.z = result.head.rotation.z * 5;
+
   if (mouthIndex) {
     mesh.morphTargetInfluences[mouthIndex] = 1;
   }
@@ -282,6 +299,37 @@ export function renderWithResult(result: DetectResult) {
   if (mouthIndex) {
     mesh.morphTargetInfluences[mouthIndex] = 0;
   }
+}
+
+export enum Mouth {
+  /**
+   * 生气
+   */
+  Angry = 17,
+  /**
+   * 疑惑
+   */
+  Haze = 16,
+  /**
+   * 惊讶
+   */
+  Amazed = 14,
+  /**
+   * 小
+   */
+  Small = 11,
+  /**
+   * 半
+   */
+  Half = 12,
+  /**
+   * Big
+   */
+  Big = 13,
+  /**
+   * 大笑
+   */
+  Laugh = 9,
 }
 
 /**
@@ -299,13 +347,13 @@ export function renderWithResult(result: DetectResult) {
 function getMouthIndex(mouth: number) {
   let mouthIndex = 0;
   if (mouth > 0.4) {
-    mouthIndex = 9;
+    mouthIndex = Mouth.Laugh;
   } else if (mouth > 0.3) {
-    mouthIndex = 13;
+    mouthIndex = Mouth.Big;
   } else if (mouth > 0.2) {
-    mouthIndex = 12;
+    mouthIndex = Mouth.Half;
   } else if (mouth > 0.1) {
-    mouthIndex = 11;
+    mouthIndex = Mouth.Small;
   }
   return mouthIndex;
 }

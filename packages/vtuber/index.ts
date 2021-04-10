@@ -1,19 +1,6 @@
 import { animate, initVtuber } from "./mmd";
-import { PositionPoint } from "./types/index";
 import { getScript, isDev } from "vtuber/utils";
 import { ASSETS } from "vtuber/utils/cdn";
-
-interface KeyPoints {
-  eyeCenter: PositionPoint;
-  noseCenter: PositionPoint;
-  jawCenter: PositionPoint;
-}
-
-/**
- * 获取水平旋转量
- * @param keyPoints 关键点
- */
-export function getHorizontalRotation(keyPoints: KeyPoints) {}
 
 export function main(AmmoLib: any) {
   // Ammo = AmmoLib;
