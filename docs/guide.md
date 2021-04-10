@@ -1,5 +1,7 @@
 # Guide
 
+[![GitHub Repo stars](https://img.shields.io/github/stars/YunYouJun/vtuber?style=social)](https://github.com/YunYouJun/vtuber)
+
 ## 前言
 
 因为经济拮据，家道中落，我打算出道成为 Vtuber。（~~好，很有精神！~~）
@@ -35,9 +37,15 @@ face_landmark_68_mode 仅 350KB。
 
 而我们将这些点坐标与其代表含义建立对应关系即可。
 
-![dlib 68 point](../public/images/face-68-landmarks.jpg)
+![dlib 68 point](/images/face-68-landmarks.jpg)
 
 我们可以看到 dlib 给出的 68 个点对应的位置。
+
+为了更方便的使用，我们可以将其各点用对象进行命名并一一对应。
+
+见 `packages/vtuber/face.ts`。
+
+<<< @/../packages/vtuber/face.ts
 
 ### 三二一，茄子
 
@@ -55,7 +63,60 @@ Python 里有 [NumPy](https://numpy.org/)，JavaScript 里就用 [mathjs](https:
 
 #### 头的左右旋转
 
-那么首先我们需要获取
+那么首先我们需要获取标准的正面，我们假设人的正脸是对称的，也就是说眉毛的中心，鼻子的中心，下巴的中心应当是可以连成直线的。
+
+眉毛的中心，我们可以通过取左眉毛中点与右眉毛中点连线的中点。
+
+```ts
+const browCenter = points[FaceMap.brow.left[2]]
+  .add(points[FaceMap.brow.right[2]])
+  .div({ x: 2, y: 2 });
+```
+
+鼻子中心
+
+```ts
+const noseCenter = points[FaceMap.nose.nostrils[2]];
+```
+
+下巴中心
+
+```ts
+const jawCenter = points[FaceMap.jaw[2]];
+```
+
+当转头时，三个点相连，应当是一个三角形。
+
+我们暂且将眉毛中心到下巴中心这条最长的线称之为 `中线`，眉毛中心到鼻子中心的这条线称之为 `上斜线`。
+
+```ts
+const midline = browCenter.sub(jawCenter);
+// 上斜边
+const topline = browCenter.sub(noseCenter);
+
+// 转化为 Three.js 里的向量以使用叉乘
+const midlineVector = new THREE.Vector2(midline.x, midline.y);
+const toplineVector = new THREE.Vector2(topline.x, topline.y);
+```
+
+中线与上斜线进行 [叉乘(向量积)](https://baike.baidu.com/item/%E5%90%91%E9%87%8F%E7%A7%AF)，则可以得到三角形的面积。
+
+`鼻子转过的高度 = 三角形面积 / 中线长度`
+
+而所谓 `鼻子转过的高度` 即与脸水平旋转的角度正相关。
+
+```ts
+// 旋转头部模型的 Y 轴
+const rotationY =
+    midlineVector.cross(toplineVector) / (midlineLength * midlineLength);
+...
+const ratio = 5
+head.rotation.y = rotationY * ratio
+```
+
+> 也许应当有一个正确的换算方式，但是我测试放大倍率为 `5` 的时候效果还不错，总之先将就用下吧！
+
+![又不是不能用](https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/meme/not-unusable.jpg)
 
 ---
 

@@ -11,7 +11,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs"
   },
   "dependencies": {
     "augma": "0.1.1",
@@ -35,6 +38,7 @@
     "vite": "^2.1.5",
     "vite-plugin-components": "^0.8.3",
     "vite-plugin-icons": "^0.5.0",
-    "vite-plugin-pages": "^0.9.3"
+    "vite-plugin-pages": "^0.9.3",
+    "vitepress": "^0.13.0"
   }
 }

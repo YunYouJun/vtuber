@@ -10,6 +10,13 @@ import { MMDAnimationHelper } from "three/examples/jsm/animation/MMDAnimationHel
 
 import { generateResult, DetectResult } from "./parse";
 
+import { getMouthIndex } from "./render/mouth";
+import {
+  MMDPhysics,
+  MMDPhysicsHelper,
+} from "three/examples/jsm/animation/MMDPhysics";
+import { CCDIKHelper } from "three/examples/jsm/animation/CCDIKSolver";
+
 /**
  * Webcam 检测得到的数据
  */
@@ -20,8 +27,9 @@ export interface ResultData {
 let stats: Stats;
 
 let helper: MMDAnimationHelper;
-let ikHelper: any;
-let physicsHelper: any;
+let ikHelper: CCDIKHelper | undefined;
+let physics: MMDPhysics | undefined;
+let physicsHelper: MMDPhysicsHelper | undefined;
 
 let mesh: THREE.SkinnedMesh;
 let camera: THREE.PerspectiveCamera;
@@ -29,6 +37,9 @@ let scene: THREE.Scene;
 let renderer: THREE.WebGLRenderer;
 let effect: OutlineEffect;
 
+/**
+ * 头部
+ */
 let head: any;
 
 const clock = new THREE.Clock();
@@ -149,22 +160,31 @@ export function initVtuber(
   }
 
   function createIkHelper() {
-    ikHelper = (helper as any).objects.get(mesh).ikSolver.createHelper();
-    ikHelper.visible = false;
-    scene.add(ikHelper);
+    ikHelper = helper.objects.get(mesh)?.ikSolver.createHelper();
+
+    if (ikHelper) {
+      ikHelper.visible = false;
+      scene.add(ikHelper);
+    }
   }
 
   function createPhysicsHelper() {
-    physicsHelper = (helper as any).objects.get(mesh).physics.createHelper();
-    physicsHelper.visible = false;
-    scene.add(physicsHelper);
+    physics = helper.objects.get(mesh)?.physics;
+    physicsHelper = physics?.createHelper();
+
+    if (physicsHelper) {
+      physicsHelper.visible = false;
+      scene.add(physicsHelper);
+    }
   }
 
   function bindBones() {
     // bind bones
-    const bones = physicsHelper.physics.mesh.skeleton.bones;
-    // 头部
-    head = bones[8];
+    const bones = physics?.mesh.skeleton.bones;
+    if (bones) {
+      // 头部
+      head = bones[8];
+    }
   }
 
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -224,16 +244,19 @@ export function initVtuber(
     gui
       .add(params, "showIkBones")
       .name("显示骨骼")
-      .onChange(function () {
-        ikHelper.visible = params["showIkBones"];
+      .onChange(() => {
+        if (ikHelper) {
+          ikHelper.visible = params["showIkBones"];
+        }
       });
 
     gui
       .add(params, "showRigidBodies")
       .name("显示刚体")
       .onChange(function () {
-        if (physicsHelper !== undefined)
+        if (physicsHelper) {
           physicsHelper.visible = params["showRigidBodies"];
+        }
       });
   }
 }
@@ -284,10 +307,17 @@ export function renderWithResult(result: DetectResult) {
   if (!mesh.morphTargetInfluences) return;
   const mouthIndex = getMouthIndex(mouth);
 
-  // 旋转
-  head.rotation.x = result.head.rotation.x * 5;
-  head.rotation.y = result.head.rotation.y * 5;
-  head.rotation.z = result.head.rotation.z * 5;
+  /**
+   * 旋转头部
+   * @param ratoio 比例
+   */
+  function rotateHead(ratio = 5) {
+    head.rotation.x = result.head.rotation.x * ratio;
+    head.rotation.y = result.head.rotation.y * ratio;
+    head.rotation.z = result.head.rotation.z * ratio;
+  }
+
+  rotateHead();
 
   if (mouthIndex) {
     mesh.morphTargetInfluences[mouthIndex] = 1;
@@ -299,61 +329,4 @@ export function renderWithResult(result: DetectResult) {
   if (mouthIndex) {
     mesh.morphTargetInfluences[mouthIndex] = 0;
   }
-}
-
-export enum Mouth {
-  /**
-   * 生气
-   */
-  Angry = 17,
-  /**
-   * 疑惑
-   */
-  Haze = 16,
-  /**
-   * 惊讶
-   */
-  Amazed = 14,
-  /**
-   * 小
-   */
-  Small = 11,
-  /**
-   * 半
-   */
-  Half = 12,
-  /**
-   * Big
-   */
-  Big = 13,
-  /**
-   * 大笑
-   */
-  Laugh = 9,
-}
-
-/**
- * 根据张开百分比 设置嘴形
- * mouth: 9 -> 13 -> 14 -> 12 -> 16 -> 17 -> 11
- * 生气：17
- * 疑惑：16
- * 惊讶：14
- * 小开：11
- * 半开：12
- * 大开：13
- * 大笑：9
- * @param mouth
- */
-function getMouthIndex(mouth: number) {
-  let mouthIndex = 0;
-  if (mouth > 0.4) {
-    mouthIndex = Mouth.Laugh;
-  } else if (mouth > 0.3) {
-    mouthIndex = Mouth.Big;
-  } else if (mouth > 0.2) {
-    mouthIndex = Mouth.Half;
-  } else if (mouth > 0.1) {
-    mouthIndex = Mouth.Small;
-  }
-  return mouthIndex;
 }
