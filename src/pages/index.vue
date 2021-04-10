@@ -1,6 +1,8 @@
 <template>
   <div class="home text-center">
-    <h1>从零开始的 Vtuber</h1>
+    <a href="https://docs.vtuber.yunyoujun.cn" target="_blank">
+      <h1>从零开始的 Vtuber</h1>
+    </a>
     <hr style="margin: 2rem" />
     <a :href="pkg.repository" target="_blank">
       <i-carbon-logo-github class="github" style="margin: auto" />

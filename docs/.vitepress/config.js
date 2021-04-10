@@ -14,10 +14,7 @@ module.exports = {
     lastUpdated: "上次更新",
 
     sidebar: {
-      "/": [
-        { text: "指南", link: "/guide" },
-        { text: "参考", link: "/ref" },
-      ],
+      "/guide/": getGuideSidebar(),
     },
   },
 
@@ -26,3 +23,19 @@ module.exports = {
     ["meta", { name: "author", content: "YunYouJun" }],
   ],
 };
+
+/**
+ * 获取导航侧边栏
+ */
+function getGuideSidebar() {
+  return [
+    {
+      text: "指南",
+      children: [
+        { text: "Why Web VTuber?", link: "/guide/index" },
+        { text: "开始", link: "/guide/start" },
+        { text: "参考", link: "/guide/ref" },
+      ],
+    },
+  ];
+}
