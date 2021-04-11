@@ -2,6 +2,10 @@
 
 [![GitHub Repo stars](https://img.shields.io/github/stars/YunYouJun/vtuber?style=social)](https://github.com/YunYouJun/vtuber)
 
+[![GitHub Pages](https://github.com/YunYouJun/vtuber/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/YunYouJun/vtuber/actions/workflows/gh-pages.yml)
+
+这里有个 [在线示例](https://vtuber.yunyoujun.cn)，会随着文档的内容更新而不断延伸下去，但是不得不承认线上还是挺卡的。
+
 ## 前言
 
 因为经济拮据，家道中落，我打算出道成为 Vtuber。（~~好，很有精神！~~）

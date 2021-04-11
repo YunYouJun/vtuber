@@ -13,6 +13,8 @@ module.exports = {
     editLinkText: "帮助咱们改善文档！",
     lastUpdated: "上次更新",
 
+    nav: [{ text: "在线示例", link: "https://vtuber.yunyoujun.cn" }],
+
     sidebar: {
       "/guide/": getGuideSidebar(),
     },

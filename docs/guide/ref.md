@@ -9,6 +9,9 @@
 
 ## 其他有趣可以参考的东西
 
+- [Vtuber_Tutorial](https://github.com/RimoChan/Vtuber_Tutorial): 【教程】从零开始的自制 Vtuber！
+- [OpenVtuber](https://github.com/1996scarlet/OpenVtuber): 虚拟爱抖露(アイドル)共享计划, 是基于单目 RGB 摄像头的人眼与人脸特征点检测算法, 在实时 3D 面部捕捉以及模型驱动领域的应用
+
 ### 在浏览器里训练看哪里
 
 - [Learning where you are looking at (in the browser)](https://cpury.github.io/learning-where-you-are-looking-at/)

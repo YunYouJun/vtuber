@@ -25,7 +25,7 @@
     "vuex": "^4.0.0"
   },
   "devDependencies": {
-    "@iconify/json": "^1.1.327",
+    "@iconify/json": "^1.1.328",
     "@types/node": "^14.14.37",
     "@types/three": "^0.127.0",
     "@vitejs/plugin-vue": "^1.2.1",

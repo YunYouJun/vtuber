@@ -28,6 +28,8 @@ face_landmark_68_mode 仅 350KB。
 
 Python 里有 [NumPy](https://numpy.org/)，JavaScript 里就用 [mathjs](https://github.com/josdejong/mathjs) 凑合一下吧。
 
+说了这么多，发现还是先用现有的模型更方便，[Kizuna AI 绊爱 官网](https://kizunaai.com/download/) 可以下载到爱酱的模型（非商业使用）。
+
 ### 统计特征点
 
 已知 30 是鼻子的中心点，而我们需要使用眉毛的中心与下巴的中心构成三角形，以计算头部的左右旋转角度。
@@ -88,6 +90,10 @@ head.rotation.y = rotationY * ratio
 > 也许应当有一个正确的换算方式，但是我测试放大倍率为 `5` 的时候效果还不错，总之先将就用下吧！
 
 ![又不是不能用](https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/meme/not-unusable.jpg)
+
+看看效果吧。（有点卡！真的只是有点吗？）
+
+![预览-1](/gif/preview-1.gif)
 
 ---
 
