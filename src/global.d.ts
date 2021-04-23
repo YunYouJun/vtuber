@@ -1,13 +1,6 @@
 import * as faceapi from "face-api.js";
 import { DetectResult } from "vtuber/parse";
 
-import { DefineComponent } from "vue";
-
-declare module "*.vue" {
-  const component: DefineComponent<{}, {}, any>;
-  export default component;
-}
-
 declare global {
   interface Window {
     Ammo: any;

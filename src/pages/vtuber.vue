@@ -1,7 +1,7 @@
 <template>
-  <button class="agm-button" @click="showVideo = !showVideo">
+  <el-button @click="showVideo = !showVideo">
     {{ showVideo ? "隐藏" : "显示" }}
-  </button>
+  </el-button>
   <!-- vtuber 容器 -->
   <div id="vtuber-container"></div>
   <div id="detect-container" v-show="showVideo">

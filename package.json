@@ -6,7 +6,10 @@
     "packages/*"
   ],
   "author": "YunYouJun <me@yunyoujun.cn>",
-  "repository": "https://github.com/YunYouJun/vtuber.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YunYouJun/vtuber"
+  },
   "license": "MIT",
   "scripts": {
     "dev": "vite",
@@ -17,9 +20,9 @@
     "docs:serve": "vitepress serve docs"
   },
   "dependencies": {
-    "augma": "0.1.1",
+    "element-plus": "^1.0.2-beta.40",
     "face-api.js": "^0.22.2",
-    "three": "0.127.0",
+    "three": "0.128.0",
     "vue": "^3.0.11",
     "vue-router": "^4.0.6",
     "vuex": "^4.0.0"

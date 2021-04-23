@@ -12,15 +12,17 @@
     <canvas id="overlay" class="webcam-overlay" ref="overlay"></canvas>
   </div>
   <div class="video-control">
-    <button class="agm-button" @click="onPlay">开始</button>
-    <button class="agm-button" @click="debug = !debug">DEBUG</button>
-    <button class="agm-button" @click="flip = !flip">翻转</button>
-    <button class="agm-button" @click="withFaceLandmarks = !withFaceLandmarks">
+    <el-button size="mini" @click="toggleDetect">
+      {{ detecting ? "STOP" : "START" }}
+    </el-button>
+    <el-button size="mini" @click="debug = !debug">DEBUG</el-button>
+    <el-button size="mini" @click="flip = !flip">翻转</el-button>
+    <el-button size="mini" @click="withFaceLandmarks = !withFaceLandmarks">
       标记
-    </button>
-    <button class="agm-button" @click="withLandmarkIndex = !withLandmarkIndex">
+    </el-button>
+    <el-button size="mini" @click="withLandmarkIndex = !withLandmarkIndex">
       索引
-    </button>
+    </el-button>
   </div>
 </template>
 
@@ -51,6 +53,9 @@ export default defineComponent({
       withBoxes: false,
       withFaceLandmarks: true,
       withLandmarkIndex: true,
+
+      // 正在监听
+      detecting: false,
     };
   },
 
@@ -93,7 +98,23 @@ export default defineComponent({
       // };
     },
 
+    /**
+     * 切换监听状态
+     */
+    toggleDetect() {
+      if (this.detecting) {
+        this.detecting = false;
+      } else {
+        this.detecting = true;
+        this.onPlay();
+      }
+    },
+
     async onPlay() {
+      if (!this.detecting) {
+        return;
+      }
+
       const videoEl = this.videoEl;
       if (!videoEl) return;
 
@@ -119,6 +140,9 @@ export default defineComponent({
       setTimeout(() => this.onPlay());
     },
 
+    /**
+     * 绘制脸部识别结果
+     */
     drawFaceRecognitionResults(
       results: faceapi.WithFaceLandmarks<
         {
@@ -155,6 +179,7 @@ export default defineComponent({
           points,
         };
 
+        // 绘制索引点序号
         if (this.withLandmarkIndex) {
           points.forEach((point: PositionPoint, i: number) => {
             if (this.ctx) {
@@ -180,6 +205,10 @@ video {
   margin: 0 auto;
 }
 
+.video-control {
+  margin: 1rem;
+}
+
 .video-card {
   border-radius: 5px;
 }
@@ -197,14 +226,5 @@ video {
   width: 640px;
   height: 360px;
   pointer-events: none;
-}
-
-// augma
-.agm-button {
-  padding: 0.5rem 1rem;
-  margin: 0.5rem 1rem;
-  border-radius: 4px;
-  border: 1px solid black;
-  background: white;
 }
 </style>
