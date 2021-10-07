@@ -1,22 +1,16 @@
-<template>
-  <el-container>
-    <el-header>
-      <BaseHeader />
-    </el-header>
-    <el-main>
-      <router-view />
-    </el-main>
-  </el-container>
-</template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import BaseHeader from './layouts/BaseHeader.vue'
-
-export default defineComponent({
-  name: 'App',
-  components: {
-    BaseHeader,
-  },
+<script setup lang="ts">
+// https://github.com/vueuse/head
+// you can use this to manipulate the document head in any components,
+// they will be rendered correctly in the html results with vite-ssg
+useHead({
+  title: 'Vtuber',
+  meta: [
+    { name: 'description', content: '从一开始的 Vtuber' },
+  ],
 })
 </script>
+
+<template>
+  <router-view />
+</template>

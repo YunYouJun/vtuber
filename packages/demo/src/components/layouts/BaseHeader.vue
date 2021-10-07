@@ -26,7 +26,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-interface NavItem {
+export interface NavItem {
   name: string
   title: string
   to: string

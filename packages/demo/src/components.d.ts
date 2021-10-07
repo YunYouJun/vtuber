@@ -4,6 +4,7 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
+    BaseHeader: typeof import('./components/layouts/BaseHeader.vue')['default']
     ElButton: typeof import('~icons/el/button')['default']
     ElContainer: typeof import('~icons/el/container')['default']
     ElHeader: typeof import('~icons/el/header')['default']
