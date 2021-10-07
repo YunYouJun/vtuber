@@ -3,5 +3,8 @@
   "version": "0.0.1",
   "author": "YunYouJun <me@yunyoujun.cn>",
   "repository": "https://github.com/YunYouJun/vtuber.git",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "consola": "^2.15.3"
+  }
 }

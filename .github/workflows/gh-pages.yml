@@ -14,12 +14,19 @@ jobs:
         with:
           node-version: "14.x"
 
-      - run: yarn
-      - run: yarn build
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6.16.1
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - run: pnpm build:demo
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: ./packages/demo/dist
           force_orphan: true

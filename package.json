@@ -1,47 +1,28 @@
 {
-  "name": "vtuber",
-  "version": "0.0.1",
-  "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
-  "author": "YunYouJun <me@yunyoujun.cn>",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "pnpm dev -C packages/demo",
+    "build": "pnpm run build:demo",
+    "build:demo": "pnpm build -C packages/demo",
+    "docs:dev": "pnpm dev -C docs",
+    "docs:build": "pnpm build -C docs",
+    "docs:serve": "pnpm serve -C docs",
+    "lint": "eslint \"**/*.{vue,ts,js}\" --fix"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/YunYouJun/vtuber"
+    "url": "git+https://github.com/YunYouJun/vtuber.git"
   },
-  "license": "MIT",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "serve": "vite preview",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:serve": "vitepress serve docs"
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YunYouJun/vtuber/issues"
   },
-  "dependencies": {
-    "element-plus": "^1.0.2-beta.40",
-    "face-api.js": "^0.22.2",
-    "three": "0.128.0",
-    "vue": "^3.0.11",
-    "vue-router": "^4.0.6",
-    "vuex": "^4.0.0"
-  },
+  "homepage": "https://vtuber.yunyoujun.cn",
   "devDependencies": {
-    "@iconify/json": "^1.1.328",
-    "@types/node": "^14.14.37",
-    "@types/three": "^0.127.0",
-    "@vitejs/plugin-vue": "^1.2.1",
-    "@vue/compiler-sfc": "^3.0.11",
-    "autoprefixer": "^10.2.5",
-    "postcss": "^8.2.9",
-    "sass": "^1.32.7",
-    "tailwindcss": "^2.1.1",
-    "typescript": "^4.2.4",
-    "vite": "^2.1.5",
-    "vite-plugin-components": "^0.8.3",
-    "vite-plugin-icons": "^0.5.0",
-    "vite-plugin-pages": "^0.9.3",
-    "vitepress": "^0.13.0"
+    "@antfu/eslint-config": "^0.9.0",
+    "eslint": "^7.32.0"
   }
 }
