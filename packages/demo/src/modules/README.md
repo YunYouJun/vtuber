@@ -9,7 +9,3 @@ export const install: UserModule = ({ app, router, isClient }) => {
   // do something
 }
 ```
-
-## Todo
-
-- [ ] use pinia instead of vuex

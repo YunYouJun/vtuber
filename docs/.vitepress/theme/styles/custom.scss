@@ -1,0 +1,16 @@
+.home-hero {
+  .figure {
+    .image {
+      width: 7.2rem;
+    }
+  }
+}
+
+// 左上角 logo 居中
+.theme {
+  .nav-bar-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

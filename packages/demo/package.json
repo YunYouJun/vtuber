@@ -28,8 +28,7 @@
     "three": "0.128.0",
     "vue": "^3.2.19",
     "vue-i18n": "^9.2.0-beta.11",
-    "vue-router": "^4.0.11",
-    "vuex": "^4.0.2"
+    "vue-router": "^4.0.11"
   },
   "devDependencies": {
     "@iconify-json/carbon": "^1.0.4",
@@ -60,7 +59,6 @@
     "vite-plugin-vue-layouts": "^0.5.0",
     "vite-plugin-windicss": "^1.4.9",
     "vite-ssg": "^0.15.4",
-    "vitepress": "^0.19.2",
     "vue-tsc": "^0.3.0"
   }
 }

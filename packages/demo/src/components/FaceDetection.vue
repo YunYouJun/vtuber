@@ -13,7 +13,7 @@
   </div>
   <div class="video-control">
     <el-button size="mini" @click="toggleDetect">
-      {{ detecting ? "STOP" : "START" }}
+      {{ detecting ? 'STOP' : 'START' }}
     </el-button>
     <el-button size="mini" @click="debug = !debug">
       DEBUG
@@ -34,7 +34,7 @@
 import * as faceapi from 'face-api.js'
 import { Webcam } from 'vtuber/utils/webcam'
 import { loadModel } from 'vtuber/detect'
-import consola from 'consola/src/browser'
+import consola from 'consola'
 
 import { PositionPoint } from 'vtuber/types/index'
 import { useWebcamStore } from '~/stores/webcam'
@@ -43,7 +43,7 @@ const webcamStore = useWebcamStore()
 
 const videoRef = ref<HTMLVideoElement | null>(null)
 const overlayRef = ref<HTMLCanvasElement | null>(null)
-let ctx: null | CanvasRenderingContext2D = (null)
+let ctx: null | CanvasRenderingContext2D = null
 
 const minConfidence = ref(0.5)
 const withBoxes = ref(false)
@@ -59,8 +59,8 @@ let webcam: Webcam | null = null
 onMounted(async() => {
   await loadModel()
   if (overlayRef.value) {
-    ctx = overlayRef.value.getContext('2d');
-    (ctx as CanvasRenderingContext2D).font = '100px serif'
+    ctx = overlayRef.value.getContext('2d')
+    ;(ctx as CanvasRenderingContext2D).font = '100px serif'
   }
   initWebcam()
 })
@@ -81,8 +81,8 @@ async function initWebcam() {
 }
 
 /**
-     * 切换监听状态
-     */
+ * 切换监听状态
+ */
 function toggleDetect() {
   if (detecting.value) {
     detecting.value = false
@@ -94,14 +94,12 @@ function toggleDetect() {
 }
 
 async function onPlay() {
-  if (!detecting.value)
-    return
+  if (!detecting.value) return
 
   const videoEl = videoRef.value
   if (!videoEl) return
 
-  if (videoEl.paused || videoEl.ended)
-    setTimeout(() => onPlay(), 100)
+  if (videoEl.paused || videoEl.ended) setTimeout(() => onPlay(), 100)
 
   const options = new faceapi.SsdMobilenetv1Options({
     minConfidence: minConfidence.value,
@@ -114,15 +112,14 @@ async function onPlay() {
     .withFaceLandmarks()
 
   const canvas = overlayRef.value
-  if (results && canvas)
-    drawFaceRecognitionResults(results)
+  if (results && canvas) drawFaceRecognitionResults(results)
 
   setTimeout(() => onPlay())
 }
 
 /**
-     * 绘制脸部识别结果
-     */
+ * 绘制脸部识别结果
+ */
 function drawFaceRecognitionResults(
   results: faceapi.WithFaceLandmarks<
   {
@@ -138,19 +135,16 @@ function drawFaceRecognitionResults(
   const dims = faceapi.matchDimensions(canvas, videoRef.value, true)
   const resizedResults = faceapi.resizeResults(results, dims)
 
-  if (debug.value)
-    consola.log(resizedResults)
+  if (debug.value) consola.log(resizedResults)
 
   // draw detections
-  if (withBoxes.value)
-    faceapi.draw.drawDetections(canvas, resizedResults)
+  if (withBoxes.value) faceapi.draw.drawDetections(canvas, resizedResults)
 
   if (withFaceLandmarks.value) {
     faceapi.draw.drawFaceLandmarks(canvas, resizedResults)
     // draw text number
     const points = resizedResults.landmarks.positions
-    // this.$store.commit("face/setPoints", points);
-    // 挂载到全局
+    // 挂载到全局，store 管理速度似乎太慢
     window.face = {
       enable: true,
       points,
@@ -159,8 +153,7 @@ function drawFaceRecognitionResults(
     // 绘制索引点序号
     if (withLandmarkIndex.value) {
       points.forEach((point: PositionPoint, i: number) => {
-        if (ctx)
-          ctx.fillText(i.toString(), point.x, point.y)
+        if (ctx) ctx.fillText(i.toString(), point.x, point.y)
       })
     }
   }

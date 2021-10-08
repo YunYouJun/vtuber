@@ -16,7 +16,7 @@ face_landmark_68_mode 仅 350KB。
 
 见 `packages/vtuber/face.ts`。
 
-<<< @/../packages/vtuber/face.ts
+<<< @/../packages/vtuber/src/face.ts
 
 > 没错，是我自己一个个分的。
 

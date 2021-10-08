@@ -8,47 +8,33 @@
   >
     <el-menu-item index="/">
       <div class="flex h-full justify-center items-center">
-        <img
-          class="flex w-auto h-8"
-          src="https://www.yunyoujun.cn/yun.svg"
-          alt="Workflow"
-        />
+        <img class="flex w-auto h-8" src="/favicon.svg" alt="Workflow" />
       </div>
     </el-menu-item>
     <el-menu-item v-for="(item, i) in navItems" :key="i" :index="item.to">
-      {{
-        item.title
-      }}
+      {{ item.title }}
     </el-menu-item>
   </el-menu>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
+<script setup lang="ts">
 export interface NavItem {
   name: string
   title: string
   to: string
 }
 
-export default defineComponent({
-  data() {
-    return {
-      activeIndex: '/',
-      navItems: [
-        {
-          name: 'Vtuber',
-          title: 'Vtuber Demo',
-          to: '/vtuber',
-        },
-        {
-          name: 'Webcam',
-          title: 'Webcam',
-          to: '/webcam',
-        },
-      ],
-    }
+const activeIndex = ref('/')
+const navItems = [
+  {
+    name: 'Vtuber',
+    title: 'Vtuber Demo',
+    to: '/vtuber',
   },
-})
+  {
+    name: 'Webcam',
+    title: 'Webcam',
+    to: '/webcam',
+  },
+]
 </script>

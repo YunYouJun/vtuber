@@ -1,11 +1,11 @@
-/**
- * @type {import('vitepress').UserConfig}
- */
-module.exports = {
+import { UserConfig } from "vitepress";
+
+export default {
   title: "Docs for Vtuber",
   description: "从一开始的 Vtuber",
   themeConfig: {
     repo: "YunYouJun/vtuber",
+    logo: "/favicon.svg",
     docsBranch: "main",
     docsDir: "docs",
 
@@ -21,10 +21,10 @@ module.exports = {
   },
 
   head: [
-    ["link", { rel: "icon", href: "/logo.png", type: "image/png" }],
+    ["link", { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" }],
     ["meta", { name: "author", content: "YunYouJun" }],
   ],
-};
+} as UserConfig;
 
 /**
  * 获取导航侧边栏

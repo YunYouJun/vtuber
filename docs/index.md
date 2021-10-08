@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: /logo.png
+heroImage: /favicon.svg
 heroAlt: Logo image
 heroText: Vtuber
 tagline: 从一开始的 Vtuber

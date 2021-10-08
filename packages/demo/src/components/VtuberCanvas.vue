@@ -1,116 +1,95 @@
 <template>
   <div class="vtuber-container">
     <canvas
-      ref="vtuberCanvas"
-      :class="['vtuber-canvas', flip ? 'flip' : null]"
+      ref="vtuberCanvasRef"
+      :class="['vtuber-canvas', isFlipped ? 'flip' : null]"
       width="640"
       height="360"
     ></canvas>
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue'
-import { useStore } from 'vuex'
-export default defineComponent({
-  setup() {
-    const store = useStore()
-    return {
-      facePoints: computed(() => store.state.face.points),
-      flip: computed(() => store.state.webcam.flip),
-    }
-  },
-  data() {
-    return {
-      ctx: null as null | CanvasRenderingContext2D,
+<script setup lang="ts">
+// import { initVtuber } from 'vtuber/mmd'
+import { useWebcamStore } from '~/stores/webcam'
 
-      center: [75, 75],
-      radius: 50,
+const { isFlipped } = useWebcamStore()
 
-      ratio: 2,
-    }
-  },
-  mounted() {
-    this.initVtuber()
-  },
-  methods: {
-    initVtuber() {
-      const canvas = this.$refs.vtuberCanvas as HTMLCanvasElement
-      const ctx = canvas.getContext('2d')
-      this.ctx = ctx
+const facePoints = computed(() => window.facePoints)
 
-      if (!ctx) return
+const vtuberCanvasRef = ref<HTMLCanvasElement>()
+let ctx: null | CanvasRenderingContext2D = null
+const centerPoint = ref([75, 75])
+const radius = ref(50)
+const ratio = ref(2)
 
-      // setInterval
-      setInterval(() => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-        if (this.facePoints && this.facePoints[30]) {
-          this.center = [
-            this.facePoints[30].x / this.ratio,
-            this.facePoints[30].y / this.ratio,
-          ]
-        }
-
-        this.drawVtuber()
-      }, 20)
-    },
-
-    drawVtuber() {
-      const ctx = this.ctx
-      if (!ctx) return
-
-      const center = this.center
-      const radius = this.radius
-
-      const eyeHeight = 12
-      const eyeGap = 15
-      const eyeRadius = 5
-
-      const mouthHeight = 2
-      const mouthRadius = 30
-
-      // arc 默认顺时针
-
-      ctx.beginPath()
-      ctx.arc(center[0], center[1], radius, 0, Math.PI * 2, true)
-
-      // draw mouth
-      ctx.moveTo(center[0] + mouthRadius, center[1] + mouthHeight)
-      ctx.arc(
-        center[0],
-        center[1] + mouthHeight,
-        mouthRadius,
-        0,
-        Math.PI,
-        false,
-      )
-
-      // left eye
-      ctx.moveTo(center[0] - eyeGap + eyeRadius, center[1] - eyeHeight)
-      ctx.arc(
-        center[0] - eyeGap,
-        center[1] - eyeHeight,
-        eyeRadius,
-        0,
-        Math.PI * 2,
-        true,
-      )
-
-      // right eye
-      ctx.moveTo(center[0] + eyeGap + eyeRadius, center[1] - eyeHeight)
-      ctx.arc(
-        center[0] + eyeGap,
-        center[1] - eyeHeight,
-        eyeRadius,
-        0,
-        Math.PI * 2,
-        true,
-      ) // 右眼
-      ctx.stroke()
-    },
-  },
+onMounted(() => {
+  init()
 })
+
+function init() {
+  const canvas = vtuberCanvasRef.value
+  if (!canvas) return
+  ctx = canvas.getContext('2d')
+  // setInterval
+  setInterval(() => {
+    if (!ctx) return
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    if (facePoints.value && facePoints.value[30]) {
+      centerPoint.value = [
+        facePoints.value[30].x / ratio.value,
+        facePoints.value[30].y / ratio.value,
+      ]
+    }
+
+    drawVtuber()
+  }, 20)
+}
+
+function drawVtuber() {
+  if (!ctx) return
+  const center = centerPoint.value
+
+  const eyeHeight = 12
+  const eyeGap = 15
+  const eyeRadius = 5
+
+  const mouthHeight = 2
+  const mouthRadius = 30
+
+  // arc 默认顺时针
+
+  ctx.beginPath()
+  ctx.arc(center[0], center[1], radius.value, 0, Math.PI * 2, true)
+
+  // draw mouth
+  ctx.moveTo(center[0] + mouthRadius, center[1] + mouthHeight)
+  ctx.arc(center[0], center[1] + mouthHeight, mouthRadius, 0, Math.PI, false)
+
+  // left eye
+  ctx.moveTo(center[0] - eyeGap + eyeRadius, center[1] - eyeHeight)
+  ctx.arc(
+    center[0] - eyeGap,
+    center[1] - eyeHeight,
+    eyeRadius,
+    0,
+    Math.PI * 2,
+    true,
+  )
+
+  // right eye
+  ctx.moveTo(center[0] + eyeGap + eyeRadius, center[1] - eyeHeight)
+  ctx.arc(
+    center[0] + eyeGap,
+    center[1] - eyeHeight,
+    eyeRadius,
+    0,
+    Math.PI * 2,
+    true,
+  ) // 右眼
+  ctx.stroke()
+}
 </script>
 
 <style lang="scss">
