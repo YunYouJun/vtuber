@@ -15,7 +15,11 @@
     "type": "git",
     "url": "git+https://github.com/YunYouJun/vtuber.git"
   },
-  "author": "",
+  "author": {
+    "name": "YunYouJun",
+    "url": "https://www.yunyoujun.cn",
+    "email": "me@yunyoujun.cn"
+  },
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/YunYouJun/vtuber/issues"

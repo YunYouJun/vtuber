@@ -1,9 +1,12 @@
 <template>
-  <div :class="['video-container', webcamStore.isFlipped ? 'flip' : '']">
+  <div
+    class="video-container rounded-full overflow-hidden object-cover"
+    :class="[webcamStore.isFlipped ? 'flip' : '']"
+  >
     <video
       id="webcam"
       ref="videoRef"
-      class="video-card"
+      class="object-cover min-w-full min-h-full rounded-full"
       autoplay
       controls
       width="640"
@@ -12,21 +15,33 @@
     <canvas id="overlay" ref="overlayRef" class="webcam-overlay"></canvas>
   </div>
   <div class="video-control">
-    <el-button size="mini" @click="toggleDetect">
-      {{ detecting ? 'STOP' : 'START' }}
-    </el-button>
-    <el-button size="mini" @click="debug = !debug">
-      DEBUG
-    </el-button>
-    <el-button size="mini" @click="webcamStore.toggleIsFlipped">
-      翻转
-    </el-button>
-    <el-button size="mini" @click="withFaceLandmarks = !withFaceLandmarks">
-      标记
-    </el-button>
-    <el-button size="mini" @click="withLandmarkIndex = !withLandmarkIndex">
-      索引
-    </el-button>
+    <IconButton :active="detecting" @click="toggleDetect">
+      <i-ri-play-line v-if="detecting" />
+      <i-ri-pause-line v-else />
+    </IconButton>
+    <IconButton :active="debug" @click="debug = !debug">
+      <i-ri-bug-line />
+    </IconButton>
+    <IconButton
+      :active="webcamStore.isFlipped"
+      @click="webcamStore.toggleIsFlipped"
+    >
+      <i-mdi:flip-horizontal />
+    </IconButton>
+    <IconButton
+      :active="withFaceLandmarks"
+      title="标记"
+      @click="withFaceLandmarks = !withFaceLandmarks"
+    >
+      <i-ri-bookmark-line />
+    </IconButton>
+    <IconButton
+      :active="withLandmarkIndex"
+      title="索引"
+      @click="withLandmarkIndex = !withLandmarkIndex"
+    >
+      <i-ri-list-ordered />
+    </IconButton>
   </div>
 </template>
 
@@ -37,6 +52,7 @@ import { loadModel } from 'vtuber/detect'
 import consola from 'consola'
 
 import { PositionPoint } from 'vtuber/types/index'
+// import { useUserMedia, useDevicesList } from '@vueuse/core'
 import { useWebcamStore } from '~/stores/webcam'
 
 const webcamStore = useWebcamStore()
@@ -165,19 +181,8 @@ video {
   outline: none;
 }
 
-.video-container {
-  position: relative;
-  width: 640px;
-  height: 360px;
-  margin: 0 auto;
-}
-
 .video-control {
   margin: 1rem;
-}
-
-.video-card {
-  border-radius: 5px;
 }
 
 #webcam {

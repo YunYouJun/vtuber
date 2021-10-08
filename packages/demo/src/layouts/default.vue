@@ -6,5 +6,6 @@
     <el-main>
       <router-view />
     </el-main>
+    <BaseFooter />
   </el-container>
 </template>

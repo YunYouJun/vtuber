@@ -21,6 +21,7 @@
     "paths": {
       "~/*": ["packages/demo/src/*"],
       "@vtuber/*": ["packages/*/src"],
+      "vtuber": ["packages/vtuber/src/index"],
       "vtuber/*": ["packages/vtuber/src/*"]
     }
   },

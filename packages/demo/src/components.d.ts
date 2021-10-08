@@ -4,6 +4,7 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
+    BaseFooter: typeof import('./components/layouts/BaseFooter.vue')['default']
     BaseHeader: typeof import('./components/layouts/BaseHeader.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElContainer: typeof import('element-plus/es')['ElContainer']
@@ -14,8 +15,19 @@ declare module 'vue' {
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     FaceDetection: typeof import('./components/FaceDetection.vue')['default']
     ICarbonLogoGithub: typeof import('~icons/carbon/logo-github')['default']
+    IconButton: typeof import('./components/global/IconButton.vue')['default']
+    'IMdi:flipHorizontal': typeof import('~icons/mdi/flip-horizontal')['default']
+    IRiBookmarkLine: typeof import('~icons/ri/bookmark-line')['default']
+    IRiBugLine: typeof import('~icons/ri/bug-line')['default']
+    IRiEyeClose: typeof import('~icons/ri/eye-close')['default']
+    IRiEyeCloseLine: typeof import('~icons/ri/eye-close-line')['default']
+    IRiEyeLine: typeof import('~icons/ri/eye-line')['default']
+    IRiListOrdered: typeof import('~icons/ri/list-ordered')['default']
+    IRiPauseLine: typeof import('~icons/ri/pause-line')['default']
+    IRiPlayLine: typeof import('~icons/ri/play-line')['default']
     VtuberCanvas: typeof import('./components/VtuberCanvas.vue')['default']
     VtuberConfig: typeof import('./components/vtuber/VtuberConfig.vue')['default']
+    WebCamera: typeof import('./components/internals/WebCamera.vue')['default']
   }
 }
 
