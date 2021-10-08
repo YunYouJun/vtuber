@@ -1,24 +1,20 @@
 <script setup lang="ts">
-import {
-  useEventListener,
-  useStorage,
-  useDraggable,
-  useDevicesList,
-  useUserMedia,
-} from '@vueuse/core'
+// const currentCamera = ref<string>()
+// const { videoInputs: cameras } = useDevicesList({
+//   requestPermissions: true,
+//   onUpdated() {
+//     if (!cameras.value.find(i => i.deviceId === currentCamera.value))
+//       currentCamera.value = cameras.value[0]?.deviceId
+//   },
+// })
 
-const currentCamera = ref<string>()
-const { videoInputs: cameras } = useDevicesList({
-  requestPermissions: true,
-  onUpdated() {
-    if (!cameras.value.find(i => i.deviceId === currentCamera.value))
-      currentCamera.value = cameras.value[0]?.deviceId
-  },
-})
+import { useWebcamStore } from '~/stores/webcam'
 
-const { stream, enabled } = useUserMedia({
-  videoDeviceId: currentCamera,
-})
+// const { stream, enabled } = useUserMedia({
+//   videoDeviceId: currentCamera,
+// })
+
+const webcamStore = useWebcamStore()
 
 const namespace = 'adv'
 
@@ -36,7 +32,8 @@ const handler = ref<HTMLDivElement | undefined>()
 const video = ref<HTMLVideoElement | undefined>()
 
 watchEffect(() => {
-  if (video.value) video.value.srcObject = stream.value!
+  // if (video.value) video.value.srcObject = stream.value!
+  if (video.value) video.value.srcObject = webcamStore.stream!
 })
 
 const { style: containerStyle } = useDraggable(
@@ -86,17 +83,11 @@ onMounted(fixPosistion)
 
 <template>
   <div class="fixed z-10" :style="containerStyle">
-    <div>
-      <button @click="enabled = !enabled">
-        {{ enabled ? 'Stop' : 'Start' }}
-      </button>
-    </div>
-
     <div
       ref="frame"
       class="
         rounded-full
-        shadow
+        shadow-lg
         bg-gray-400 bg-opacity-10
         overflow-hidden
         object-cover

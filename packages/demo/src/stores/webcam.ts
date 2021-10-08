@@ -1,19 +1,29 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
 
+const currentCamera = ref<string>()
+
+const { videoInputs: cameras } = useDevicesList({
+  requestPermissions: true,
+  onUpdated() {
+    if (!cameras.value.find(i => i.deviceId === currentCamera.value))
+      currentCamera.value = cameras.value[0]?.deviceId
+  },
+})
+
+const { stream, enabled } = useUserMedia({
+  videoDeviceId: currentCamera,
+})
+
 export const useWebcamStore = defineStore('webcam', () => {
-  const isFlipped = ref(false)
-
-  function setIsFlipped(val: boolean) {
-    isFlipped.value = val
-  }
-
-  function toggleIsFlipped() {
-    isFlipped.value = !isFlipped.value
-  }
+  const toggleEnabled = useToggle(enabled)
+  const [isFlipped, toggleIsFlipped] = useToggle(false)
 
   return {
+    stream,
+    enabled,
+
     isFlipped,
-    setIsFlipped,
+    toggleEnabled,
     toggleIsFlipped,
   }
 })

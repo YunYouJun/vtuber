@@ -1,3 +1,4 @@
+// maybe i will use `https://vueuse.org/core/useUserMedia/` instead of this
 /**
  * Webcam
  * https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/getUserMedia

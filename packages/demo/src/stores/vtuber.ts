@@ -7,11 +7,11 @@ export const useVtuberStore = defineStore('vtuber', () => {
    */
   // const showWebcam = ref(false)
   // const toggleWebcam = useToggle(showWebcam)
-  const [showWebcam, toggleWebcam] = useToggle()
+  const [showWebcam, toggleShowWebcam] = useToggle()
 
   return {
     showWebcam,
-    toggleWebcam,
+    toggleShowWebcam,
   }
 })
 

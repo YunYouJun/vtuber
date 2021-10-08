@@ -1,6 +1,7 @@
 <template>
   <button
-    :class="['vtb-icon-button', 'm-1', active ? 'is-active' : '']"
+    class="vtb-icon-button m-1 shadow bg-gray-100 hover:shadow-lg"
+    :class="[active ? 'is-active' : '']"
     :title="title"
     :aria-label="title"
     @click="emit('click')"
@@ -30,13 +31,8 @@ withDefaults(defineProps<{ active: boolean; title: string }>(), {
 
   width: 2.5rem;
   height: 2.5rem;
-  border: 1px solid gray;
 
   transition: 0.2s;
-
-  &:hover {
-    border-color: black;
-  }
 
   &:focus {
     outline: none;
@@ -45,7 +41,7 @@ withDefaults(defineProps<{ active: boolean; title: string }>(), {
   &:active,
   &.is-active {
     color: white;
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0.8);
   }
 }
 </style>

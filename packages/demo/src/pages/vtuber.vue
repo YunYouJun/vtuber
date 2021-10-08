@@ -1,18 +1,25 @@
 <template>
-  <IconButton
-    :active="vtuberStore.showWebcam"
-    title="切换 Webcam"
-    @click="vtuberStore.toggleWebcam"
-  >
-    <i-ri-eye-line v-if="vtuberStore.showWebcam" title="显示" />
-    <i-ri-eye-close-line v-else title="隐藏" />
-  </IconButton>
   <!-- vtuber 容器 -->
   <div id="vtuber-container"></div>
   <div v-show="vtuberStore.showWebcam" id="detect-container">
     <!-- <face-detection /> -->
     <WebCamera />
     <!-- <vtuber-config /> -->
+  </div>
+  <div
+    class="
+      absolute
+      bottom-0
+      left-0
+      transition
+      duration-300
+      opacity-0
+      hover:opacity-100
+      shadow-dark-900
+    "
+    :class="[presistNav ? 'opacity-100 right-0' : 'oapcity-0 p-2']"
+  >
+    <NavControls />
   </div>
 </template>
 
@@ -26,6 +33,8 @@ meta:
 
 import { useVtuberStore } from '~/stores/vtuber'
 const vtuberStore = useVtuberStore()
+
+const presistNav = ref(true)
 
 onMounted(() => {
   // const vtuber = new Vtuber()

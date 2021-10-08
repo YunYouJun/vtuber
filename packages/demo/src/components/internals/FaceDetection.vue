@@ -15,10 +15,6 @@
     <canvas id="overlay" ref="overlayRef" class="webcam-overlay"></canvas>
   </div>
   <div class="video-control">
-    <IconButton :active="detecting" @click="toggleDetect">
-      <i-ri-play-line v-if="detecting" />
-      <i-ri-pause-line v-else />
-    </IconButton>
     <IconButton :active="debug" @click="debug = !debug">
       <i-ri-bug-line />
     </IconButton>
@@ -66,10 +62,6 @@ const withBoxes = ref(false)
 const withFaceLandmarks = ref(true)
 const withLandmarkIndex = ref(true)
 
-// 正在监听
-const detecting = ref(false)
-
-const debug = ref(false)
 let webcam: Webcam | null = null
 
 onMounted(async() => {
@@ -94,19 +86,6 @@ async function initWebcam() {
   // videoEl.onloadedmetadata = () => {
   //   this.onPlay();
   // };
-}
-
-/**
- * 切换监听状态
- */
-function toggleDetect() {
-  if (detecting.value) {
-    detecting.value = false
-  }
-  else {
-    detecting.value = true
-    onPlay()
-  }
 }
 
 async function onPlay() {
@@ -183,13 +162,6 @@ video {
 
 .video-control {
   margin: 1rem;
-}
-
-#webcam {
-  position: absolute;
-  inset: 0;
-  width: 640px;
-  height: 360px;
 }
 
 .webcam-overlay {
