@@ -51,6 +51,5 @@ onUnmounted(() => {
 #vtuber-container {
   position: absolute;
   inset: 0;
-  z-index: -1;
 }
 </style>

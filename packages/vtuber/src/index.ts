@@ -1,3 +1,5 @@
+import consola from 'consola'
+
 import { getScript } from 'vtuber/utils'
 import { isDev } from '@vtuber/shared'
 import { ASSETS } from 'vtuber/utils/cdn'
@@ -19,7 +21,10 @@ export async function main(container: HTMLDivElement) {
   // unhappy: 19 24 25
   // what?: 20
 
-  if (!container) return
+  if (!container) {
+    consola.error('Container can not be found!')
+    return
+  }
 
   const vtuber = await initVtuber(container)
   // run({ euler: [0, 0, 0], eye: [0, 0] });
@@ -50,6 +55,7 @@ export class Vtuber {
   }
 
   destroy() {
+    // gui 是被创建的 dom 元素，需要在取消挂载时手动销毁
     this.gui?.destroy()
   }
 }
