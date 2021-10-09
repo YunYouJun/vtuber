@@ -17,8 +17,6 @@ import 'virtual:windi-utilities.css'
 // windicss devtools support (dev only)
 import 'virtual:windi-devtools'
 
-import 'element-plus/dist/index.css'
-
 const routes = setupLayouts(generatedRoutes)
 
 // https://github.com/antfu/vite-ssg

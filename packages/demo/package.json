@@ -13,9 +13,11 @@
   },
   "license": "MIT",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "serve": "vite preview"
+    "dev": "vite --port 3333 --open",
+    "build": "cross-env NODE_ENV=production vite-ssg build",
+    "preview": "vite preview",
+    "lint": "eslint \"**/*.{vue,ts,js}\"",
+    "preview-https": "serve dist"
   },
   "dependencies": {
     "@vueuse/core": "^6.5.3",

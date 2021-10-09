@@ -6,7 +6,6 @@ import Layouts from 'vite-plugin-vue-layouts'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import AutoImport from 'unplugin-auto-import/vite'
 import Markdown from 'vite-plugin-md'
 import WindiCSS from 'vite-plugin-windicss'
@@ -62,7 +61,6 @@ export default defineConfig({
 
       // custom resolvers
       resolvers: [
-        ElementPlusResolver(),
         // auto import icons
         // https://github.com/antfu/unplugin-icons
         IconsResolver({
