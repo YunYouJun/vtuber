@@ -1,18 +1,5 @@
 <script setup lang="ts">
-// const currentCamera = ref<string>()
-// const { videoInputs: cameras } = useDevicesList({
-//   requestPermissions: true,
-//   onUpdated() {
-//     if (!cameras.value.find(i => i.deviceId === currentCamera.value))
-//       currentCamera.value = cameras.value[0]?.deviceId
-//   },
-// })
-
 import { useWebcamStore } from '~/stores/webcam'
-
-// const { stream, enabled } = useUserMedia({
-//   videoDeviceId: currentCamera,
-// })
 
 const webcamStore = useWebcamStore()
 
@@ -30,6 +17,10 @@ const position = useStorage(`${namespace}-webcam-pos`, {
 const frame = ref<HTMLDivElement | undefined>()
 const handler = ref<HTMLDivElement | undefined>()
 const video = ref<HTMLVideoElement | undefined>()
+
+defineExpose({
+  video,
+})
 
 watchEffect(() => {
   // if (video.value) video.value.srcObject = stream.value!
@@ -61,8 +52,8 @@ const frameStyle = computed(() => ({
 }))
 
 const handleStyle = computed(() => ({
-  width: '14px',
-  height: '14px',
+  width: '1rem',
+  height: '1rem',
   // 0.5 + 0.5 / sqrt(2)
   top: `${size.value * 0.8536 - 7}px`,
   left: `${size.value * 0.8536 - 7}px`,
@@ -95,6 +86,7 @@ onMounted(fixPosistion)
       :style="frameStyle"
     >
       <video
+        id="webcamVideo"
         ref="video"
         autoplay
         muted
@@ -107,21 +99,24 @@ onMounted(fixPosistion)
     <div
       ref="handler"
       class="
+        bg-gray-100
         absolute
         bottom-0
         right-0
         rounded-full
-        bg-main
-        shadow
-        opacity-0
-        shadow
+        shadow shadow
         z-30
         hover:opacity-100
         dark:(border
         border-true-gray-700)
       "
       :style="handleStyle"
-      :class="handlerDown ? '!opacity-100' : ''"
+      :class="[
+        handlerDown ? '!opacity-100' : '',
+        webcamStore.enabled ? 'bg-green-500' : '',
+      ]"
     ></div>
+
+    <slot></slot>
   </div>
 </template>

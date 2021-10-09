@@ -1,9 +1,9 @@
 <template>
-  <IconButton :active="detecting" @click="toggleDetect">
-    <i-ri-play-line v-if="detecting" />
-    <i-ri-pause-line v-else />
+  <IconButton :active="faceStore.detecting" @click="faceStore.toggleDetecting">
+    <i-ri-pause-line v-if="faceStore.detecting" />
+    <i-ri-play-line v-else />
   </IconButton>
-  <IconButton :active="debug" @click="toggleDebug">
+  <IconButton :active="faceStore.options.debug" @click="faceStore.toggleDebug">
     <i-ri-bug-line />
   </IconButton>
   <IconButton
@@ -13,31 +13,27 @@
     <i-mdi:flip-horizontal />
   </IconButton>
   <IconButton
-    :active="withFaceLandmarks"
+    :active="faceStore.options.withFaceLandmarks"
     title="标记"
-    @click="toggleFaceLandmarks"
+    @click="faceStore.toggleFaceLandmarks"
   >
     <i-ri-bookmark-line />
   </IconButton>
   <IconButton
-    :active="withLandmarkIndex"
+    :active="faceStore.options.withLandmarkIndex"
     title="索引"
-    @click="toggleLandmarkIndex"
+    @click="faceStore.toggleLandmarkIndex"
   >
     <i-ri-list-ordered />
   </IconButton>
 </template>
 
 <script setup lang="ts">
+import { useFaceStore } from '~/stores/face'
 import { useWebcamStore } from '~/stores/webcam'
 
+const faceStore = useFaceStore()
 const webcamStore = useWebcamStore()
-
-// 正在监听
-const [detecting, toggleDetect] = useToggle()
-const [debug, toggleDebug] = useToggle()
-const [withFaceLandmarks, toggleFaceLandmarks] = useToggle()
-const [withLandmarkIndex, toggleLandmarkIndex] = useToggle()
 
 /**
  * 切换监听状态

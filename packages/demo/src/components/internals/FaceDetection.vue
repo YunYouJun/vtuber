@@ -1,103 +1,63 @@
 <template>
-  <div
-    class="video-container rounded-full overflow-hidden object-cover"
-    :class="[webcamStore.isFlipped ? 'flip' : '']"
+  <WebCamera
+    ref="webCamera"
+    :class="[webcamStore.isFlipped ? 'transform rotate-y-180' : '']"
   >
-    <video
-      id="webcam"
-      ref="videoRef"
-      class="object-cover min-w-full min-h-full rounded-full"
-      autoplay
-      controls
-      width="640"
-      height="480"
-    ></video>
-    <canvas id="overlay" ref="overlayRef" class="webcam-overlay"></canvas>
-  </div>
-  <div class="video-control">
-    <IconButton :active="debug" @click="debug = !debug">
-      <i-ri-bug-line />
-    </IconButton>
-    <IconButton
-      :active="webcamStore.isFlipped"
-      @click="webcamStore.toggleIsFlipped"
-    >
-      <i-mdi:flip-horizontal />
-    </IconButton>
-    <IconButton
-      :active="withFaceLandmarks"
-      title="标记"
-      @click="withFaceLandmarks = !withFaceLandmarks"
-    >
-      <i-ri-bookmark-line />
-    </IconButton>
-    <IconButton
-      :active="withLandmarkIndex"
-      title="索引"
-      @click="withLandmarkIndex = !withLandmarkIndex"
-    >
-      <i-ri-list-ordered />
-    </IconButton>
-  </div>
+    <FaceCanvas ref="faceCanvas" />
+  </WebCamera>
 </template>
 
 <script setup lang="ts">
-import * as faceapi from 'face-api.js'
-import { Webcam } from 'vtuber/utils/webcam'
-import { loadModel } from 'vtuber/detect'
 import consola from 'consola'
+import * as faceapi from 'face-api.js'
+import { drawFaceRecognitionResults, loadModel } from 'vtuber/detect'
 
-import { PositionPoint } from 'vtuber/types/index'
 // import { useUserMedia, useDevicesList } from '@vueuse/core'
+import { useFaceStore } from '~/stores/face'
 import { useWebcamStore } from '~/stores/webcam'
 
+const faceStore = useFaceStore()
 const webcamStore = useWebcamStore()
 
-const videoRef = ref<HTMLVideoElement | null>(null)
-const overlayRef = ref<HTMLCanvasElement | null>(null)
-let ctx: null | CanvasRenderingContext2D = null
-
-const minConfidence = ref(0.5)
-const withBoxes = ref(false)
-const withFaceLandmarks = ref(true)
-const withLandmarkIndex = ref(true)
-
-let webcam: Webcam | null = null
+const webCamera = ref()
+const faceCanvas = ref()
 
 onMounted(async() => {
   await loadModel()
-  if (overlayRef.value) {
-    ctx = overlayRef.value.getContext('2d')
-    ;(ctx as CanvasRenderingContext2D).font = '100px serif'
-  }
-  initWebcam()
+})
+
+watchEffect(() => {
+  // if (video.value) video.value.srcObject = stream.value!
+  // onPlay(faceStore.options)
+  const canvas = faceCanvas.value && faceCanvas.value.canvas
+  const video = webCamera.value && webCamera.value.video
+  if (faceStore.detecting && canvas && video)
+    startDetecting(canvas, video, faceStore.options)
 })
 
 /**
- * 初始化 Webcam
+ * 当 video 播放时，则检测
  */
-async function initWebcam() {
-  const videoEl = videoRef.value
+async function startDetecting(
+  canvas: HTMLCanvasElement,
+  videoEl: HTMLVideoElement,
+  defaultOptions = {
+    debug: false,
+    withBoxes: false,
+    withFaceLandmarks: true,
+    withLandmarkIndex: false,
+  },
+  faceapiOptions = {
+    minConfidence: 0.5,
+  },
+) {
+  if (!faceStore.detecting) return
   if (!videoEl) return
 
-  webcam = new Webcam(videoEl)
-  await webcam.init()
-
-  // videoEl.onloadedmetadata = () => {
-  //   this.onPlay();
-  // };
-}
-
-async function onPlay() {
-  if (!detecting.value) return
-
-  const videoEl = videoRef.value
-  if (!videoEl) return
-
-  if (videoEl.paused || videoEl.ended) setTimeout(() => onPlay(), 100)
+  consola.info('Start Detecting')
 
   const options = new faceapi.SsdMobilenetv1Options({
-    minConfidence: minConfidence.value,
+    minConfidence: faceapiOptions.minConfidence,
   })
 
   // we only need single face
@@ -106,69 +66,11 @@ async function onPlay() {
     .detectSingleFace(videoEl, options)
     .withFaceLandmarks()
 
-  const canvas = overlayRef.value
-  if (results && canvas) drawFaceRecognitionResults(results)
+  if (results)
+    drawFaceRecognitionResults(canvas, videoEl, results, defaultOptions)
 
-  setTimeout(() => onPlay())
-}
-
-/**
- * 绘制脸部识别结果
- */
-function drawFaceRecognitionResults(
-  results: faceapi.WithFaceLandmarks<
-  {
-    detection: faceapi.FaceDetection
-  },
-  faceapi.FaceLandmarks68
-  >,
-) {
-  const canvas = overlayRef.value
-
-  if (!canvas || !videoRef.value) return
-
-  const dims = faceapi.matchDimensions(canvas, videoRef.value, true)
-  const resizedResults = faceapi.resizeResults(results, dims)
-
-  if (debug.value) consola.log(resizedResults)
-
-  // draw detections
-  if (withBoxes.value) faceapi.draw.drawDetections(canvas, resizedResults)
-
-  if (withFaceLandmarks.value) {
-    faceapi.draw.drawFaceLandmarks(canvas, resizedResults)
-    // draw text number
-    const points = resizedResults.landmarks.positions
-    // 挂载到全局，store 管理速度似乎太慢
-    window.face = {
-      enable: true,
-      points,
-    }
-
-    // 绘制索引点序号
-    if (withLandmarkIndex.value) {
-      points.forEach((point: PositionPoint, i: number) => {
-        if (ctx) ctx.fillText(i.toString(), point.x, point.y)
-      })
-    }
-  }
+  setTimeout(() => {
+    startDetecting(canvas, videoEl, defaultOptions, faceapiOptions)
+  })
 }
 </script>
-
-<style lang="scss">
-video {
-  outline: none;
-}
-
-.video-control {
-  margin: 1rem;
-}
-
-.webcam-overlay {
-  position: absolute;
-  inset: 0;
-  width: 640px;
-  height: 360px;
-  pointer-events: none;
-}
-</style>

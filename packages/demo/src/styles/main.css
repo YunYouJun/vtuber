@@ -49,8 +49,3 @@ html.dark {
     hover:opacity-100 hover:text-blue-600;
   font-size: 0.9em;
 }
-
-/* helper */
-.flip {
-  transform: rotateY(180deg);
-}

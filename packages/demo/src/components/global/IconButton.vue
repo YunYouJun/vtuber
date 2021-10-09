@@ -13,9 +13,9 @@
 <script setup lang="ts">
 const emit = defineEmits(['click'])
 
-withDefaults(defineProps<{ active: boolean; title: string }>(), {
+withDefaults(defineProps<{ active?: boolean; title?: string }>(), {
   title: '',
-  active: true,
+  active: false,
 })
 </script>
 

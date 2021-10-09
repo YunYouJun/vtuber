@@ -1,20 +1,11 @@
 <template>
   <div class="vtuber-container">
-    <canvas
-      ref="vtuberCanvasRef"
-      :class="['vtuber-canvas', isFlipped ? 'flip' : null]"
-      width="640"
-      height="360"
-    ></canvas>
+    <canvas ref="vtuberCanvasRef" width="640" height="360"></canvas>
   </div>
 </template>
 
 <script setup lang="ts">
 // import { initVtuber } from 'vtuber/mmd'
-import { useWebcamStore } from '~/stores/webcam'
-
-const { isFlipped } = useWebcamStore()
-
 const facePoints = computed(() => window.facePoints)
 
 const vtuberCanvasRef = ref<HTMLCanvasElement>()

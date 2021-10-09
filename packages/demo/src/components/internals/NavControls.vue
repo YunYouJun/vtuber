@@ -4,7 +4,7 @@
       <IconButton
         :active="vtuberStore.showWebcam"
         title="切换 Webcam"
-        @click="vtuberStore.toggleShowWebcam"
+        @click="toggleWebcam"
       >
         <i-ri-eye-line v-if="vtuberStore.showWebcam" title="显示" />
         <i-ri-eye-close-line v-else title="隐藏" />
@@ -24,6 +24,10 @@
         <i-mdi:video v-if="webcamStore.enabled" />
         <i-mdi:video-off v-else />
       </IconButton>
+
+      <VerticalDivider />
+
+      <DetectionControls />
     </div>
   </nav>
 </template>
@@ -40,7 +44,7 @@ const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 
 const props = withDefaults(
   defineProps<{
-    persist: boolean
+    persist?: boolean
   }>(),
   {
     persist: false,
@@ -55,8 +59,12 @@ const barStyle = computed(() =>
     : 'rounded-md shadow dark:(border border-gray-400 border-opacity-10)',
 )
 
-function toggleWebcam() {
+/**
+ * 显示圆形窗口时，则默认打开摄像头
+ */
+const toggleWebcam = () => {
+  if (!vtuberStore.showWebcam) webcamStore.enabled = true
+
   vtuberStore.toggleShowWebcam()
-  webcamStore.enabled = !webcamStore.enabled
 }
 </script>

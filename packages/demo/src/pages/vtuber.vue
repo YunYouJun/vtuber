@@ -1,11 +1,8 @@
 <template>
   <!-- vtuber 容器 -->
   <div id="vtuber-container"></div>
-  <div v-show="vtuberStore.showWebcam" id="detect-container">
-    <!-- <face-detection /> -->
-    <WebCamera />
-    <!-- <vtuber-config /> -->
-  </div>
+  <FaceDetection v-show="vtuberStore.showWebcam" />
+  <!-- <vtuber-config /> -->
   <div
     class="
       absolute
@@ -47,12 +44,5 @@ onMounted(() => {
   position: absolute;
   inset: 0;
   z-index: -1;
-}
-
-#detect-container {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  // transform: scale(0.6);
 }
 </style>
