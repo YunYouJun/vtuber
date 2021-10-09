@@ -1,10 +1,11 @@
 import { getScript } from 'vtuber/utils'
 import { isDev } from '@vtuber/shared'
 import { ASSETS } from 'vtuber/utils/cdn'
-import { animate, initVtuber } from './mmd'
+import type { GUI } from 'three/examples/jsm/libs/dat.gui.module'
+import { initVtuber } from './mmd'
 
 // export function main(AmmoLib: any) {
-export function main() {
+export async function main(container: HTMLDivElement) {
   // Ammo = AmmoLib;
   // 30 25 24 21 20 19 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0
 
@@ -18,19 +19,37 @@ export function main() {
   // unhappy: 19 24 25
   // what?: 20
 
-  const container = document.getElementById('vtuber-container')
   if (!container) return
-  initVtuber(container)
+
+  const vtuber = await initVtuber(container)
   // run({ euler: [0, 0, 0], eye: [0, 0] });
-  animate()
+
+  return vtuber
 }
 
 export class Vtuber {
-  init() {
+  gui: GUI | undefined
+
+  async init(container: HTMLDivElement) {
     const ammoPath = isDev ? ASSETS.Ammo.local : ASSETS.Ammo.cdn
-    getScript(ammoPath, () => {
-      if (window.Ammo)
-        window.Ammo().then(main)
+    return new Promise((resolve, reject) => {
+      getScript(ammoPath, () => {
+        if (window.Ammo) {
+          window.Ammo().then(async() => {
+            const vtuber = await main(container)
+            if (vtuber?.gui)
+              this.gui = vtuber.gui
+
+            resolve(this)
+          }).catch((e: any) => {
+            reject(e)
+          })
+        }
+      })
     })
+  }
+
+  destroy() {
+    this.gui?.destroy()
   }
 }

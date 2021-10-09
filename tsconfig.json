@@ -22,7 +22,8 @@
       "~/*": ["packages/demo/src/*"],
       "@vtuber/*": ["packages/*/src"],
       "vtuber": ["packages/vtuber/src/index"],
-      "vtuber/*": ["packages/vtuber/src/*"]
+      "vtuber/*": ["packages/vtuber/src/*"],
+      "three/examples/jsm/libs/dat.gui.module": ["node_modules/@types/dat.gui"]
     }
   },
   "exclude": ["dist", "node_modules"]

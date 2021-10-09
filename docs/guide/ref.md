@@ -16,3 +16,8 @@
 
 - [Learning where you are looking at (in the browser)](https://cpury.github.io/learning-where-you-are-looking-at/)
 - [lookie-lookie](https://github.com/cpury/lookie-lookie)
+
+## 其他
+
+- [slidev](https://github.com/slidevjs/slidev)
+  - Vue3 + Webcam 的实现方式

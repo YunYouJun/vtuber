@@ -1,6 +1,6 @@
 <template>
   <!-- vtuber 容器 -->
-  <div id="vtuber-container"></div>
+  <div id="vtuber-container" ref="vtuberContainer"></div>
   <FaceDetection v-show="vtuberStore.showWebcam" />
   <!-- <vtuber-config /> -->
   <div
@@ -26,16 +26,24 @@ meta:
 </route>
 
 <script setup lang="ts">
-// import { Vtuber } from 'vtuber'
+import { Vtuber } from 'vtuber'
 
 import { useVtuberStore } from '~/stores/vtuber'
 const vtuberStore = useVtuberStore()
 
 const presistNav = ref(true)
 
+const vtuberContainer = ref<HTMLDivElement>()
+
+let vtuber: Vtuber
+
 onMounted(() => {
-  // const vtuber = new Vtuber()
-  // vtuber.init()
+  vtuber = new Vtuber()
+  if (vtuberContainer.value) vtuber.init(vtuberContainer.value)
+})
+
+onUnmounted(() => {
+  vtuber.destroy()
 })
 </script>
 
