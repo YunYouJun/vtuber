@@ -1,15 +1,18 @@
-import { GUI } from 'three/examples/jsm/libs/dat.gui.module'
 import type { MMDAnimationHelper } from 'three/examples/jsm/animation/MMDAnimationHelper.js'
 import type { OutlineEffect } from 'three/examples/jsm/effects/OutlineEffect.js'
 import type { CCDIKHelper } from 'three/examples/jsm/animation/CCDIKSolver'
 import type {
   MMDPhysicsHelper,
 } from 'three/examples/jsm/animation/MMDPhysics'
+import { isDev } from '@vtuber/shared'
+import { ASSETS } from 'vtuber/utils/cdn'
 
 /**
  * GUI
  */
-export function initGui(helper: MMDAnimationHelper, effect: OutlineEffect, ikHelper: CCDIKHelper | undefined, physicsHelper: MMDPhysicsHelper | undefined) {
+export async function initGui(helper: MMDAnimationHelper, effect: OutlineEffect, ikHelper: CCDIKHelper | undefined, physicsHelper: MMDPhysicsHelper | undefined) {
+  const { GUI } = await import(/* @vite-ignore */isDev ? 'three/examples/jsm/libs/dat.gui.module' : ASSETS.GUI.cdn)
+
   const params = {
     animation: true,
     ik: true,

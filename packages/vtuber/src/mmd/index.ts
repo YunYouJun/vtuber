@@ -1,19 +1,17 @@
 import consola from 'consola'
 import * as THREE from 'three'
-import Stats from 'three/examples/jsm/libs/stats.module.js'
 
-import { GUI } from 'three/examples/jsm/libs/dat.gui.module'
+import type { GUI } from 'three/examples/jsm/libs/dat.gui.module'
 
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { OutlineEffect } from 'three/examples/jsm/effects/OutlineEffect.js'
-import { MMDLoader } from 'three/examples/jsm/loaders/MMDLoader.js'
-import { MMDAnimationHelper } from 'three/examples/jsm/animation/MMDAnimationHelper.js'
-
-import {
+import type Stats from 'three/examples/jsm/libs/stats.module.js'
+import type { OutlineEffect } from 'three/examples/jsm/effects/OutlineEffect.js'
+import type { MMDAnimationHelper } from 'three/examples/jsm/animation/MMDAnimationHelper.js'
+import type {
   MMDPhysics,
   MMDPhysicsHelper,
 } from 'three/examples/jsm/animation/MMDPhysics'
-import { CCDIKHelper } from 'three/examples/jsm/animation/CCDIKSolver'
+import type { CCDIKHelper } from 'three/examples/jsm/animation/CCDIKSolver'
+
 import { generateResult, DetectResult } from '../parse'
 
 import { getMouthIndex } from '../render/mouth'
@@ -44,7 +42,7 @@ let effect: OutlineEffect
  */
 let head: any
 
-const clock = new THREE.Clock()
+let clock: THREE.Clock
 
 const modelFile = 'models/kizunaai/kizunaai.pmx'
 
@@ -61,11 +59,31 @@ export interface VtuberOptions {
 export async function initVtuber(
   container: HTMLElement,
   options: VtuberOptions = {},
-): Promise<{gui: GUI}> {
+): Promise<{ gui: GUI }> {
+  // const Stats = await import('three/examples/jsm/libs/stats.module.js')
+  // const { OutlineEffect } = await import('three/examples/jsm/effects/OutlineEffect.js')
+  // const { MMDLoader } = await import('three/examples/jsm/loaders/MMDLoader.js')
+  // const { MMDAnimationHelper } = await import('three/examples/jsm/animation/MMDAnimationHelper.js')
+
+  clock = new THREE.Clock()
+
+  const [
+    { default: Stats },
+    { OutlineEffect },
+    { MMDLoader },
+    { MMDAnimationHelper },
+  ] = await Promise.all([
+    import('three/examples/jsm/libs/stats.module.js'),
+    import('three/examples/jsm/effects/OutlineEffect.js'),
+    import('three/examples/jsm/loaders/MMDLoader.js'),
+    import('three/examples/jsm/animation/MMDAnimationHelper.js'),
+  ])
+
   return new Promise((resolve) => {
     let gui: GUI | undefined
 
     window.inited = true
+
     const defaultOptions = {
       withAnimation: false,
     }
@@ -74,7 +92,7 @@ export async function initVtuber(
 
     camera = new THREE.PerspectiveCamera(
       20,
-      window.innerWidth / window.innerHeight,
+      globalThis.innerWidth / globalThis.innerHeight,
       1,
       1000,
     )
@@ -104,8 +122,8 @@ export async function initVtuber(
     scene.add(directionalLight)
 
     renderer = new THREE.WebGLRenderer({ antialias: true })
-    renderer.setPixelRatio(window.devicePixelRatio)
-    renderer.setSize(window.innerWidth, window.innerHeight)
+    renderer.setPixelRatio(globalThis.devicePixelRatio)
+    renderer.setSize(globalThis.innerWidth, globalThis.innerHeight)
     container.appendChild(renderer.domElement)
 
     effect = new OutlineEffect(renderer, {})
@@ -130,7 +148,7 @@ export async function initVtuber(
       mmdLoader.loadWithAnimation(
         modelFile,
         vmdFiles,
-        (mmd) => {
+        async(mmd) => {
           mesh = mmd.mesh
           mesh.position.y = gridHelper.position.y
 
@@ -142,7 +160,7 @@ export async function initVtuber(
           createPhysicsHelper()
           bindBones()
 
-          gui = initGui(helper, effect, ikHelper, physicsHelper)
+          gui = await initGui(helper, effect, ikHelper, physicsHelper)
 
           resolve({ gui })
         },
@@ -151,7 +169,7 @@ export async function initVtuber(
       )
     }
     else {
-      mmdLoader.load(modelFile, (object) => {
+      mmdLoader.load(modelFile, async(object) => {
         mesh = object
         mesh.position.y = gridHelper.position.y
 
@@ -163,7 +181,7 @@ export async function initVtuber(
         createPhysicsHelper()
         bindBones()
 
-        gui = initGui(helper, effect, ikHelper, physicsHelper)
+        gui = await initGui(helper, effect, ikHelper, physicsHelper)
 
         resolve({ gui })
       })
@@ -201,14 +219,16 @@ export async function initVtuber(
 
     animate()
 
-    window.addEventListener('resize', onWindowResize, false)
+    globalThis.addEventListener('resize', onWindowResize, false)
   })
 }
 
 /**
  * 添加缩放旋转控制
  */
-function addOrbitControls(camera: THREE.Camera, renderer: THREE.Renderer) {
+async function addOrbitControls(camera: THREE.Camera, renderer: THREE.Renderer) {
+  const { OrbitControls } = await import('three/examples/jsm/controls/OrbitControls.js')
+
   const controls = new OrbitControls(camera, renderer.domElement)
   controls.minDistance = 10
   controls.maxDistance = 100
@@ -218,9 +238,9 @@ function addOrbitControls(camera: THREE.Camera, renderer: THREE.Renderer) {
  * 重新调整窗口大小
  */
 function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight
+  camera.aspect = globalThis.innerWidth / globalThis.innerHeight
   camera.updateProjectionMatrix()
-  effect.setSize(window.innerWidth, window.innerHeight)
+  effect.setSize(globalThis.innerWidth, globalThis.innerHeight)
 }
 
 /**
@@ -237,7 +257,8 @@ function render() {
  * @param result
  */
 export function animate(result?: DetectResult) {
-  requestAnimationFrame(() => {
+  if (typeof window === 'undefined') return
+  window.requestAnimationFrame(() => {
     let result
     if (window.face)
       result = generateResult()

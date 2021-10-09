@@ -38,6 +38,7 @@ const vtuberContainer = ref<HTMLDivElement>()
 let vtuber: Vtuber
 
 onMounted(() => {
+  if (typeof window === 'undefined') return
   vtuber = new Vtuber()
   if (vtuberContainer.value) vtuber.init(vtuberContainer.value)
 })

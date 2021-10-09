@@ -16,7 +16,7 @@ const { stream, enabled } = useUserMedia({
 
 export const useWebcamStore = defineStore('webcam', () => {
   const toggleEnabled = useToggle(enabled)
-  const [isFlipped, toggleIsFlipped] = useToggle(false)
+  const [isFlipped, toggleIsFlipped] = useToggle()
 
   return {
     stream,

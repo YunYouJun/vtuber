@@ -26,5 +26,6 @@
       "three/examples/jsm/libs/dat.gui.module": ["node_modules/@types/dat.gui"]
     }
   },
+  "include": ["docs/.vitepress", "packages/*/src", "packages/global.d.ts"],
   "exclude": ["dist", "node_modules"]
 }

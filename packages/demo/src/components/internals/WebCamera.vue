@@ -7,11 +7,11 @@ const namespace = 'adv'
 
 const size = useStorage(
   `${namespace}-webcam-size`,
-  Math.round(Math.min(window.innerHeight, window.innerWidth / 8)),
+  Math.round(Math.min(globalThis.innerHeight, globalThis.innerWidth / 8)),
 )
 const position = useStorage(`${namespace}-webcam-pos`, {
-  x: window.innerWidth - size.value - 30,
-  y: window.innerHeight - size.value - 30,
+  x: globalThis.innerWidth - size.value - 30,
+  y: globalThis.innerHeight - size.value - 30,
 })
 
 const frame = ref<HTMLDivElement | undefined>()
@@ -62,10 +62,10 @@ const handleStyle = computed(() => ({
 
 function fixPosistion() {
   // move back if the camera is outside of the canvas
-  if (position.value.x >= window.innerWidth)
-    position.value.x = window.innerWidth - size.value - 30
-  if (position.value.y >= window.innerHeight)
-    position.value.y = window.innerHeight - size.value - 30
+  if (position.value.x >= globalThis.innerWidth)
+    position.value.x = globalThis.innerWidth - size.value - 30
+  if (position.value.y >= globalThis.innerHeight)
+    position.value.y = globalThis.innerHeight - size.value - 30
 }
 
 useEventListener('resize', fixPosistion)

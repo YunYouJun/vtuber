@@ -33,7 +33,6 @@
 </template>
 
 <script setup lang="ts">
-import VerticalDivider from './VerticalDivider.vue'
 import { fullscreen } from '~/stores'
 import { useVtuberStore } from '~/stores/vtuber'
 import { useWebcamStore } from '~/stores/webcam'
