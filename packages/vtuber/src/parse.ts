@@ -36,22 +36,28 @@ interface KeyPoints {
 }
 
 /**
- * 获取水平旋转量
- * @param keyPoints 关键点
+ * 获得水平与垂直旋转量
+ * @param keyPoints 
  */
-export function getHorizontalRotation(keyPoints: KeyPoints) {
+export function getRotation(keyPoints: KeyPoints) {
   const { browCenter, noseCenter, jawCenter } = keyPoints
-  const midline = browCenter.sub(jawCenter)
+  const midLine = browCenter.sub(jawCenter)
+
   // 上斜边
-  const topline = browCenter.sub(noseCenter)
-  const midlineVector = new THREE.Vector2(midline.x, midline.y)
-  const toplineVector = new THREE.Vector2(topline.x, topline.y)
+  const topLine = browCenter.sub(noseCenter)
+  const midLineVector = new THREE.Vector2(midLine.x, midLine.y)
+  const topLineVector = new THREE.Vector2(topLine.x, topLine.y)
 
-  const midlineLength = midline.magnitude()
+  const midLineLength = midLine.magnitude()
 
-  const rotation
-    = midlineVector.cross(toplineVector) / (midlineLength * midlineLength)
-  return rotation
+  const midLineLengthSquare = midLineLength * midLineLength
+
+  return {
+    // 水平 Horizontal x
+    x: midLineVector.cross(topLineVector) / midLineLengthSquare,
+    // 垂直 Vertical y
+    y: midLineVector.dot(topLineVector) / midLineLengthSquare - 0.5
+  }
 }
 
 /**
@@ -78,12 +84,14 @@ export function generateResult(): DetectResult | undefined {
   const noseCenter = points[FaceMap.nose.nostrils[2]]
   const jawCenter = points[FaceMap.jaw[2]]
 
-  const rotation = getHorizontalRotation({
+  const rotation = getRotation({
     browCenter,
     noseCenter,
     jawCenter,
   })
-  head.rotation.y = rotation
+  console.log(rotation)
+  head.rotation.y = rotation.x
+  head.rotation.x = rotation.y
 
   /**
    * 嘴巴宽度

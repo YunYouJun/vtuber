@@ -1,6 +1,6 @@
 import { UserConfig } from "vitepress";
 
-export default {
+const config: UserConfig = {
   title: "Docs for Vtuber",
   description: "从一开始的 Vtuber",
   themeConfig: {
@@ -24,7 +24,15 @@ export default {
     ["link", { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" }],
     ["meta", { name: "author", content: "YunYouJun" }],
   ],
-} as UserConfig;
+
+  markdown: {
+    config: (md) => {
+      md.use(require('markdown-it-katex'))
+    }
+  },
+}
+
+export default config;
 
 /**
  * 获取导航侧边栏
@@ -36,6 +44,7 @@ function getGuideSidebar() {
       children: [
         { text: "Why Web VTuber?", link: "/guide/index" },
         { text: "开始", link: "/guide/start" },
+        { text: "扩展功能", link: "/guide/extensions" },
         { text: "参考", link: "/guide/ref" },
       ],
     },

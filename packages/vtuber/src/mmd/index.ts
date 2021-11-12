@@ -148,7 +148,7 @@ export async function initVtuber(
       mmdLoader.loadWithAnimation(
         modelFile,
         vmdFiles,
-        async(mmd) => {
+        async (mmd) => {
           mesh = mmd.mesh
           mesh.position.y = gridHelper.position.y
 
@@ -169,7 +169,7 @@ export async function initVtuber(
       )
     }
     else {
-      mmdLoader.load(modelFile, async(object) => {
+      mmdLoader.load(modelFile, async (object) => {
         mesh = object
         mesh.position.y = gridHelper.position.y
 
@@ -207,10 +207,10 @@ export async function initVtuber(
     }
 
     function bindBones() {
-    // bind bones
+      // bind bones
       const bones = physics?.mesh.skeleton.bones
       if (bones) {
-      // 头部
+        // 头部
         head = bones[8]
       }
     }
