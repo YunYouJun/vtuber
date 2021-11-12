@@ -28,6 +28,13 @@ const config: UserConfig = {
   markdown: {
     config: (md) => {
       md.use(require('markdown-it-katex'))
+      const originalRender = md
+        .render
+      md.render = function () {
+        return originalRender
+          .apply(this, arguments)
+          .replace(/<span class="katex">/g, '<span v-pre class="katex">')
+      }
     }
   },
 }
