@@ -1,40 +1,71 @@
 <template>
-  <!-- This example requires Tailwind CSS v2.0+ -->
-  <el-menu
-    :default-active="activeIndex"
-    class="el-menu-demo"
-    mode="horizontal"
-    router
-  >
-    <el-menu-item index="/">
-      <div class="flex h-full justify-center items-center">
-        <img class="flex w-auto h-8" src="/favicon.svg" alt="Workflow" />
-      </div>
-    </el-menu-item>
-    <el-menu-item v-for="(item, i) in navItems" :key="i" :index="item.to">
-      {{ item.title }}
-    </el-menu-item>
-  </el-menu>
+  <nav class="text-xl my-5">
+    <router-link
+      active-class="text-blue-500"
+      class="icon-btn mx-2"
+      to="/"
+      :title="t('button.home')"
+    >
+      <i-ri-home-2-line />
+    </router-link>
+
+    <router-link class="icon-btn mx-2" to="/vtuber">
+      <i-ri-ghost-line />
+    </router-link>
+
+    <router-link class="icon-btn mx-2" to="/webcam">
+      <i-ri-camera-line />
+    </router-link>
+
+    <button
+      class="icon-btn mx-2 !outline-none"
+      :title="t('button.toggle_dark')"
+      @click="toggleDark()"
+    >
+      <i-ri-moon-line v-if="isDark" />
+      <i-ri-sun-line v-else />
+    </button>
+
+    <a class="icon-btn mx-2" :title="t('button.toggle_langs')" @click="toggleLocales">
+      <i-ri-translate />
+    </a>
+
+    <router-link
+      class="icon-btn mx-2"
+      active-class="text-blue-500"
+      to="/about"
+      :title="t('button.about')"
+    >
+      <i-ri-file-info-line />
+    </router-link>
+
+    <a
+      class="icon-btn mx-2"
+      rel="noreferrer"
+      :href="pkg.repository.url"
+      target="_blank"
+      title="GitHub"
+    >
+      <i-ri-github-line />
+    </a>
+  </nav>
 </template>
 
 <script setup lang="ts">
+import * as pkg from '~/../package.json'
+import { isDark, toggleDark } from '~/logic'
+
 export interface NavItem {
   name: string
   title: string
   to: string
 }
 
-const activeIndex = ref('/')
-const navItems = [
-  {
-    name: 'Vtuber',
-    title: 'Vtuber Demo',
-    to: '/vtuber',
-  },
-  {
-    name: 'Webcam',
-    title: 'Webcam',
-    to: '/webcam',
-  },
-]
+const { t, availableLocales, locale } = useI18n()
+
+const toggleLocales = () => {
+  // change to some real logic
+  const locales = availableLocales
+  locale.value = locales[(locales.indexOf(locale.value) + 1) % locales.length]
+}
 </script>

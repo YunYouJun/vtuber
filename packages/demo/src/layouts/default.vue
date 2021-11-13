@@ -1,11 +1,9 @@
 <template>
-  <el-container>
-    <el-header style="--el-header-padding: 0">
-      <BaseHeader />
-    </el-header>
+  <main class="p-1 text-center text-gray-700 dark:text-gray-200 min-h-screen">
+    <BaseHeader />
     <el-main>
       <router-view />
     </el-main>
     <BaseFooter />
-  </el-container>
+  </main>
 </template>

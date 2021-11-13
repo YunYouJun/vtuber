@@ -1,8 +1,7 @@
-import { ElMain, ElHeader, ElMenu, ElContainer } from 'element-plus'
-import 'element-plus/dist/index.css'
+import { ElMain, ElHeader, ElContainer } from 'element-plus'
 import { UserModule } from '~/types'
 
-const components = [ElMain, ElHeader, ElContainer, ElMenu]
+const components = [ElMain, ElHeader, ElContainer]
 
 export const install: UserModule = ({ app }) => {
   components.forEach((component) => {
