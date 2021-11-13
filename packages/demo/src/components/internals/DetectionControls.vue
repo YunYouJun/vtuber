@@ -1,8 +1,9 @@
 <template>
+
   <IconButton :active="faceStore.detecting" @click="faceStore.toggleDetecting">
-    <i-ri-pause-line v-if="faceStore.detecting" />
-    <i-ri-play-line v-else />
+    <i-ri-body-scan-line/>
   </IconButton>
+  <IconButton @click="downloadPointsRecording"><i-ri-download-line /></IconButton>
   <IconButton :active="faceStore.options.debug" @click="faceStore.toggleDebug">
     <i-ri-bug-line />
   </IconButton>
@@ -29,6 +30,8 @@
 </template>
 
 <script setup lang="ts">
+import { ElMessage } from 'element-plus'
+import { downloadObjectAsJson } from 'vtuber/utils'
 import { useFaceStore } from '~/stores/face'
 import { useWebcamStore } from '~/stores/webcam'
 
@@ -47,4 +50,18 @@ const webcamStore = useWebcamStore()
 //     onPlay()
 //   }
 // }
+
+/**
+ * 下载记录的点 文本
+ */
+const downloadPointsRecording = () => {
+  if (faceStore.pointsRecording && faceStore.pointsRecording.length) {
+    downloadObjectAsJson(faceStore.pointsRecording, 'points')
+  } else {
+    ElMessage.warning({
+      message: '您尚未记录数据',
+      showClose: true
+    })
+  }
+}
 </script>

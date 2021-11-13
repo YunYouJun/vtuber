@@ -89,7 +89,6 @@ export function generateResult(): DetectResult | undefined {
     noseCenter,
     jawCenter,
   })
-  console.log(rotation)
   head.rotation.y = rotation.x
   head.rotation.x = rotation.y
 

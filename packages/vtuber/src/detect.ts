@@ -37,6 +37,7 @@ export function drawFaceRecognitionResults(
   },
 ) {
   const dims = faceapi.matchDimensions(canvas, videoEl, true)
+  // resize the detected boxes in case your displayed image has a different size than the original
   const resizedResults = faceapi.resizeResults(results, dims)
 
   // if (options.debug) consola.log(resizedResults)
@@ -46,13 +47,9 @@ export function drawFaceRecognitionResults(
 
   if (options.withFaceLandmarks) {
     faceapi.draw.drawFaceLandmarks(canvas, resizedResults)
-    // draw text number
+
+    // 面部的 68 个特征点
     const points = resizedResults.landmarks.positions
-    // 挂载到全局，store 管理速度似乎太慢
-    window.face = {
-      enable: true,
-      points,
-    }
 
     // 绘制索引点序号
     if (options.withLandmarkIndex) {

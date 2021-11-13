@@ -1,7 +1,14 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
+import * as faceapi from 'face-api.js'
 
 export const useFaceStore = defineStore('face', () => {
   const [detecting, toggleDetecting] = useToggle()
+
+  // 记录每次检测的时间和对应的点位置信息
+  const pointsRecording: {
+    time: number,
+    points: faceapi.Point[]
+  }[] = []
 
   const options = reactive({
     debug: false,
@@ -24,6 +31,8 @@ export const useFaceStore = defineStore('face', () => {
   }
 
   return {
+    pointsRecording,
+
     detecting,
     toggleDetecting,
 

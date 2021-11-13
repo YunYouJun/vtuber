@@ -1,6 +1,6 @@
 <template>
   <button
-    class="vtb-icon-button m-1 shadow bg-gray-100 hover:shadow-lg"
+    class="vtb-icon-button m-1 shadow hover:shadow-lg"
     :class="[active ? 'is-active' : '']"
     :title="title"
     :aria-label="title"
@@ -34,14 +34,15 @@ withDefaults(defineProps<{ active?: boolean; title?: string }>(), {
 
   transition: 0.2s;
 
+  @apply bg-gray-100 bg-opacity-90 dark:bg-gray-800;
+
   &:focus {
     outline: none;
   }
 
   &:active,
   &.is-active {
-    color: white;
-    background-color: rgba(0, 0, 0, 0.8);
+    @apply text-white bg-black dark:(bg-white text-black);
   }
 }
 </style>

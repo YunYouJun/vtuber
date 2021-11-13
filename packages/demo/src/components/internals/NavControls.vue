@@ -28,6 +28,12 @@
       <VerticalDivider />
 
       <DetectionControls />
+
+      <VerticalDivider />
+      <IconButton :active="playVtuberAction" @click="">
+        <i-ri-pause-line v-if="playVtuberAction" />
+        <i-ri-play-line v-else />
+      </IconButton>
     </div>
   </nav>
 </template>
@@ -40,6 +46,9 @@ const vtuberStore = useVtuberStore()
 const webcamStore = useWebcamStore()
 
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
+
+// 根据已记录的数据，播放动作
+const playVtuberAction = ref(false)
 
 const props = withDefaults(
   defineProps<{

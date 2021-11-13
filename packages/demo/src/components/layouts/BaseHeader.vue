@@ -17,18 +17,9 @@
       <i-ri-camera-line />
     </router-link>
 
-    <button
-      class="icon-btn mx-2 !outline-none"
-      :title="t('button.toggle_dark')"
-      @click="toggleDark()"
-    >
-      <i-ri-moon-line v-if="isDark" />
-      <i-ri-sun-line v-else />
-    </button>
-
-    <a class="icon-btn mx-2" :title="t('button.toggle_langs')" @click="toggleLocales">
-      <i-ri-translate />
-    </a>
+    <router-link class="icon-btn mx-2" to="/record">
+      <i-ri-tape-line />
+    </router-link>
 
     <router-link
       class="icon-btn mx-2"
@@ -47,6 +38,21 @@
       title="GitHub"
     >
       <i-ri-github-line />
+    </a>
+  </nav>
+
+  <nav>
+    <button
+      class="icon-btn mx-2 !outline-none"
+      :title="t('button.toggle_dark')"
+      @click="toggleDark()"
+    >
+      <i-ri-moon-line v-if="isDark" />
+      <i-ri-sun-line v-else />
+    </button>
+
+    <a class="icon-btn mx-2" :title="t('button.toggle_langs')" @click="toggleLocales">
+      <i-ri-translate />
     </a>
   </nav>
 </template>
