@@ -30,8 +30,8 @@
       <DetectionControls />
 
       <VerticalDivider />
-      <IconButton :active="playVtuberAction" @click="">
-        <i-ri-pause-line v-if="playVtuberAction" />
+      <IconButton :active="isActionPlaying" @click="playVtuberAction">
+        <i-ri-pause-line v-if="isActionPlaying" />
         <i-ri-play-line v-else />
       </IconButton>
     </div>
@@ -40,6 +40,7 @@
 
 <script setup lang="ts">
 import { fullscreen } from '~/stores'
+import type { RecordedFrame } from '~/stores/face'
 import { useVtuberStore } from '~/stores/vtuber'
 import { useWebcamStore } from '~/stores/webcam'
 const vtuberStore = useVtuberStore()
@@ -48,7 +49,17 @@ const webcamStore = useWebcamStore()
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 
 // 根据已记录的数据，播放动作
-const playVtuberAction = ref(false)
+const isActionPlaying = ref(false)
+
+const playVtuberAction = async () => {
+  const data = await fetch('/data/rawPoints.json').then(res => res.json()) as RecordedFrame[]
+
+  // data.forEach(item => {
+  //   setTimeout(() => {
+  //     window.face.points = item.points
+  //   }, item.time);
+  // })
+}
 
 const props = withDefaults(
   defineProps<{

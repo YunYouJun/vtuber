@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { Point } from 'face-api.js'
 import { FaceMap } from './face'
+import { IKeyframeTrack, RecordedFrame } from '~/stores/face'
 
 /**
  * 解析后的检测结果
@@ -60,12 +61,46 @@ export function getRotation(keyPoints: KeyPoints) {
   }
 }
 
+
 /**
- * 生成解析后的结果
+ * 将 dlib 68点数据转换为 序列帧的形式
  */
-export function generateResult(): DetectResult | undefined {
-  if (!window.face) return
-  const points = window.face.points
+export function convertRecordedFrameToFrameTrack(data: RecordedFrame[]) {
+  const tracks: {
+    x: IKeyframeTrack,
+    y: IKeyframeTrack
+  } = {
+    x: {
+      times: [],
+      values: []
+    },
+    y: {
+      times: [],
+      values: []
+    }
+  }
+
+  for (let i = 0; i < data.length; i++) {
+    const rawFrame = data[i];
+    const result = generateResultFromPoints(rawFrame.points.map(point => new Point(point.x, point.y)))
+
+    const time = rawFrame.time / 1000
+    tracks.x.times.push(time)
+    tracks.y.times.push(time)
+    if (result) {
+      tracks.x.values.push(result.head.rotation.x)
+      tracks.y.values.push(result.head.rotation.y)
+    }
+  }
+
+  return tracks
+}
+
+/**
+ * 根据 dlib 68 点位置，生成解析后的结果
+ */
+export function generateResultFromPoints(points: Point[]): DetectResult | undefined {
+  if (!points || !points.length) return
 
   const head = {
     rotation: {

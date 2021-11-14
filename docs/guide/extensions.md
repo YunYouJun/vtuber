@@ -17,3 +17,15 @@
 ## 播放数据
 
 记录好数据，我们需要把记录的数据拿来播放。
+
+3D 模型本身每一帧都要去渲染，每次渲染时我们让它去读取全局 windows 下 face.points 是否有数据，若有数据，则进行解析，根据解析后的结果跳转旋转并渲染。
+
+> 同时到这里我们也可以发现此前看起来卡顿的原因了，人脸识别记录下来的数据远远不足 30fps，所以动画的状态看起来其实几乎是瞬移的。
+> 我们应当根据此对动画进行插值，来使动画变得更加平缓。
+
+动画这部分，THREE.JS 有自己的动画序列关键帧规范。我们尽量把格式往上靠近。
+
+- [AnimationClip | three.js](https://threejs.org/docs/index.html?q=animati#api/en/animation/AnimationClip)
+- [examples/misc_animation_keys | three.js | GitHub](https://github.com/mrdoob/three.js/blob/master/examples/misc_animation_keys.html)
+
+[KeyframeTrack](https://threejs.org/docs/index.html?q=keyfr#api/en/animation/KeyframeTrack) 规则为 times 与 values 均为数组。

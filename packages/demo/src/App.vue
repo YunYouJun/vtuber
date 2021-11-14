@@ -6,6 +6,8 @@ useHead({
   title: 'Vtuber',
   meta: [{ name: 'description', content: '从一开始的 Vtuber' }],
 })
+
+window.face = {}
 </script>
 
 <template>

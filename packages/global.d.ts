@@ -12,8 +12,7 @@ declare global {
      * faceapi 相关
      */
     face: {
-      enable: boolean
-      points: faceapi.Point[]
+      points?: {x: number, y: number}[]
     }
 
     /**

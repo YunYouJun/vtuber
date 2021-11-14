@@ -1,6 +1,8 @@
 import consola from 'consola'
 import * as THREE from 'three'
 
+import { Point } from 'face-api.js'
+
 import type { GUI } from 'three/examples/jsm/libs/dat.gui.module'
 
 import type Stats from 'three/examples/jsm/libs/stats.module.js'
@@ -12,7 +14,7 @@ import type {
 } from 'three/examples/jsm/animation/MMDPhysics'
 import type { CCDIKHelper } from 'three/examples/jsm/animation/CCDIKSolver'
 
-import { generateResult, DetectResult } from '../parse'
+import { generateResultFromPoints, DetectResult, convertRecordedFrameToFrameTrack } from '../parse'
 
 import { getMouthIndex } from '../render/mouth'
 import { initGui } from './gui'
@@ -40,9 +42,11 @@ let effect: OutlineEffect
 /**
  * 头部
  */
-let head: any
+let head: THREE.Bone
 
 let clock: THREE.Clock
+
+let mixer: THREE.AnimationMixer
 
 const modelFile = 'models/kizunaai/kizunaai.pmx'
 
@@ -181,6 +185,13 @@ export async function initVtuber(
         createPhysicsHelper()
         bindBones()
 
+        // setup the THREE.AnimationMixer
+        mixer = new THREE.AnimationMixer(mesh);
+        // create a ClipAction and set it to play
+        const clip = await createAnimationClip()
+        const clipAction = mixer.clipAction(clip);
+        clipAction.play();
+
         gui = await initGui(helper, effect, ikHelper, physicsHelper)
 
         resolve({ gui })
@@ -223,6 +234,48 @@ export async function initVtuber(
   })
 }
 
+// ROTATION
+// Rotation should be performed using quaternions, using a THREE.QuaternionKeyframeTrack
+// Interpolating Euler angles (.rotation property) can be problematic and is currently not supported
+function createRotationAboutAxis(name: string, axis: 'x' | 'y' | 'z', times: number[], values: number[]) {
+  // set up rotation about x axis
+  const dirAxis = new THREE.Vector3(axis === 'x' ? 1 : 0, axis === 'y' ? 1 : 0, axis === 'z' ? 1 : 0);
+
+  const keyframeValues: number[] = []
+  for (let i = 0; i < values.length; i++) {
+    const value = values[i] * 5;
+    console.log(value)
+    const q = new THREE.Quaternion().setFromAxisAngle(dirAxis, value)
+    keyframeValues.push(q.x)
+    keyframeValues.push(q.y)
+    keyframeValues.push(q.z)
+    keyframeValues.push(q.w)
+
+    // keyframeValues.push(qInitial.x)
+    // keyframeValues.push(qInitial.y)
+    // keyframeValues.push(qInitial.z)
+    // keyframeValues.push(qInitial.w)
+  }
+
+  // const quaternionKF = new THREE.QuaternionKeyframeTrack(`${name}.quaternion`, times, keyframeValues);
+  const quaternionKF = new THREE.QuaternionKeyframeTrack(`${name}.quaternion`, Array.from(new Array(values.length).keys()), keyframeValues);
+  return quaternionKF
+}
+
+/**
+ * 创建动画序列
+ */
+async function createAnimationClip() {
+  const tracks = await fetch('/data/vtuber-info.json').then(res => res.json())
+  const headName = '.skeleton.bones[8]'
+
+  const xKF = createRotationAboutAxis(headName, 'x', tracks.x.times, tracks.x.values)
+  const yKF = createRotationAboutAxis(headName, 'y', tracks.y.times, tracks.y.values)
+
+  const clip = new THREE.AnimationClip('Action', 20, [xKF, yKF])
+  return clip
+}
+
 /**
  * 添加缩放旋转控制
  */
@@ -248,20 +301,26 @@ function onWindowResize() {
  * @param result 检测数据
  */
 function render() {
-  helper.update(clock.getDelta())
+  const delta = clock.getDelta()
+
+  if (mixer) {
+    mixer.update(delta);
+  }
+  helper.update(delta)
   effect.render(scene, camera)
 }
 
 /**
- *
+ * 根据结果播放动画
  * @param result
  */
 export function animate(result?: DetectResult) {
   if (typeof window === 'undefined') return
   window.requestAnimationFrame(() => {
     let result
-    if (window.face)
-      result = generateResult()
+    if (window.face && window.face.points) {
+      result = generateResultFromPoints(window.face.points.map(point => new Point(point.x, point.y)))
+    }
     else
       result = window.vtuberResult
 
@@ -283,7 +342,7 @@ export function renderWithResult(result: DetectResult) {
 
   /**
    * 旋转头部
-   * @param ratoio 比例
+   * @param ratio 比例
    */
   function rotateHead(ratio = 5) {
     head.rotation.x = result.head.rotation.x * ratio

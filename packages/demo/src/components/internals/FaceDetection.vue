@@ -79,18 +79,15 @@ async function startDetecting(
   if (results) {
     // 面部的 68 个特征点
     const points = results.landmarks.positions
+    console.log(points)
     // 挂载到全局，store 管理速度似乎太慢
-    window.face = {
-      enable: true,
-      points,
-    }
+    window.face.points = points
     drawFaceRecognitionResults(canvas, videoEl, results, defaultOptions)
 
-
-    faceStore.pointsRecording.push(
+    faceStore.recordedPointsFrames.push(
       {
         time: elapsedTime,
-        points
+        points: points.map((point) => ({x: point.x, y: point.y}))
       }
     )
   }
