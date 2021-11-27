@@ -45,6 +45,7 @@ declare module 'vue' {
     IRiMoonLine: typeof import('~icons/ri/moon-line')['default']
     IRiPauseLine: typeof import('~icons/ri/pause-line')['default']
     IRiPlayLine: typeof import('~icons/ri/play-line')['default']
+    IRiSpyLine: typeof import('~icons/ri/spy-line')['default']
     IRiSunLine: typeof import('~icons/ri/sun-line')['default']
     IRiTapeLine: typeof import('~icons/ri/tape-line')['default']
     IRiTranslate: typeof import('~icons/ri/translate')['default']

@@ -19,11 +19,10 @@
       "vite-plugin-vue-layouts/client"
     ],
     "paths": {
-      "~/*": ["packages/demo/src/*"],
+      "~/*": ["packages/client/src/*"],
       "@vtuber/*": ["packages/*/src"],
       "vtuber": ["packages/vtuber/src/index"],
       "vtuber/*": ["packages/vtuber/src/*"],
-      "three/examples/jsm/libs/dat.gui.module": ["node_modules/@types/dat.gui"]
     }
   },
   "include": ["docs/.vitepress", "packages/*/src", "packages/global.d.ts"],

@@ -3,7 +3,7 @@ import consola from 'consola'
 import { getScript } from 'vtuber/utils'
 import { isDev } from '@vtuber/shared'
 import { ASSETS } from 'vtuber/utils/cdn'
-import type { GUI } from 'three/examples/jsm/libs/dat.gui.module'
+import type { GUI } from 'three/examples/jsm/libs/lil-gui.module.min'
 import { initVtuber } from './mmd'
 
 // export function main(AmmoLib: any) {
@@ -39,8 +39,8 @@ export class Vtuber {
     const ammoPath = isDev ? ASSETS.Ammo.local : ASSETS.Ammo.cdn
     return new Promise((resolve, reject) => {
       getScript(ammoPath, () => {
-        if (window.Ammo) {
-          window.Ammo().then(async() => {
+        if (self.Ammo) {
+          self.Ammo().then(async() => {
             const vtuber = await main(container)
             if (vtuber?.gui)
               this.gui = vtuber.gui

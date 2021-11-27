@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 // import { initVtuber } from 'vtuber/mmd'
-const facePoints = computed(() => window.facePoints)
+const facePoints = computed(() => self.face.points)
 
 const vtuberCanvasRef = ref<HTMLCanvasElement>()
 let ctx: null | CanvasRenderingContext2D = null

@@ -1,5 +1,12 @@
 # 起步
 
+::: warning
+
+由于 face-api.js 已经有一段时间没有活跃更新了，而谷歌推出的 [mediapipe](https://github.com/google/mediapipe) 除了可以跨平台地检测人脸，甚至还可以检测身体动作等。
+这无疑是我们更想要的东西，所以此后将会从 face-api.js 迁移为使用 [mediapipe/Holistic](https://google.github.io/mediapipe/solutions/holistic)。
+
+:::
+
 使用已有的 [face-api.js](https://github.com/justadudewhohacks/face-api.js/) 配合浏览器的 WebCam 可以很方便地搭建出一个人近乎实时的人脸检测效果 Demo。
 
 > [68 Point Face Landmark Detection Models](https://github.com/justadudewhohacks/face-api.js#68-point-face-landmark-detection-models)

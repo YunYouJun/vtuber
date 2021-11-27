@@ -3,7 +3,7 @@ import * as THREE from 'three'
 
 import { Point } from 'face-api.js'
 
-import type { GUI } from 'three/examples/jsm/libs/dat.gui.module'
+import type { GUI } from 'three/examples/jsm/libs/lil-gui.module.min'
 
 import type Stats from 'three/examples/jsm/libs/stats.module.js'
 import type { OutlineEffect } from 'three/examples/jsm/effects/OutlineEffect.js'
@@ -14,7 +14,7 @@ import type {
 } from 'three/examples/jsm/animation/MMDPhysics'
 import type { CCDIKHelper } from 'three/examples/jsm/animation/CCDIKSolver'
 
-import { generateResultFromPoints, DetectResult, convertRecordedFrameToFrameTrack } from '../parse'
+import { generateResultFromPoints, DetectResult } from '../parse'
 
 import { getMouthIndex } from '../render/mouth'
 import { initGui } from './gui'
@@ -86,7 +86,7 @@ export async function initVtuber(
   return new Promise((resolve) => {
     let gui: GUI | undefined
 
-    window.inited = true
+    self.inited = true
 
     const defaultOptions = {
       withAnimation: false,
@@ -152,7 +152,7 @@ export async function initVtuber(
       mmdLoader.loadWithAnimation(
         modelFile,
         vmdFiles,
-        async (mmd) => {
+        async(mmd) => {
           mesh = mmd.mesh
           mesh.position.y = gridHelper.position.y
 
@@ -173,7 +173,7 @@ export async function initVtuber(
       )
     }
     else {
-      mmdLoader.load(modelFile, async (object) => {
+      mmdLoader.load(modelFile, async(object) => {
         mesh = object
         mesh.position.y = gridHelper.position.y
 
@@ -186,11 +186,11 @@ export async function initVtuber(
         bindBones()
 
         // setup the THREE.AnimationMixer
-        mixer = new THREE.AnimationMixer(mesh);
+        mixer = new THREE.AnimationMixer(mesh)
         // create a ClipAction and set it to play
         const clip = await createAnimationClip()
-        const clipAction = mixer.clipAction(clip);
-        clipAction.play();
+        const clipAction = mixer.clipAction(clip)
+        clipAction.play()
 
         gui = await initGui(helper, effect, ikHelper, physicsHelper)
 
@@ -239,13 +239,14 @@ export async function initVtuber(
 // Interpolating Euler angles (.rotation property) can be problematic and is currently not supported
 function createRotationAboutAxis(name: string, axis: 'x' | 'y' | 'z', times: number[], values: number[]) {
   // set up rotation about x axis
-  const dirAxis = new THREE.Vector3(axis === 'x' ? 1 : 0, axis === 'y' ? 1 : 0, axis === 'z' ? 1 : 0);
+  const dirAxis = new THREE.Vector3(axis === 'x' ? 1 : 0, axis === 'y' ? 1 : 0, axis === 'z' ? 1 : 0)
 
   const keyframeValues: number[] = []
   for (let i = 0; i < values.length; i++) {
-    const value = values[i] * 5;
+    const value = values[i] * 5
     console.log(value)
     const q = new THREE.Quaternion().setFromAxisAngle(dirAxis, value)
+    // efficiency push > concat
     keyframeValues.push(q.x)
     keyframeValues.push(q.y)
     keyframeValues.push(q.z)
@@ -258,7 +259,7 @@ function createRotationAboutAxis(name: string, axis: 'x' | 'y' | 'z', times: num
   }
 
   // const quaternionKF = new THREE.QuaternionKeyframeTrack(`${name}.quaternion`, times, keyframeValues);
-  const quaternionKF = new THREE.QuaternionKeyframeTrack(`${name}.quaternion`, Array.from(new Array(values.length).keys()), keyframeValues);
+  const quaternionKF = new THREE.QuaternionKeyframeTrack(`${name}.quaternion`, Array.from(new Array(values.length).keys()), keyframeValues)
   return quaternionKF
 }
 
@@ -272,7 +273,7 @@ async function createAnimationClip() {
   const xKF = createRotationAboutAxis(headName, 'x', tracks.x.times, tracks.x.values)
   const yKF = createRotationAboutAxis(headName, 'y', tracks.y.times, tracks.y.values)
 
-  const clip = new THREE.AnimationClip('Action', 20, [xKF, yKF])
+  const clip = new THREE.AnimationClip('Action', 10, [xKF, yKF])
   return clip
 }
 
@@ -303,9 +304,9 @@ function onWindowResize() {
 function render() {
   const delta = clock.getDelta()
 
-  if (mixer) {
-    mixer.update(delta);
-  }
+  if (mixer)
+    mixer.update(delta)
+
   helper.update(delta)
   effect.render(scene, camera)
 }
@@ -318,9 +319,9 @@ export function animate(result?: DetectResult) {
   if (typeof window === 'undefined') return
   window.requestAnimationFrame(() => {
     let result
-    if (window.face && window.face.points) {
+    if (window.face && window.face.points)
       result = generateResultFromPoints(window.face.points.map(point => new Point(point.x, point.y)))
-    }
+
     else
       result = window.vtuberResult
 

@@ -7,6 +7,11 @@
 
 - [Live2D 官方示例说明](https://docs.live2d.com/cubism-sdk-tutorials/sample-build-web/)
 
+## MediaPipe
+
+- [mediapipe](https://google.github.io/mediapipe/getting_started/javascript.html)
+- [MediaPipe Holistic](https://google.github.io/mediapipe/solutions/holistic): 全身识别
+
 ## 其他有趣可以参考的东西
 
 - [Vtuber_Tutorial](https://github.com/RimoChan/Vtuber_Tutorial): 【教程】从零开始的自制 Vtuber！

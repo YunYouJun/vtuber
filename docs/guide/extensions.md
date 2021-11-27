@@ -29,3 +29,5 @@
 - [examples/misc_animation_keys | three.js | GitHub](https://github.com/mrdoob/three.js/blob/master/examples/misc_animation_keys.html)
 
 [KeyframeTrack](https://threejs.org/docs/index.html?q=keyfr#api/en/animation/KeyframeTrack) 规则为 times 与 values 均为数组。
+
+- [rhubarb-lip-sync | GitHub](https://github.com/DanielSWolf/rhubarb-lip-sync): 音频 -> 嘴形

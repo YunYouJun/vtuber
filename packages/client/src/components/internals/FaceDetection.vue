@@ -36,7 +36,7 @@ watchEffect(() => {
 })
 
 // 第一次检测开始的时间
-let startTime = ref(0)
+const startTime = ref(0)
 
 /**
  * 当 video 播放时，则检测
@@ -61,7 +61,6 @@ async function startDetecting(
 
   consola.info('Start Detecting')
 
-
   const options = new faceapi.SsdMobilenetv1Options({
     minConfidence: faceapiOptions.minConfidence,
   })
@@ -79,16 +78,16 @@ async function startDetecting(
   if (results) {
     // 面部的 68 个特征点
     const points = results.landmarks.positions
-    console.log(points)
+    // console.log(points)
     // 挂载到全局，store 管理速度似乎太慢
-    window.face.points = points
+    self.face.points = points
     drawFaceRecognitionResults(canvas, videoEl, results, defaultOptions)
 
     faceStore.recordedPointsFrames.push(
       {
         time: elapsedTime,
-        points: points.map((point) => ({x: point.x, y: point.y}))
-      }
+        points: points.map(point => ({ x: point.x, y: point.y })),
+      },
     )
   }
 

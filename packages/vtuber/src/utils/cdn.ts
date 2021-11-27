@@ -15,7 +15,7 @@ type AssetsMap = {
 
 const assetsMap: AssetsMap = {
   THREE: '/build/three.module.js',
-  GUI: '/examples/jsm/libs/dat.gui.module.js',
+  GUI: '/examples/jsm/libs/lil-gui.module.min.js',
   Stats: '/examples/jsm/libs/stats.module.js',
   OutlineEffect: '/examples/jsm/effects/OutlineEffect.js',
   MMDLoader: '/examples/jsm/loaders/MMDLoader.js',

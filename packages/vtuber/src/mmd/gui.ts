@@ -11,7 +11,7 @@ import { ASSETS } from 'vtuber/utils/cdn'
  * GUI
  */
 export async function initGui(helper: MMDAnimationHelper, effect: OutlineEffect, ikHelper: CCDIKHelper | undefined, physicsHelper: MMDPhysicsHelper | undefined) {
-  const { GUI } = await import(/* @vite-ignore */isDev ? 'three/examples/jsm/libs/dat.gui.module' : ASSETS.GUI.cdn)
+  const { GUI } = await import(/* @vite-ignore */isDev ? 'three/examples/jsm/libs/lil-gui.module.min' : ASSETS.GUI.cdn)
 
   const params = {
     animation: true,

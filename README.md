@@ -33,7 +33,9 @@ yarn docs:build
 
 ## Base
 
-- [face-api.js](https://github.com/justadudewhohacks/face-api.js/)
+- ~~[face-api.js](https://github.com/justadudewhohacks/face-api.js/)~~
+- [google/mediapipe](https://github.com/google/mediapipe)
+  - [Holistic](https://google.github.io/mediapipe/solutions/holistic.html)
 
 ## Thanks
 
