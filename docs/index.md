@@ -1,6 +1,7 @@
 ---
 home: true
-heroImage: /favicon.svg
+# heroImage: /favicon.svg
+heroIconClass: i-ri-ghost-line
 heroAlt: Logo image
 heroText: Vtuber
 tagline: 从一开始的 Vtuber
@@ -13,5 +14,10 @@ features:
     details: 使用 Vue + Vite + TypeScript 驱动的项目与文档
   - title: 表现不佳
     details: 浏览器端的算力必然让你的风扇嗡嗡作响
-footer: MIT Licensed | Copyright © 2020-present YunYouJun
+footer: 
+  license: MIT Licensed
+  since: 2020
+  author:
+    name: YunYouJun
+    url: https://www.yunyoujun.cn
 ---

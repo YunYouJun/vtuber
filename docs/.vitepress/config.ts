@@ -6,6 +6,8 @@ const config: UserConfig = {
   themeConfig: {
     repo: "YunYouJun/vtuber",
     logo: "/favicon.svg",
+    iconClass: 'i-ri-ghost-line',
+
     docsBranch: "main",
     docsDir: "docs",
 

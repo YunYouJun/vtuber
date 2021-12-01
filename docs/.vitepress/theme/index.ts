@@ -1,9 +1,11 @@
-import DefaultTheme from "vitepress/dist/client/theme-default";
+import YouTheme from "vitepress-theme-you";
 
 import "./styles/index.scss";
 import "./styles/custom.scss";
 import "./styles/katex.scss";
 
+import 'uno.css'
+
 export default {
-  ...DefaultTheme,
+  ...YouTheme,
 };

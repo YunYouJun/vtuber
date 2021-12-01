@@ -1,4 +1,5 @@
-:root {
-  --c-brand: #5186ec;
-  --c-brand-light: #{lighten(#5186ec, 5%)};
-}
+@forward "vitepress-theme-you/styles/vars.scss" with (
+  $colors: (
+    'brand': #5186ec,
+  ),
+);
