@@ -6,6 +6,10 @@ import { ASSETS } from 'vtuber/utils/cdn'
 import type { GUI } from 'three/examples/jsm/libs/lil-gui.module.min'
 import { initVtuber } from './mmd'
 
+export { useVtuber } from './kalidokit'
+
+export * from './types'
+
 // export function main(AmmoLib: any) {
 export async function main(container: HTMLDivElement) {
   // Ammo = AmmoLib;

@@ -36,6 +36,7 @@ yarn docs:build
 - ~~[face-api.js](https://github.com/justadudewhohacks/face-api.js/)~~
 - [google/mediapipe](https://github.com/google/mediapipe)
   - [Holistic](https://google.github.io/mediapipe/solutions/holistic.html)
+- [kalidokit](https://github.com/yeemachine/kalidokit)
 
 ## Thanks
 

@@ -1,6 +1,6 @@
 <template>
   <!-- vtuber 容器 -->
-  <div id="vtuber-container" ref="vtuberContainer"></div>
+  <div id="vtuber-container" ref="vtuberContainer" />
   <FaceDetection v-show="vtuberStore.showWebcam" />
   <!-- <vtuber-config /> -->
   <div
@@ -14,7 +14,7 @@
       hover:opacity-100
       shadow-dark-900
     "
-    :class="[presistNav ? 'opacity-100 right-0' : 'oapcity-0 p-2']"
+    :class="[presistNav ? 'opacity-100 right-0' : 'opacity-0 p-2']"
   >
     <NavControls />
   </div>

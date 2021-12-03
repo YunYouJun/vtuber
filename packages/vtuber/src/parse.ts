@@ -38,7 +38,7 @@ interface KeyPoints {
 
 /**
  * 获得水平与垂直旋转量
- * @param keyPoints 
+ * @param keyPoints
  */
 export function getRotation(keyPoints: KeyPoints) {
   const { browCenter, noseCenter, jawCenter } = keyPoints
@@ -57,31 +57,30 @@ export function getRotation(keyPoints: KeyPoints) {
     // 水平 Horizontal x
     x: midLineVector.cross(topLineVector) / midLineLengthSquare,
     // 垂直 Vertical y
-    y: midLineVector.dot(topLineVector) / midLineLengthSquare - 0.5
+    y: midLineVector.dot(topLineVector) / midLineLengthSquare - 0.5,
   }
 }
-
 
 /**
  * 将 dlib 68点数据转换为 序列帧的形式
  */
 export function convertRecordedFrameToFrameTrack(data: RecordedFrame[]) {
   const tracks: {
-    x: IKeyframeTrack,
+    x: IKeyframeTrack
     y: IKeyframeTrack
   } = {
     x: {
       times: [],
-      values: []
+      values: [],
     },
     y: {
       times: [],
-      values: []
-    }
+      values: [],
+    },
   }
 
   for (let i = 0; i < data.length; i++) {
-    const rawFrame = data[i];
+    const rawFrame = data[i]
     const result = generateResultFromPoints(rawFrame.points.map(point => new Point(point.x, point.y)))
 
     const time = rawFrame.time / 1000

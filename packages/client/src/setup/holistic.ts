@@ -2,8 +2,6 @@ import * as controls from '@mediapipe/control_utils'
 import * as drawingUtils from '@mediapipe/drawing_utils'
 import * as mpHolistic from '@mediapipe/holistic'
 
-import { Ref } from 'vue'
-
 const config: mpHolistic.HolisticConfig = {
   locateFile: (file) => {
     return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic@${mpHolistic.VERSION}/${file}`
@@ -31,9 +29,8 @@ export function initHolistic(options: {
   // call tick() each time the graph runs.
   const fpsControl = new controls.FPS()
 
-  const activeEffect = 'mask'
-
   function onResults(results: mpHolistic.Results): void {
+    console.log(results)
     // Remove landmarks we don't want to draw.
     removeLandmarks(results)
 
@@ -88,21 +85,6 @@ export function initHolistic(options: {
       }
     }
 
-    // Pose...
-    drawingUtils.drawConnectors(
-      canvasCtx, results.poseLandmarks, mpHolistic.POSE_CONNECTIONS,
-      { color: 'white' })
-    drawingUtils.drawLandmarks(
-      canvasCtx,
-      Object.values(mpHolistic.POSE_LANDMARKS_LEFT)
-        .map(index => results.poseLandmarks[index]),
-      { visibilityMin: 0.65, color: 'white', fillColor: 'rgb(255,138,0)' })
-    drawingUtils.drawLandmarks(
-      canvasCtx,
-      Object.values(mpHolistic.POSE_LANDMARKS_RIGHT)
-        .map(index => results.poseLandmarks[index]),
-      { visibilityMin: 0.65, color: 'white', fillColor: 'rgb(0,217,231)' })
-
     // Hands...
     drawingUtils.drawConnectors(
       canvasCtx, results.rightHandLandmarks, mpHolistic.HAND_CONNECTIONS,
@@ -128,9 +110,9 @@ export function initHolistic(options: {
     })
 
     // Face...
-    drawingUtils.drawConnectors(
-      canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_TESSELATION,
-      { color: '#C0C0C070', lineWidth: 1 })
+    // drawingUtils.drawConnectors(
+    //   canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_TESSELATION,
+    //   { color: '#C0C0C070', lineWidth: 1 })
     drawingUtils.drawConnectors(
       canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_RIGHT_EYE,
       { color: 'rgb(0,217,231)' })
@@ -150,6 +132,12 @@ export function initHolistic(options: {
       canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_LIPS,
       { color: '#E0E0E0', lineWidth: 5 })
 
+    // ea
+    // console.log(results.ea)
+    drawingUtils.drawConnectors(
+      canvasCtx, results.ea, mpHolistic.FACE_GEOMETRY,
+      { color: 'red', lineWidth: 10 })
+
     canvasCtx.restore()
   }
 
@@ -162,7 +150,6 @@ export function initHolistic(options: {
       videoElement,
       fpsControl,
       holistic,
-      activeEffect,
     })
   }
 
@@ -218,9 +205,8 @@ function createControlPanel(params: {
   videoElement: HTMLVideoElement
   fpsControl: controls.FPSControl
   holistic: mpHolistic.Holistic
-  activeEffect: Ref<string>
 }) {
-  const { canvasElement, videoElement, fpsControl, holistic, activeEffect } = params
+  const { canvasElement, videoElement, fpsControl, holistic } = params
   const controlsElement
       = document.getElementsByClassName('control-panel')[0] as HTMLDivElement
 

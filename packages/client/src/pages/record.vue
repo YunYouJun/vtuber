@@ -11,7 +11,7 @@
       hover:opacity-100
       shadow-dark-900
     "
-    :class="[presistNav ? 'opacity-100 right-0' : 'oapcity-0 p-2']"
+    :class="[presistNav ? 'opacity-100 right-0' : 'opacity-0 p-2']"
   >
     <NavControls />
   </div>

@@ -3,14 +3,16 @@
     "dlib",
     "faceapi",
     "FACEMESH",
+    "kalidokit",
     "Kizuna",
+    "lerp",
     "mediapipe",
     "vtuber"
   ],
   "i18n-ally.keystyle": "nested",
   "i18n-ally.localesPaths": "locales",
   "i18n-ally.sortKeys": true,
-  "prettier.enable": false,
+  // "prettier.enable": false,
   "typescript.tsdk": "node_modules/typescript/lib",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true,

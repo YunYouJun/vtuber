@@ -1,5 +1,6 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { useToggle } from '@vueuse/core'
+import { modelList } from '@vtuber/shared'
 
 export const useVtuberStore = defineStore('vtuber', () => {
   /**
@@ -7,8 +8,12 @@ export const useVtuberStore = defineStore('vtuber', () => {
    */
   const [showWebcam, toggleShowWebcam] = useToggle(true)
 
+  const curModelUrl = ref(modelList[0].url)
+
   return {
     showWebcam,
+    curModelUrl,
+
     toggleShowWebcam,
   }
 })

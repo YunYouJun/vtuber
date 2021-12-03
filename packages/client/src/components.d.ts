@@ -51,6 +51,7 @@ declare module 'vue' {
     IRiTranslate: typeof import('~icons/ri/translate')['default']
     IRiUserLine: typeof import('~icons/ri/user-line')['default']
     NavControls: typeof import('./components/internals/NavControls.vue')['default']
+    ToggleVrm: typeof import('./components/vtuber/ToggleVrm.vue')['default']
     VerticalDivider: typeof import('./components/internals/VerticalDivider.vue')['default']
     VtuberCanvas: typeof import('./components/internals/VtuberCanvas.vue')['default']
     VtuberConfig: typeof import('./components/vtuber/VtuberConfig.vue')['default']

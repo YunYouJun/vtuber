@@ -14,9 +14,9 @@ const position = useStorage(`${namespace}-webcam-pos`, {
   y: globalThis.innerHeight - size.value - 30,
 })
 
-const frame = ref<HTMLDivElement | undefined>()
-const handler = ref<HTMLDivElement | undefined>()
-const video = ref<HTMLVideoElement | undefined>()
+const frame = ref<HTMLElement>()
+const handler = ref<HTMLDivElement>()
+const video = ref<HTMLVideoElement>()
 
 defineExpose({
   video,
@@ -25,7 +25,7 @@ defineExpose({
 watchEffect(() => {
   // if (video.value) video.value.srcObject = stream.value!
   if (video.value) video.value.srcObject = webcamStore.stream!
-})
+}, { flush: 'post' })
 
 const { style: containerStyle } = useDraggable(
   frame as unknown as HTMLElement,
@@ -73,7 +73,7 @@ onMounted(fixPosistion)
 </script>
 
 <template>
-  <div class="fixed z-10" :style="containerStyle">
+  <div class="fixed z-10 cursor-move" :style="containerStyle">
     <div
       ref="frame"
       class="
@@ -91,9 +91,10 @@ onMounted(fixPosistion)
         autoplay
         muted
         volume="0"
-        class="object-cover min-w-full min-h-full rounded-full"
-        style="transform: rotateY(180deg)"
+        class="object-cover min-w-full min-h-full rounded-full transform rotate-y-180"
       />
+
+      <slot />
     </div>
 
     <div
@@ -115,8 +116,6 @@ onMounted(fixPosistion)
         handlerDown ? '!opacity-100' : '',
         webcamStore.enabled ? 'bg-green-500' : '',
       ]"
-    ></div>
-
-    <slot></slot>
+    />
   </div>
 </template>

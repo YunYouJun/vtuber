@@ -6,9 +6,9 @@
     "serve": "vitepress serve ."
   },
   "devDependencies": {
-    "@unocss/preset-icons": "^0.12.16",
+    "@unocss/preset-icons": "^0.15.3",
     "markdown-it-katex": "^2.0.3",
-    "unocss": "^0.12.16",
+    "unocss": "^0.15.3",
     "vitepress": "^0.20.1"
   },
   "dependencies": {
