@@ -1,6 +1,7 @@
 import * as controls from '@mediapipe/control_utils'
 import * as drawingUtils from '@mediapipe/drawing_utils'
 import * as mpHolistic from '@mediapipe/holistic'
+import { createControlPanel } from 'vtuber/mediapipe/control'
 
 const config: mpHolistic.HolisticConfig = {
   locateFile: (file) => {

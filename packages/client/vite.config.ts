@@ -164,7 +164,6 @@ export default defineConfig({
       '@vueuse/core',
       '@vueuse/head',
       'three/examples/js/libs/ammo.wasm',
-      'face-api.js',
       'consola',
     ],
     exclude: ['vue-demi'],

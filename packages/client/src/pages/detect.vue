@@ -1,12 +1,11 @@
 <template>
   <!-- <FaceDetection v-show="vtuberStore.showWebcam" /> -->
   <div class="container" m="auto">
-    <video class="input_video hidden"></video>
+    <video class="input_video hidden" />
     <canvas class="output_canvas w-180 rounded shadow" bg="gray-200" m="auto" />
   </div>
   <div class="absolute left-0 top-0">
-    <div class="control-panel ">
-    </div>
+    <div class="control-panel " />
   </div>
 </template>
 

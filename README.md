@@ -1,6 +1,7 @@
 # vtuber
 
-[![GitHub Pages](https://github.com/YunYouJun/vtuber/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/YunYouJun/vtuber/actions/workflows/gh-pages.yml)
+[![CI](https://github.com/YunYouJun/vtuber/actions/workflows/ci.yml/badge.svg)](https://github.com/YunYouJun/vtuber/actions/workflows/ci.yml)
+[![GitHub deployments](https://img.shields.io/github/deployments/YunYouJun/vtuber/production)](https://vercel.com/yunyoujun/vtuber)
 
 从一开始的 Vtuber。
 
@@ -13,7 +14,7 @@
 
 ## Usage
 
-```sh
+```bash
 # install dependencies
 pnpm i
 

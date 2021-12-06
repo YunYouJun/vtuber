@@ -9,10 +9,6 @@
       <i-ri-home-2-line />
     </router-link>
 
-    <router-link class="icon-btn mx-2" to="/vtuber">
-      <i-ri-ghost-line />
-    </router-link>
-
     <router-link class="icon-btn mx-2" to="/detect">
       <i-ri-spy-line />
     </router-link>

@@ -5,21 +5,13 @@ type AssetName =
   | 'GUI'
   | 'Stats'
   | 'OutlineEffect'
-  | 'MMDLoader'
-  | 'MMDAnimationHelper'
   | 'Ammo'
 
-type AssetsMap = {
-  [propName in AssetName]: string;
-}
-
-const assetsMap: AssetsMap = {
+const assetsMap = {
   THREE: '/build/three.module.js',
   GUI: '/examples/jsm/libs/lil-gui.module.min.js',
   Stats: '/examples/jsm/libs/stats.module.js',
   OutlineEffect: '/examples/jsm/effects/OutlineEffect.js',
-  MMDLoader: '/examples/jsm/loaders/MMDLoader.js',
-  MMDAnimationHelper: '/examples/jsm/animation/MMDAnimationHelper.js',
   Ammo: '/examples/js/libs/ammo.wasm.js',
 }
 

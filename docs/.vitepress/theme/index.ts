@@ -1,7 +1,6 @@
 import YouTheme from "vitepress-theme-you";
 
 import "./styles/index.scss";
-import "./styles/custom.scss";
 import "./styles/katex.scss";
 
 import 'uno.css'

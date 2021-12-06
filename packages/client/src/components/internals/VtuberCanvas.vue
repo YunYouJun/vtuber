@@ -1,6 +1,6 @@
 <template>
   <div class="vtuber-container">
-    <canvas ref="vtuberCanvasRef" width="640" height="360"></canvas>
+    <canvas ref="vtuberCanvasRef" width="640" height="360" />
   </div>
 </template>
 

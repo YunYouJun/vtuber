@@ -1,4 +1,4 @@
-name: GitHub Pages
+name: CI
 on:
   push:
     branches:
@@ -17,16 +17,17 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 6.16.1
+          version: 6.23.6
 
       - name: Install dependencies
         run: pnpm i
 
       - run: pnpm build:client
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./packages/client/dist
-          force_orphan: true
+      # gh-pages, now use vercel
+      # - name: Deploy
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: ./packages/client/dist
+      #     force_orphan: true
