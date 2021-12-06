@@ -1,3 +1,4 @@
+import { namespace } from '@vtuber/shared'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 
 const currentCamera = ref<string>()
@@ -18,13 +19,19 @@ export const useWebcamStore = defineStore('webcam', () => {
   const toggleEnabled = useToggle(enabled)
   const [isFlipped, toggleIsFlipped] = useToggle()
 
+  // 摄像头画面是否铺满
+  const fitHeight = useStorage(`${namespace}-fitHeight`, false)
+  const toggleFitHeight = useToggle(fitHeight)
+
   return {
     stream,
     enabled,
 
     isFlipped,
+    fitHeight,
     toggleEnabled,
     toggleIsFlipped,
+    toggleFitHeight,
   }
 })
 

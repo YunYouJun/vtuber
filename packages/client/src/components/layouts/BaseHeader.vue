@@ -17,12 +17,12 @@
       <i-ri-spy-line />
     </router-link>
 
-    <router-link class="icon-btn mx-2" to="/webcam">
+    <router-link class="icon-btn mx-2" to="/2d">
       <i-ri-camera-line />
     </router-link>
 
-    <router-link class="icon-btn mx-2" to="/record">
-      <i-ri-tape-line />
+    <router-link class="icon-btn mx-2" to="/3d">
+      <i-ri-body-scan-line />
     </router-link>
 
     <router-link

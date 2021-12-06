@@ -1,5 +1,6 @@
 import type { Results } from '@mediapipe/holistic'
 import { POSE_CONNECTIONS, FACEMESH_TESSELATION, HAND_CONNECTIONS } from '@mediapipe/holistic'
+import * as mpHolistic from '@mediapipe/holistic'
 
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils'
 
@@ -8,6 +9,9 @@ export function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoElement, 
   canvas.height = video.videoHeight
   const canvasCtx = canvas.getContext('2d')
   if (!canvasCtx) return
+
+  // Remove landmarks we don't want to draw.
+  // removeLandmarks(results)
 
   canvasCtx.save()
   canvasCtx.clearRect(0, 0, canvas.width, canvas.height)
@@ -88,4 +92,17 @@ export function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoElement, 
   drawFaceLandmarks()
   drawPupil()
   drawHandLandmarks()
+}
+
+/**
+ * 移除不想绘制的点
+ * @param results
+ */
+export function removeLandmarks(results: mpHolistic.Results) {
+  if (results.poseLandmarks) {
+    // face in pose landmarks
+    const elements = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 16, 17, 18, 19, 20, 21, 22]
+    for (const element of elements)
+      delete results.poseLandmarks[element]
+  }
 }

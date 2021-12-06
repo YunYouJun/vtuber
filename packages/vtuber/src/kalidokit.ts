@@ -2,15 +2,20 @@ import { ref } from 'vue'
 import consola from 'consola'
 import * as THREE from 'three'
 import { VRM, VRMUtils } from '@pixiv/three-vrm'
-import { Holistic } from '@mediapipe/holistic'
 import { Camera } from '@mediapipe/camera_utils'
-import type { Results } from '@mediapipe/holistic'
+import { FPS } from '@mediapipe/control_utils'
 
-import { MaybeRef } from '@vueuse/shared'
+import type { MaybeRef } from '@vueuse/shared'
+
+import * as mpHolistic from '@mediapipe/holistic'
 import { drawResults } from './mediapipe'
 import { animateVRM } from './vrm'
 
 interface VtuberOptions {
+  /**
+   * 初始化时使用的 VRM 模型链接
+   */
+  vrmUrl?: string
   videoRef: MaybeRef<HTMLVideoElement | undefined>
   /**
    * mediapipe 示意画布
@@ -24,6 +29,11 @@ interface VtuberOptions {
    * 调试模式
    */
   debug?: boolean
+  /**
+   * 显示控制面板
+   */
+  displayControlPanel?: boolean
+
 }
 
 /**
@@ -39,6 +49,8 @@ export function useVtuber(options: VtuberOptions) {
   let currentVrm: VRM
 
   let scene: THREE.Scene
+
+  let holistic: mpHolistic.Holistic
 
   return {
     loadModelProgress,
@@ -111,6 +123,7 @@ export function useVtuber(options: VtuberOptions) {
       const loader = new GLTFLoader()
       loader.crossOrigin = 'anonymous'
       // Import model from URL, add your own model here
+      consola.info(`加载模型：${vrmOptions.url}`)
       loader.load(
         vrmOptions.url,
 
@@ -137,34 +150,59 @@ export function useVtuber(options: VtuberOptions) {
         error => console.error(error),
       )
     },
-    create(createOptions: {
-      vrmUrl: string
+
+    initVRM(vrmOptions?: {
+      url?: string
     }) {
+      if (!scene)
+        this.initScene(vrmCanvasRef)
+
+      const vrmUrl = (vrmOptions && vrmOptions.url) || options.vrmUrl
+      if (vrmUrl) {
+        this.loadVRM({
+          url: vrmUrl,
+        })
+      }
+      else {
+        consola.error('缺少 VRM 模型链接')
+      }
+    },
+
+    /**
+     * 初始化 Holistic 检测
+     * @returns
+     */
+    initHolistic() {
+      if (holistic) {
+        consola.info('Holistic 实例已存在')
+        return
+      }
+
       // createVtuber(options)
       const canvasEl = unref(mpCanvasRef)
       const videoEl = unref(videoRef)
-
       if (!canvasEl) {
         consola.error('canvasEl is not found')
         return
       }
-
       if (!videoEl) {
         consola.error('videoEl is not found')
         return
       }
 
-      consola.info('Start create Vtuber')
-
-      this.initScene(vrmCanvasRef)
-
-      this.loadVRM({
-        url: createOptions.vrmUrl,
-      })
+      consola.info('start holistic...')
 
       /* SETUP MEDIAPIPE HOLISTIC INSTANCE */
 
-      const onResults = (results: Results) => {
+      // We'll add this to our control panel later, but we'll save it here so we can
+      // call tick() each time the graph runs.
+      const fpsControl = new FPS()
+
+      const onResults = (results: mpHolistic.Results) => {
+        // Update the frame rate.
+        if (options.displayControlPanel)
+          fpsControl.tick()
+
         // Draw landmark guides
         drawResults(canvasEl, videoEl, results)
 
@@ -172,12 +210,13 @@ export function useVtuber(options: VtuberOptions) {
         animateVRM(currentVrm, videoEl, results)
       }
 
-      const holistic = new Holistic({
+      const config: mpHolistic.HolisticConfig = {
         locateFile: (file) => {
-          return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic@0.5.1635989137/${file}`
+          return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic@${mpHolistic.VERSION}/${file}`
         },
-      })
+      }
 
+      holistic = new mpHolistic.Holistic(config)
       holistic.setOptions({
         modelComplexity: 1,
         smoothLandmarks: true,
@@ -193,8 +232,6 @@ export function useVtuber(options: VtuberOptions) {
         onFrame: async() => {
           await holistic.send({ image: videoEl })
         },
-        width: 640,
-        height: 480,
       })
       camera.start()
     },

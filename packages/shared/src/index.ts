@@ -4,3 +4,5 @@
 export const isDev = import.meta.env.MODE === 'development'
 
 export * from './modelList'
+
+export const namespace = 'vtb'

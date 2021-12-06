@@ -1,10 +1,11 @@
 <template>
   <div class="preview flex justify-center items-center h-full">
     <div class="max-w-500px inline-flex z-1">
-      <el-progress v-if="loadPercent !== 100" type="circle" :percentage="loadPercent" />
+      <el-progress v-if="vtbStore.loadPercent !== 100" type="circle" :percentage="vtbStore.loadPercent" />
     </div>
     <ToggleVrm class="z-1" />
     <WebCamera
+      v-if="vtbStore.showWebcam"
       ref="webCamera"
       :class="[webcamStore.isFlipped ? 'transform rotate-y-180' : '']"
     >
@@ -13,39 +14,23 @@
         class="
           absolute
           left-0
-          top-0
-          object-cover
+          right-0
           w-full
-          h-full
-          rounded-full
           pointer-events-none
           transform
           rotate-y-180
         "
+        :style="webcamStore.fitHeight ? { height: '100%' } : { width: '100%' }"
       />
     </WebCamera>
     <canvas ref="vrmCanvasRef" class="vrm-canvas absolute top-0 left-0" />
   </div>
 
-  <div
-    class="
-      absolute
-      bottom-0
-      left-0
-      transition
-      duration-300
-      opacity-0
-      hover:opacity-100
-      shadow-dark-900
-    "
-  >
-    <NavControls />
-  </div>
+  <NavControls :persist="true" />
 </template>
 
 <script lang="ts" setup>
 import { useVtuber } from 'vtuber'
-import { modelList } from '@vtuber/shared'
 import { useWebcamStore } from '~/stores/webcam'
 import { useVtuberStore } from '~/stores/vtuber'
 
@@ -53,7 +38,7 @@ const webcamStore = useWebcamStore()
 
 const webCamera = ref()
 
-const vtuberStore = useVtuberStore()
+const vtbStore = useVtuberStore()
 
 useHead({
   meta: [{
@@ -68,30 +53,22 @@ const vrmCanvasRef = ref<HTMLCanvasElement>()
 const videoRef = computed(() => webCamera.value?.video)
 
 const vtuber = useVtuber({
+  vrmUrl: vtbStore.curModelUrl,
   mpCanvasRef,
   vrmCanvasRef,
   videoRef,
 })
 
-const loadPercent = computed(() => {
-  const progress = vtuber.loadModelProgress.value
-  let percent = 0
-  if (progress)
-    percent = Math.floor(progress.loaded / progress.total * 100)
-  return percent
-})
+vtbStore.setInstance(vtuber)
 
-onMounted(() => {
-  vtuber.create({
-    // Ashtra
-    vrmUrl: vtuberStore.curModelUrl,
-  })
-})
-
-watch(() => vtuberStore.curModelUrl, (vrmUrl: string) => {
+watch(() => vtbStore.curModelUrl, (vrmUrl: string) => {
   vtuber.loadVRM({
     url: vrmUrl,
   })
+})
+
+onMounted(() => {
+  vtuber.initVRM()
 })
 
 </script>

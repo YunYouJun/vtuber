@@ -15,10 +15,10 @@
 
 ```sh
 # install dependencies
-yarn
+pnpm i
 
 # dev
-yarn dev
+pnpm run dev
 ```
 
 ## Dev
@@ -27,7 +27,7 @@ yarn dev
 
 ```bash
 # 构建文档
-yarn docs:build
+pnpm docs:build
 # docs/.vitepress/dist
 ```
 
@@ -40,4 +40,6 @@ yarn docs:build
 
 ## Thanks
 
+- [Alicia Solid | VRoid Hub](https://hub.vroid.com/characters/515144657245174640/models/6438391937465666012)
+  - 利用条件: アバターOK/暴力表現OK/性的表現OK/法人OK/個人商用OK - 同人OK/改変OK/再配布OK/クレジット表記不要
 - [Kizuna AI official website](https://kizunaai.com/): 非商业模型免费使用

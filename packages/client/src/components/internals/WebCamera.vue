@@ -3,7 +3,7 @@ import { useWebcamStore } from '~/stores/webcam'
 
 const webcamStore = useWebcamStore()
 
-const namespace = 'adv'
+const namespace = 'vtb'
 
 const size = useStorage(
   `${namespace}-webcam-size`,
@@ -70,6 +70,10 @@ function fixPosistion() {
 
 useEventListener('resize', fixPosistion)
 onMounted(fixPosistion)
+
+const isRounded = ref(true)
+// 摄像头画面是否铺满
+const fitHeight = ref(false)
 </script>
 
 <template>
@@ -77,12 +81,14 @@ onMounted(fixPosistion)
     <div
       ref="frame"
       class="
-        rounded-full
+        flex
+        justify-center
+        items-center
         shadow-lg
         bg-gray-400 bg-opacity-10
         overflow-hidden
-        object-cover
       "
+      :class="isRounded ? ['object-cover', 'rounded-full'] : ''"
       :style="frameStyle"
     >
       <video
@@ -91,7 +97,9 @@ onMounted(fixPosistion)
         autoplay
         muted
         volume="0"
-        class="object-cover min-w-full min-h-full rounded-full transform rotate-y-180"
+        class="transform rotate-y-180"
+        :class="isRounded ? ['object-cover', 'rounded-full'] : ''"
+        :style="webcamStore.fitHeight ? { height: '100%' } : { width: '100%' }"
       />
 
       <slot />
