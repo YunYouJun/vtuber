@@ -8,7 +8,7 @@ import { FPS } from '@mediapipe/control_utils'
 import type { MaybeRef } from '@vueuse/shared'
 
 import * as mpHolistic from '@mediapipe/holistic'
-import { drawResults } from './mediapipe'
+import { drawResults, useHolistic } from './mediapipe'
 import { animateVRM } from './vrm'
 
 interface VtuberOptions {
@@ -210,20 +210,8 @@ export function useVtuber(options: VtuberOptions) {
         animateVRM(currentVrm, videoEl, results)
       }
 
-      const config: mpHolistic.HolisticConfig = {
-        locateFile: (file) => {
-          return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic@${mpHolistic.VERSION}/${file}`
-        },
-      }
+      holistic = useHolistic()
 
-      holistic = new mpHolistic.Holistic(config)
-      holistic.setOptions({
-        modelComplexity: 1,
-        smoothLandmarks: true,
-        minDetectionConfidence: 0.7,
-        minTrackingConfidence: 0.7,
-        refineFaceLandmarks: true,
-      })
       // Pass holistic a callback function
       holistic.onResults(onResults)
 

@@ -1,23 +1,18 @@
-import consola from 'consola'
 import * as THREE from 'three'
 
 import { Point } from 'face-api.js'
 
-import type { GUI } from 'three/examples/jsm/libs/lil-gui.module.min'
+// import type { GUI } from 'three/examples/jsm/libs/lil-gui.module.min'
 
 import type Stats from 'three/examples/jsm/libs/stats.module.js'
 import type { OutlineEffect } from 'three/examples/jsm/effects/OutlineEffect.js'
 import type { MMDAnimationHelper } from 'three/examples/jsm/animation/MMDAnimationHelper.js'
-import type {
-  MMDPhysics,
-  MMDPhysicsHelper,
-} from 'three/examples/jsm/animation/MMDPhysics'
-import type { CCDIKHelper } from 'three/examples/jsm/animation/CCDIKSolver'
+// import type { CCDIKHelper } from 'three/examples/jsm/animation/CCDIKSolver'
 
 import { generateResultFromPoints, DetectResult } from '../parse'
 
 import { getMouthIndex } from '../render/mouth'
-import { initGui } from './gui'
+// import { initGui } from './gui'
 
 /**
  * Webcam 检测得到的数据
@@ -29,9 +24,9 @@ export interface ResultData {
 let stats: Stats
 
 let helper: MMDAnimationHelper
-let ikHelper: CCDIKHelper | undefined
-let physics: MMDPhysics | undefined
-let physicsHelper: MMDPhysicsHelper | undefined
+// let ikHelper: CCDIKHelper | undefined
+// let physics: MMDPhysics | undefined
+// let physicsHelper: MMDPhysicsHelper | undefined
 
 let mesh: THREE.SkinnedMesh
 let camera: THREE.PerspectiveCamera
@@ -48,8 +43,6 @@ let clock: THREE.Clock
 
 let mixer: THREE.AnimationMixer
 
-const modelFile = 'models/kizunaai/kizunaai.pmx'
-
 export interface VtuberOptions {
   /**
    * 加载动画
@@ -63,7 +56,7 @@ export interface VtuberOptions {
 export async function initVtuber(
   container: HTMLElement,
   options: VtuberOptions = {},
-): Promise<{ gui: GUI }> {
+) {
   // const Stats = await import('three/examples/jsm/libs/stats.module.js')
   // const { OutlineEffect } = await import('three/examples/jsm/effects/OutlineEffect.js')
   // const { MMDLoader } = await import('three/examples/jsm/loaders/MMDLoader.js')
@@ -74,17 +67,13 @@ export async function initVtuber(
   const [
     { default: Stats },
     { OutlineEffect },
-    { MMDLoader },
-    { MMDAnimationHelper },
   ] = await Promise.all([
     import('three/examples/jsm/libs/stats.module.js'),
     import('three/examples/jsm/effects/OutlineEffect.js'),
-    import('three/examples/jsm/loaders/MMDLoader.js'),
-    import('three/examples/jsm/animation/MMDAnimationHelper.js'),
   ])
 
-  return new Promise((resolve) => {
-    let gui: GUI | undefined
+  return new Promise(() => {
+    // let gui: GUI | undefined
 
     self.inited = true
 
@@ -137,94 +126,92 @@ export async function initVtuber(
     container.appendChild(stats.dom)
 
     // model
-    function onProgress(xhr: ProgressEvent) {
-      if (xhr.lengthComputable) {
-        const percentComplete = (xhr.loaded / xhr.total) * 100
-        consola.log(`${xhr.type}: ${Math.round(percentComplete)}% downloaded`)
-      }
-    }
+    // function onProgress(xhr: ProgressEvent) {
+    //   if (xhr.lengthComputable) {
+    //     const percentComplete = (xhr.loaded / xhr.total) * 100
+    //     consola.log(`${xhr.type}: ${Math.round(percentComplete)}% downloaded`)
+    //   }
+    // }
 
-    helper = new MMDAnimationHelper()
+    // const mmdLoader = new MMDLoader()
+    // if (options.withAnimation) {
+    //   const vmdFiles = ['models/mmd/vmds/wavefile_v2.vmd']
+    //   mmdLoader.loadWithAnimation(
+    //     modelFile,
+    //     vmdFiles,
+    //     async(mmd) => {
+    //       mesh = mmd.mesh
+    //       mesh.position.y = gridHelper.position.y
 
-    const mmdLoader = new MMDLoader()
-    if (options.withAnimation) {
-      const vmdFiles = ['models/mmd/vmds/wavefile_v2.vmd']
-      mmdLoader.loadWithAnimation(
-        modelFile,
-        vmdFiles,
-        async(mmd) => {
-          mesh = mmd.mesh
-          mesh.position.y = gridHelper.position.y
+    //       scene.add(mesh)
 
-          scene.add(mesh)
+    //       helper.add(mesh, { animation: mmd.animation, physics: true })
 
-          helper.add(mesh, { animation: mmd.animation, physics: true })
+    //       createIkHelper()
+    //       createPhysicsHelper()
+    //       bindBones()
 
-          createIkHelper()
-          createPhysicsHelper()
-          bindBones()
+    //       gui = await initGui(helper, effect, ikHelper, physicsHelper)
 
-          gui = await initGui(helper, effect, ikHelper, physicsHelper)
+    //       resolve({ gui })
+    //     },
+    //     onProgress,
+    //     undefined,
+    //   )
+    // }
+    // else {
+    //   mmdLoader.load(modelFile, async(object) => {
+    //     mesh = object
+    //     mesh.position.y = gridHelper.position.y
 
-          resolve({ gui })
-        },
-        onProgress,
-        undefined,
-      )
-    }
-    else {
-      mmdLoader.load(modelFile, async(object) => {
-        mesh = object
-        mesh.position.y = gridHelper.position.y
+    //     scene.add(mesh)
 
-        scene.add(mesh)
+    //     helper.add(mesh, { physics: true })
 
-        helper.add(mesh, { physics: true })
+    //     createIkHelper()
+    //     createPhysicsHelper()
+    //     bindBones()
 
-        createIkHelper()
-        createPhysicsHelper()
-        bindBones()
+    //     // setup the THREE.AnimationMixer
+    //     mixer = new THREE.AnimationMixer(mesh)
+    //     // create a ClipAction and set it to play
+    //     const clip = await createAnimationClip()
+    //     const clipAction = mixer.clipAction(clip)
+    //     clipAction.play()
 
-        // setup the THREE.AnimationMixer
-        mixer = new THREE.AnimationMixer(mesh)
-        // create a ClipAction and set it to play
-        const clip = await createAnimationClip()
-        const clipAction = mixer.clipAction(clip)
-        clipAction.play()
+    //     gui = await initGui(helper, effect, ikHelper, physicsHelper)
 
-        gui = await initGui(helper, effect, ikHelper, physicsHelper)
+    //     resolve({ gui })
+    //   })
+    // }
 
-        resolve({ gui })
-      })
-    }
+    // function createIkHelper() {
+    //   ikHelper = helper.objects.get(mesh)?.ikSolver.createHelper()
 
-    function createIkHelper() {
-      ikHelper = helper.objects.get(mesh)?.ikSolver.createHelper()
+    //   if (ikHelper) {
+    //     ikHelper.visible = false
+    //     scene.add(ikHelper)
+    //   }
+    // }
 
-      if (ikHelper) {
-        ikHelper.visible = false
-        scene.add(ikHelper)
-      }
-    }
+    // function createPhysicsHelper() {
+    //   physics = helper.objects.get(mesh)?.physics
+    //   physicsHelper = physics?.createHelper()
 
-    function createPhysicsHelper() {
-      physics = helper.objects.get(mesh)?.physics
-      physicsHelper = physics?.createHelper()
+    //   if (physicsHelper) {
+    //     physicsHelper.visible = false
+    //     scene.add(physicsHelper)
+    //   }
+    // }
 
-      if (physicsHelper) {
-        physicsHelper.visible = false
-        scene.add(physicsHelper)
-      }
-    }
-
-    function bindBones() {
-      // bind bones
-      const bones = physics?.mesh.skeleton.bones
-      if (bones) {
-        // 头部
-        head = bones[8]
-      }
-    }
+    // function bindBones() {
+    //   // bind bones
+    //   const bones = physics?.mesh.skeleton.bones
+    //   if (bones) {
+    //     // 头部
+    //     head = bones[8]
+    //   }
+    // }
 
     addOrbitControls(camera, renderer)
 
@@ -237,45 +224,44 @@ export async function initVtuber(
 // ROTATION
 // Rotation should be performed using quaternions, using a THREE.QuaternionKeyframeTrack
 // Interpolating Euler angles (.rotation property) can be problematic and is currently not supported
-function createRotationAboutAxis(name: string, axis: 'x' | 'y' | 'z', times: number[], values: number[]) {
-  // set up rotation about x axis
-  const dirAxis = new THREE.Vector3(axis === 'x' ? 1 : 0, axis === 'y' ? 1 : 0, axis === 'z' ? 1 : 0)
+// function createRotationAboutAxis(name: string, axis: 'x' | 'y' | 'z', times: number[], values: number[]) {
+//   // set up rotation about x axis
+//   const dirAxis = new THREE.Vector3(axis === 'x' ? 1 : 0, axis === 'y' ? 1 : 0, axis === 'z' ? 1 : 0)
 
-  const keyframeValues: number[] = []
-  for (let i = 0; i < values.length; i++) {
-    const value = values[i] * 5
-    console.log(value)
-    const q = new THREE.Quaternion().setFromAxisAngle(dirAxis, value)
-    // efficiency push > concat
-    keyframeValues.push(q.x)
-    keyframeValues.push(q.y)
-    keyframeValues.push(q.z)
-    keyframeValues.push(q.w)
+//   const keyframeValues: number[] = []
+//   for (let i = 0; i < values.length; i++) {
+//     const value = values[i] * 5
+//     const q = new THREE.Quaternion().setFromAxisAngle(dirAxis, value)
+//     // efficiency push > concat
+//     keyframeValues.push(q.x)
+//     keyframeValues.push(q.y)
+//     keyframeValues.push(q.z)
+//     keyframeValues.push(q.w)
 
-    // keyframeValues.push(qInitial.x)
-    // keyframeValues.push(qInitial.y)
-    // keyframeValues.push(qInitial.z)
-    // keyframeValues.push(qInitial.w)
-  }
+//     // keyframeValues.push(qInitial.x)
+//     // keyframeValues.push(qInitial.y)
+//     // keyframeValues.push(qInitial.z)
+//     // keyframeValues.push(qInitial.w)
+//   }
 
-  // const quaternionKF = new THREE.QuaternionKeyframeTrack(`${name}.quaternion`, times, keyframeValues);
-  const quaternionKF = new THREE.QuaternionKeyframeTrack(`${name}.quaternion`, Array.from(new Array(values.length).keys()), keyframeValues)
-  return quaternionKF
-}
+//   // const quaternionKF = new THREE.QuaternionKeyframeTrack(`${name}.quaternion`, times, keyframeValues);
+//   const quaternionKF = new THREE.QuaternionKeyframeTrack(`${name}.quaternion`, Array.from(new Array(values.length).keys()), keyframeValues)
+//   return quaternionKF
+// }
 
 /**
  * 创建动画序列
  */
-async function createAnimationClip() {
-  const tracks = await fetch('/data/vtuber-info.json').then(res => res.json())
-  const headName = '.skeleton.bones[8]'
+// async function createAnimationClip() {
+//   const tracks = await fetch('/data/vtuber-info.json').then(res => res.json())
+//   const headName = '.skeleton.bones[8]'
 
-  const xKF = createRotationAboutAxis(headName, 'x', tracks.x.times, tracks.x.values)
-  const yKF = createRotationAboutAxis(headName, 'y', tracks.y.times, tracks.y.values)
+//   const xKF = createRotationAboutAxis(headName, 'x', tracks.x.times, tracks.x.values)
+//   const yKF = createRotationAboutAxis(headName, 'y', tracks.y.times, tracks.y.values)
 
-  const clip = new THREE.AnimationClip('Action', 10, [xKF, yKF])
-  return clip
-}
+//   const clip = new THREE.AnimationClip('Action', 10, [xKF, yKF])
+//   return clip
+// }
 
 /**
  * 添加缩放旋转控制
