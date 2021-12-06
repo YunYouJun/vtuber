@@ -3,7 +3,6 @@ import consola from 'consola'
 import * as THREE from 'three'
 import { VRM, VRMUtils } from '@pixiv/three-vrm'
 import { Camera } from '@mediapipe/camera_utils'
-import { FPS } from '@mediapipe/control_utils'
 
 import type { MaybeRef } from '@vueuse/shared'
 
@@ -76,7 +75,8 @@ export function useVtuber(options: VtuberOptions) {
         document.body.appendChild(renderer.domElement)
 
       // camera
-      const orbitCamera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000)
+      const aspect = window.innerWidth / window.innerHeight
+      const orbitCamera = new THREE.PerspectiveCamera(35, aspect, 0.1, 1000)
       orbitCamera.position.set(0.0, 1.4, 0.7)
 
       // controls
@@ -106,6 +106,17 @@ export function useVtuber(options: VtuberOptions) {
         renderer.render(scene, orbitCamera)
       }
       animate()
+
+      /**
+       * 重新调整窗口大小
+       */
+      function onWindowResize() {
+        orbitCamera.aspect = window.innerWidth / window.innerHeight
+        orbitCamera.updateProjectionMatrix()
+        renderer.setSize(window.innerWidth, window.innerHeight)
+      }
+
+      addEventListener('resize', onWindowResize, false)
 
       return {
         renderer,
@@ -173,10 +184,8 @@ export function useVtuber(options: VtuberOptions) {
      * @returns
      */
     initHolistic() {
-      if (holistic) {
-        consola.info('Holistic 实例已存在')
-        return
-      }
+      if (holistic)
+        consola.info('Holistic 实例已存在，重新实例化')
 
       // createVtuber(options)
       const canvasEl = unref(mpCanvasRef)
@@ -194,15 +203,7 @@ export function useVtuber(options: VtuberOptions) {
 
       /* SETUP MEDIAPIPE HOLISTIC INSTANCE */
 
-      // We'll add this to our control panel later, but we'll save it here so we can
-      // call tick() each time the graph runs.
-      const fpsControl = new FPS()
-
       const onResults = (results: mpHolistic.Results) => {
-        // Update the frame rate.
-        if (options.displayControlPanel)
-          fpsControl.tick()
-
         // Draw landmark guides
         drawResults(canvasEl, videoEl, results)
 

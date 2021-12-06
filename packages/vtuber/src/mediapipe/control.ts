@@ -1,20 +1,15 @@
 import * as controls from '@mediapipe/control_utils'
 import * as mpHolistic from '@mediapipe/holistic'
 
-// We'll add this to our control panel later, but we'll save it here so we can
-// call tick() each time the graph runs.
-// const fpsControl = new controls.FPS()
-
 /**
  * 创建控制面板
  */
 export function createControlPanel(params: {
   canvasElement: HTMLCanvasElement
   videoElement: HTMLVideoElement
-  fpsControl: controls.FPSControl
   holistic: mpHolistic.Holistic
 }) {
-  const { canvasElement, videoElement, fpsControl, holistic } = params
+  const { canvasElement, videoElement, holistic } = params
   const controlsElement
     = document.getElementsByClassName('control-panel')[0] as HTMLDivElement
 
@@ -32,7 +27,6 @@ export function createControlPanel(params: {
     })
     .add([
       new controls.StaticText({ title: 'MediaPipe Holistic' }),
-      fpsControl,
       new controls.Toggle({ title: 'Selfie Mode', field: 'selfieMode' }),
       new controls.SourcePicker({
         onSourceChanged: () => {

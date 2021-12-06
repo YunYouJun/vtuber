@@ -27,6 +27,14 @@
           <i-carbon:maximize v-else />
         </IconButton>
 
+        <IconButton
+          :title="t('button.toggle_dark')"
+          @click="toggleDark()"
+        >
+          <i-ri-moon-line v-if="isDark" />
+          <i-ri-sun-line v-else />
+        </IconButton>
+
         <VerticalDivider />
 
         <IconButton
@@ -78,9 +86,11 @@
 </template>
 
 <script setup lang="ts">
-import { fullscreen } from '~/stores'
 import { useVtuberStore } from '~/stores/vtuber'
 import { useWebcamStore } from '~/stores/webcam'
+import { isDark, toggleDark } from '~/logic'
+const { t } = useI18n()
+
 const vtuberStore = useVtuberStore()
 const webcamStore = useWebcamStore()
 
@@ -95,7 +105,7 @@ const props = withDefaults(
 
 const persistBar = ref(props.persist)
 
-const { isFullscreen, toggle: toggleFullscreen } = fullscreen
+const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
 
 // 根据已记录的数据，播放动作
 const isActionPlaying = ref(false)

@@ -5,6 +5,9 @@
   <IconButton :active="vtbStore.loadPercent === 100" title="加载人物模型" :disabled="loading" @click="initVRM">
     <i-ri-file-user-line :class="loading ? 'animate-spin' : ''" />
   </IconButton>
+  <IconButton :active="app.showModelList" title="切换人物" @click="() => {app.toggleShowModelList()}">
+    <i-ri-user-search-line />
+  </IconButton>
   <!-- <IconButton @click="downloadRecordedPointsFrames">
     <i-ri-download-line />
   </IconButton>
@@ -31,9 +34,12 @@
 <script setup lang="ts">
 // import { ElMessage } from 'element-plus'
 // import { convertRecordedFrameToFrameTrack } from 'vtuber/parse'
-import { downloadObjectAsJson } from 'vtuber/utils'
+// import { downloadObjectAsJson } from 'vtuber/utils'
+import { useAppStore } from '~/stores/app'
 import { useMediapipeStore } from '~/stores/mediapipe'
 import { useVtuberStore } from '~/stores/vtuber'
+
+const app = useAppStore()
 // import { useWebcamStore } from '~/stores/webcam'
 
 const vtbStore = useVtuberStore()
@@ -51,6 +57,7 @@ const detectLoading = ref(false)
 const startDetecting = () => {
   if (!vtbStore.instance) return
 
+  mpStore.detecting = true
   detectLoading.value = true
   vtbStore.instance.initHolistic()
   detectLoading.value = false

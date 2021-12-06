@@ -1,11 +1,12 @@
 <template>
   <div class="preview flex justify-center items-center h-full">
+    <ToggleVrm v-if="app.showModelList" class="z-1" />
+
     <div class="max-w-500px inline-flex z-1">
       <el-progress v-if="vtbStore.loadPercent !== 100" type="circle" :percentage="vtbStore.loadPercent" />
     </div>
-    <ToggleVrm class="z-1" />
     <WebCamera
-      v-if="vtbStore.showWebcam"
+      v-show="vtbStore.showWebcam"
       ref="webCamera"
       :class="[webcamStore.isFlipped ? 'transform rotate-y-180' : '']"
     >
@@ -23,16 +24,19 @@
         :style="webcamStore.fitHeight ? { height: '100%' } : { width: '100%' }"
       />
     </WebCamera>
-    <canvas ref="vrmCanvasRef" class="vrm-canvas absolute top-0 left-0" />
+    <canvas ref="vrmCanvasRef" class="vrm-canvas absolute inset-0" />
   </div>
 
   <NavControls :persist="true" />
+  <StatusPanel />
 </template>
 
 <script lang="ts" setup>
 import { useVtuber } from 'vtuber'
 import { useWebcamStore } from '~/stores/webcam'
 import { useVtuberStore } from '~/stores/vtuber'
+import { useAppStore } from '~/stores/app'
+const app = useAppStore()
 
 const webcamStore = useWebcamStore()
 
