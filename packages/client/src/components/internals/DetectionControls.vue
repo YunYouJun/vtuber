@@ -54,12 +54,12 @@ const detectLoading = ref(false)
    * 开始检测
    * @returns
    */
-const startDetecting = () => {
+const startDetecting = async() => {
   if (!vtbStore.instance) return
 
   mpStore.detecting = true
   detectLoading.value = true
-  vtbStore.instance.initHolistic()
+  await vtbStore.instance.initHolistic()
   detectLoading.value = false
 }
 

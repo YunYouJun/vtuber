@@ -1,11 +1,22 @@
-import type { Results } from '@mediapipe/holistic'
-import { POSE_CONNECTIONS, FACEMESH_TESSELATION, HAND_CONNECTIONS } from '@mediapipe/holistic'
-import * as mpHolistic from '@mediapipe/holistic'
+// import { POSE_CONNECTIONS, FACEMESH_TESSELATION, HAND_CONNECTIONS, FACEMESH_FACE_OVAL } from '@mediapipe/holistic'
+import type * as MpHolistic from '@mediapipe/holistic'
+import type * as DrawingUtils from '@mediapipe/drawing_utils'
 
-import { drawConnectors, drawLandmarks, lerp } from '@mediapipe/drawing_utils'
-import type { Data } from '@mediapipe/drawing_utils'
+import { isDev } from '@vtuber/shared'
 
-export function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoElement, results: Results) {
+export async function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoElement, results: MpHolistic.Results) {
+  let drawingUtils: typeof DrawingUtils
+  let mpHolistic: typeof MpHolistic
+
+  if (isDev) {
+    mpHolistic = (await import('@mediapipe/holistic')).default
+    drawingUtils = (await import('@mediapipe/drawing_utils')).default
+  }
+  else {
+    drawingUtils = window as any
+    mpHolistic = window as any
+  }
+
   canvas.width = video.videoWidth
   canvas.height = video.videoHeight
   const canvasCtx = canvas.getContext('2d')
@@ -23,7 +34,7 @@ export function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoElement, 
   function drawPupil() {
     if (!canvasCtx) return
     if (results.faceLandmarks && results.faceLandmarks.length === 478) {
-      drawLandmarks(canvasCtx, [results.faceLandmarks[468], results.faceLandmarks[468 + 5]], {
+      drawingUtils.drawLandmarks(canvasCtx, [results.faceLandmarks[468], results.faceLandmarks[468 + 5]], {
         color: '#ffe603',
         lineWidth: 2,
       })
@@ -36,11 +47,11 @@ export function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoElement, 
    */
   function drawPoseLandmarks() {
     if (!canvasCtx) return
-    drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
+    drawingUtils.drawConnectors(canvasCtx, results.poseLandmarks, mpHolistic.POSE_CONNECTIONS, {
       color: 'white',
       lineWidth: 4,
     })
-    drawLandmarks(canvasCtx, results.poseLandmarks, {
+    drawingUtils.drawLandmarks(canvasCtx, results.poseLandmarks, {
       color: '#ff0364',
       lineWidth: 2,
     })
@@ -81,7 +92,7 @@ export function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoElement, 
   function drawFaceLandmarks() {
     if (!canvasCtx) return
     // 网格
-    drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_TESSELATION, {
+    drawingUtils.drawConnectors(canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_TESSELATION, {
       color: '#C0C0C070',
       lineWidth: 1,
     })
@@ -101,7 +112,7 @@ export function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoElement, 
     //   { color: 'rgb(255,138,0)' })
 
     // 轮廓
-    drawConnectors(
+    drawingUtils.drawConnectors(
       canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_FACE_OVAL,
       { color: '#E0E0E0', lineWidth: 4 })
     // drawConnectors(
@@ -111,29 +122,29 @@ export function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoElement, 
 
   function drawHandLandmarks() {
     if (!canvasCtx) return
-    drawConnectors(canvasCtx, results.leftHandLandmarks, HAND_CONNECTIONS, {
+    drawingUtils.drawConnectors(canvasCtx, results.leftHandLandmarks, mpHolistic.HAND_CONNECTIONS, {
       color: '#ff000099',
       lineWidth: 4,
     })
     // 近大远小
-    drawLandmarks(canvasCtx, results.leftHandLandmarks, {
+    drawingUtils.drawLandmarks(canvasCtx, results.leftHandLandmarks, {
       color: 'white',
       fillColor: 'rgb(0,217,231)',
       lineWidth: 2,
-      radius: (data: Data) => {
-        return lerp(data.from!.z!, -0.15, 0.1, 10, 1)
+      radius: (data: DrawingUtils.Data) => {
+        return drawingUtils.lerp(data.from!.z!, -0.15, 0.1, 10, 1)
       },
     })
-    drawConnectors(canvasCtx, results.rightHandLandmarks, HAND_CONNECTIONS, {
+    drawingUtils.drawConnectors(canvasCtx, results.rightHandLandmarks, mpHolistic.HAND_CONNECTIONS, {
       color: '#0000ff99',
       lineWidth: 4,
     })
-    drawLandmarks(canvasCtx, results.rightHandLandmarks, {
+    drawingUtils.drawLandmarks(canvasCtx, results.rightHandLandmarks, {
       color: 'white',
       fillColor: 'rgb(255,138,0)',
       lineWidth: 2,
-      radius: (data: Data) => {
-        return lerp(data.from!.z!, -0.15, 0.1, 10, 1)
+      radius: (data: DrawingUtils.Data) => {
+        return drawingUtils.lerp(data.from!.z!, -0.15, 0.1, 10, 1)
       },
     })
   }
@@ -151,7 +162,7 @@ export function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoElement, 
  * 移除不想绘制的点
  * @param results
  */
-export function removeLandmarks(results: mpHolistic.Results) {
+export function removeLandmarks(results: MpHolistic.Results) {
   if (results.poseLandmarks) {
     // face in pose landmarks
     const elements = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 16, 17, 18, 19, 20, 21, 22]
@@ -168,7 +179,7 @@ export function removeLandmarks(results: mpHolistic.Results) {
 export function connect(
   ctx: CanvasRenderingContext2D,
   connectors:
-  Array<[mpHolistic.NormalizedLandmark, mpHolistic.NormalizedLandmark]>):
+  Array<[MpHolistic.NormalizedLandmark, MpHolistic.NormalizedLandmark]>):
   void {
   const canvas = ctx.canvas
   for (const connector of connectors) {

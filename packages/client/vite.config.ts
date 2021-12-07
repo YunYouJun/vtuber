@@ -25,6 +25,24 @@ export default defineConfig({
       '@vtuber/shared': `${path.resolve(__dirname, '../shared/src')}/`,
     },
   },
+  build: {
+    rollupOptions: {
+      // use cdn online
+      external: [
+        '@mediapipe/holistic',
+        '@mediapipe/camera_utils',
+        '@mediapipe/drawing_utils',
+      ],
+      // output: {
+      //   inlineDynamicImports: false,
+      //   manualChunks: {
+      //     holistic: ['@mediapipe/holistic'],
+      //     camera: ['@mediapipe/camera_utils'],
+      //     draw: ['@mediapipe/drawing_utils'],
+      //   },
+      // },
+    },
+  },
 
   plugins: [
     Vue({
@@ -89,9 +107,7 @@ export default defineConfig({
       headEnabled: true,
       markdownItSetup(md) {
         // https://prismjs.com/
-        // @ts-expect-error types mismatch
         md.use(Prism)
-        // @ts-expect-error types mismatch
         md.use(LinkAttributes, {
           pattern: /^https?:\/\//,
           attrs: {
@@ -147,6 +163,7 @@ export default defineConfig({
       '@vueuse/head',
       'three/examples/js/libs/ammo.wasm',
       'consola',
+      '@mediapipe/holistic',
     ],
     exclude: ['vue-demi'],
   },

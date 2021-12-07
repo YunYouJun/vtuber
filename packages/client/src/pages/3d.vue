@@ -33,6 +33,7 @@
 
 <script lang="ts" setup>
 import { useVtuber } from 'vtuber'
+import { isDev } from '@vtuber/shared'
 import { useWebcamStore } from '~/stores/webcam'
 import { useVtuberStore } from '~/stores/vtuber'
 import { useAppStore } from '~/stores/app'
@@ -49,6 +50,22 @@ useHead({
     name: 'description',
     content: '3D Vtuber Base on kalidokit & mediapipe',
   }],
+  script: !isDev
+    ? [
+      {
+        src: 'https://cdn.jsdelivr.net/npm/@mediapipe/holistic/holistic.js',
+        crossorigin: 'anonymous',
+      },
+      {
+        src: 'https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js',
+        crossorigin: 'anonymous',
+      },
+      {
+        src: 'https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js',
+        crossorigin: 'anonymous',
+      },
+    ]
+    : [],
 })
 
 const mpCanvasRef = ref<HTMLCanvasElement>()
@@ -66,9 +83,7 @@ const vtuber = useVtuber({
 vtbStore.setInstance(vtuber)
 
 watch(() => vtbStore.curModelUrl, (vrmUrl: string) => {
-  vtuber.loadVRM({
-    url: vrmUrl,
-  })
+  vtuber.vrm.load(vrmUrl)
 })
 
 onMounted(() => {

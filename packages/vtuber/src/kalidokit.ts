@@ -2,13 +2,15 @@ import { ref } from 'vue'
 import consola from 'consola'
 import * as THREE from 'three'
 import { VRM, VRMUtils } from '@pixiv/three-vrm'
-import { Camera } from '@mediapipe/camera_utils'
 
 import type { MaybeRef } from '@vueuse/shared'
 
-import * as mpHolistic from '@mediapipe/holistic'
+import type * as mpHolistic from '@mediapipe/holistic'
+
+import { isDev } from '@vtuber/shared'
+import type * as CameraUtils from '@mediapipe/camera_utils'
 import { drawResults, useHolistic } from './mediapipe'
-import { animateVRM } from './vrm'
+import { animateVRM, useVrm } from './vrm'
 
 interface VtuberOptions {
   /**
@@ -50,6 +52,25 @@ export function useVtuber(options: VtuberOptions) {
   let scene: THREE.Scene
 
   let holistic: mpHolistic.Holistic
+
+  const vrm = useVrm()
+  vrm.onLoad((gltf) => {
+    VRMUtils.removeUnnecessaryJoints(gltf.scene)
+    VRM.from(gltf).then((vrm) => {
+      scene.add(vrm.scene)
+
+      if (currentVrm)
+        scene.remove(currentVrm.scene)
+
+      currentVrm = vrm
+      currentVrm.scene.rotation.y = Math.PI // Rotate model 180deg to face camera
+    })
+  })
+  vrm.onProgress((progress) => {
+    loadModelProgress.value = progress
+    if (options.debug)
+      consola.info('Loading model...', 100.0 * (progress.loaded / progress.total), '%')
+  })
 
   return {
     loadModelProgress,
@@ -122,45 +143,8 @@ export function useVtuber(options: VtuberOptions) {
         renderer,
       }
     },
-    async loadVRM(vrmOptions: {
-      /**
-       * VRM 模型链接
-       */
-      url: string
-    }) {
-    // Import Character VRM
-      const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js')
 
-      const loader = new GLTFLoader()
-      loader.crossOrigin = 'anonymous'
-      // Import model from URL, add your own model here
-      consola.info(`加载模型：${vrmOptions.url}`)
-      loader.load(
-        vrmOptions.url,
-
-        (gltf) => {
-          VRMUtils.removeUnnecessaryJoints(gltf.scene)
-
-          VRM.from(gltf).then((vrm) => {
-            scene.add(vrm.scene)
-
-            if (currentVrm)
-              scene.remove(currentVrm.scene)
-
-            currentVrm = vrm
-            currentVrm.scene.rotation.y = Math.PI // Rotate model 180deg to face camera
-          })
-        },
-
-        (progress) => {
-          loadModelProgress.value = progress
-          if (options.debug)
-            consola.info('Loading model...', 100.0 * (progress.loaded / progress.total), '%')
-        },
-
-        error => console.error(error),
-      )
-    },
+    vrm,
 
     initVRM(vrmOptions?: {
       url?: string
@@ -169,21 +153,18 @@ export function useVtuber(options: VtuberOptions) {
         this.initScene(vrmCanvasRef)
 
       const vrmUrl = (vrmOptions && vrmOptions.url) || options.vrmUrl
-      if (vrmUrl) {
-        this.loadVRM({
-          url: vrmUrl,
-        })
-      }
-      else {
+      if (vrmUrl)
+        this.vrm.load(vrmUrl)
+
+      else
         consola.error('缺少 VRM 模型链接')
-      }
     },
 
     /**
      * 初始化 Holistic 检测
      * @returns
      */
-    initHolistic() {
+    async initHolistic() {
       if (holistic)
         consola.info('Holistic 实例已存在，重新实例化')
 
@@ -211,13 +192,20 @@ export function useVtuber(options: VtuberOptions) {
         animateVRM(currentVrm, videoEl, results)
       }
 
-      holistic = useHolistic()
+      holistic = await useHolistic()
 
       // Pass holistic a callback function
       holistic.onResults(onResults)
 
       // Use `Mediapipe` utils to get camera - lower resolution = higher fps
-      const camera = new Camera(videoEl, {
+      // const { Camera } = await import('@mediapipe/camera_utils')
+      let cameraUtils: typeof CameraUtils
+      if (isDev)
+        cameraUtils = (await import('@mediapipe/camera_utils')).default
+      else
+        cameraUtils = window as any
+
+      const camera = new cameraUtils.Camera(videoEl, {
         onFrame: async() => {
           await holistic.send({ image: videoEl })
         },

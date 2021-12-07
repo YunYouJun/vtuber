@@ -1,5 +1,5 @@
 import * as controls from '@mediapipe/control_utils'
-import * as mpHolistic from '@mediapipe/holistic'
+import type * as mpHolistic from '@mediapipe/holistic'
 
 /**
  * 创建控制面板
