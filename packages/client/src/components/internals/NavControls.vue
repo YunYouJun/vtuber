@@ -35,9 +35,7 @@
           <i-ri-sun-line v-else />
         </IconButton>
 
-        <IconButton :title="t('button.toggle_langs')" @click="toggleLocales">
-          <i-ri-translate class="transform" :class="locale === 'en' ? 'rotate-y-180' : ''" />
-        </IconButton>
+        <ToggleLocale />
 
         <VerticalDivider />
 
@@ -79,12 +77,13 @@
 
         <DetectionControls />
 
+        <IconButton :active="vtbStore.instance && vtbStore.instance?.drawMpResults" title="绘制标记" @click="vtbStore.instance!.drawMpResults = !vtbStore.instance?.drawMpResults">
+          <i-ri-mark-pen-line />
+        </IconButton>
+
         <VerticalDivider />
 
-        <IconButton title="上传 VRM 模型（或拖拽）" @click="">
-          <i-ri-upload-line />
-          <input type="file" @change="onFileChange">
-        </IconButton>
+        <UploadButton />
 
         <!-- <VerticalDivider />
         <IconButton :active="webcamStore.fitHeight" @click="webcamStore.toggleFitHeight">
@@ -105,7 +104,8 @@ import { useVtuberStore } from '~/stores/vtuber'
 import { useWebcamStore } from '~/stores/webcam'
 import { isDark, toggleDark } from '~/composables'
 import { useAppStore } from '~/stores/app'
-import { checkModelFormat } from '~/utils/vrm'
+
+const { t } = useI18n()
 
 const app = useAppStore()
 
@@ -114,35 +114,22 @@ const webcamStore = useWebcamStore()
 
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
 
+withDefaults(defineProps<{
+  persist: boolean
+}>(), {
+  persist: true,
+})
+
 // 根据已记录的数据，播放动作
 // const isActionPlaying = ref(false)
 
 const root = ref<HTMLDivElement>()
-
-const { t, availableLocales, locale } = useI18n()
-
-const toggleLocales = () => {
-  // change to some real logic
-  const locales = availableLocales
-  locale.value = locales[(locales.indexOf(locale.value) + 1) % locales.length]
-}
 
 /**
  * 显示圆形窗口时，则默认打开摄像头
  */
 const toggleWebcam = () => {
   if (!vtbStore.showWebcam) webcamStore.enabled = true
-
   vtbStore.toggleShowWebcam()
-}
-
-// 上传文件
-const onFileChange = (e: Event) => {
-  const fileList = (e.target as any).files
-  if (!fileList[0]) return
-  if (checkModelFormat(fileList[0])) {
-    const url = URL.createObjectURL(fileList[0])
-    vtbStore.instance?.vrm.load(url)
-  }
 }
 </script>

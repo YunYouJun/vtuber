@@ -2,6 +2,7 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 import { useToggle } from '@vueuse/core'
 
 import { useVtuber } from 'vtuber'
+import { isDev, namespace } from '@vtuber/shared'
 
 export const useVtuberStore = defineStore('vtuber', () => {
   const instance = ref<ReturnType<typeof useVtuber>>()
@@ -11,8 +12,10 @@ export const useVtuberStore = defineStore('vtuber', () => {
    */
   const [showWebcam, toggleShowWebcam] = useToggle(true)
 
-  // const curModelUrl = ref('/models/vrm/alicia-solid.vrm')
-  const curModelUrl = ref('/models/vrm/xiao-el.vrm')
+  // const curModelUrl = ref(
+  //   isDev ? '/models/vrm/xiao-el.vrm' : '/models/vrm/alicia-solid.vrm',
+  // )
+  const curModelUrl = ref('/models/vrm/alicia-solid.vrm')
 
   /**
    * 模型加载百分比

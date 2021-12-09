@@ -39,6 +39,8 @@
 
   <NavControls :persist="app.showNavControls" />
   <StatusPanel />
+
+  <OpenAnimation />
 </template>
 
 <script lang="ts" setup>
@@ -98,8 +100,9 @@ watch(() => vtbStore.curModelUrl, (vrmUrl: string) => {
   vtuber.vrm.load(vrmUrl)
 })
 
-onMounted(() => {
-  vtuber.initVRM()
+onMounted(async() => {
+  await vtuber.initVRM()
+  app.hasLoadedModel = true
 })
 
 const showDragStyle = ref(false)

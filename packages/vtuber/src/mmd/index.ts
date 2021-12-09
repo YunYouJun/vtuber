@@ -11,7 +11,7 @@ import type { MMDAnimationHelper } from 'three/examples/jsm/animation/MMDAnimati
 
 import { generateResultFromPoints, DetectResult } from '../parse'
 
-import { getMouthIndex } from '../render/mouth'
+import { getMouthIndex } from '../scene/mouth'
 // import { initGui } from './gui'
 
 /**

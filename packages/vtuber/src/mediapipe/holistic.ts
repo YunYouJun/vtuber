@@ -13,7 +13,9 @@ export async function useHolistic(options: {
 
   const config: m.HolisticConfig = {
     locateFile: (file) => {
-      return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic@${mpHolistic.VERSION}/${file}`
+      return options.cdn
+        ? `https://cdn.jsdelivr.net/npm/@mediapipe/holistic@${mpHolistic.VERSION}/${file}`
+        : `node_modules/@mediapipe/holistic/${file}`
     },
   }
 

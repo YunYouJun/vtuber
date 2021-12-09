@@ -5,9 +5,12 @@ export const useAppStore = defineStore('app', () => {
   const [showModelList, toggleShowModelList] = useToggle()
   const [showNavControls, toggleShowNavControls] = useToggle(true)
 
+  const hasLoadedModel = ref(false)
+
   return {
     showModelList,
     showNavControls,
+    hasLoadedModel,
 
     toggleShowModelList,
     toggleShowNavControls,

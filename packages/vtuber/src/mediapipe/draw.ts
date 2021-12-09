@@ -1,6 +1,10 @@
 // import { POSE_CONNECTIONS, FACEMESH_TESSELATION, HAND_CONNECTIONS, FACEMESH_FACE_OVAL } from '@mediapipe/holistic'
 import type * as MpHolistic from '@mediapipe/holistic'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// import * as mpHolistic from '@mediapipe/holistic'
 import type * as DrawingUtils from '@mediapipe/drawing_utils'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// import * as drawingUtils from '@mediapipe/drawing_utils'
 
 export async function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoElement, results: MpHolistic.Results, cdn = false) {
   let drawingUtils: typeof DrawingUtils
@@ -89,6 +93,7 @@ export async function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoEle
    */
   function drawFaceLandmarks() {
     if (!canvasCtx) return
+
     // 网格
     drawingUtils.drawConnectors(canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_TESSELATION, {
       color: '#C0C0C070',
@@ -149,9 +154,9 @@ export async function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoEle
 
   // draw by mediapipe
   drawPoseLandmarks()
-  drawFaceLandmarks()
   drawPupil()
   drawHandLandmarks()
+  drawFaceLandmarks()
 
   canvasCtx.restore()
 }

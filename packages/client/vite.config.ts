@@ -33,14 +33,15 @@ export default defineConfig({
         '@mediapipe/camera_utils',
         '@mediapipe/drawing_utils',
       ],
-      // output: {
-      //   inlineDynamicImports: false,
-      //   manualChunks: {
-      //     holistic: ['@mediapipe/holistic'],
-      //     camera: ['@mediapipe/camera_utils'],
-      //     draw: ['@mediapipe/drawing_utils'],
-      //   },
-      // },
+      output: {
+        inlineDynamicImports: false,
+        manualChunks: {
+          ep: ['element-plus'],
+          three: ['three'],
+          // camera: ['@mediapipe/camera_utils'],
+          // draw: ['@mediapipe/drawing_utils'],
+        },
+      },
     },
   },
 

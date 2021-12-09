@@ -1,4 +1,3 @@
-import * as faceapi from 'face-api.js'
 import { DetectResult } from 'vtuber/parse'
 
 declare global {
@@ -12,7 +11,7 @@ declare global {
      * faceapi 相关
      */
     face: {
-      points?: {x: number, y: number}[]
+      points?: {x: number; y: number}[]
     }
 
     /**
