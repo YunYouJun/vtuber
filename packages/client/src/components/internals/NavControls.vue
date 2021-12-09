@@ -81,6 +81,11 @@
           <i-ri-mark-pen-line />
         </IconButton>
 
+        <IconButton title="画中画" @click="togglePictureInPicture">
+          <i-ri-picture-in-picture-line v-if="app.isPicInPic" />
+          <i-ri-picture-in-picture-exit-line v-else />
+        </IconButton>
+
         <VerticalDivider />
 
         <UploadButton />
@@ -96,6 +101,8 @@
         <AboutInfo />
       </div>
     </nav>
+
+    <video ref="pipVideoRef" class="invisible pointer-events-none absolute right-0 bottom-0" autoplay playsinline muted />
   </div>
 </template>
 
@@ -131,5 +138,29 @@ const root = ref<HTMLDivElement>()
 const toggleWebcam = () => {
   if (!vtbStore.showWebcam) webcamStore.enabled = true
   vtbStore.toggleShowWebcam()
+}
+
+const pipVideoRef = ref<HTMLVideoElement>()
+
+const togglePictureInPicture = () => {
+  if (app.isPicInPic) {
+    document.exitPictureInPicture()
+    app.isPicInPic = false
+    if (pipVideoRef.value)
+      pipVideoRef.value.srcObject = null
+  }
+  else {
+    const vrmCanvas = document.getElementsByClassName('vrm-canvas')[0]
+    if (!pipVideoRef.value) return
+    const stream = (vrmCanvas as HTMLCanvasElement).captureStream()
+    pipVideoRef.value.srcObject = stream
+
+    setTimeout(() => {
+      if (!pipVideoRef.value) return
+      pipVideoRef.value.requestPictureInPicture()
+
+      app.isPicInPic = true
+    }, 400)
+  }
 }
 </script>

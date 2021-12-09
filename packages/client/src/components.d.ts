@@ -50,6 +50,8 @@ declare module 'vue' {
     IRiMarkPenLine: typeof import('~icons/ri/mark-pen-line')['default']
     IRiMoonLine: typeof import('~icons/ri/moon-line')['default']
     IRiPauseLine: typeof import('~icons/ri/pause-line')['default']
+    IRiPictureInPictureExitLine: typeof import('~icons/ri/picture-in-picture-exit-line')['default']
+    IRiPictureInPictureLine: typeof import('~icons/ri/picture-in-picture-line')['default']
     IRiPlayLine: typeof import('~icons/ri/play-line')['default']
     IRiSpyLine: typeof import('~icons/ri/spy-line')['default']
     IRiSunLine: typeof import('~icons/ri/sun-line')['default']

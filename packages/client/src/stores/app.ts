@@ -7,13 +7,17 @@ export const useAppStore = defineStore('app', () => {
 
   const hasLoadedModel = ref(false)
 
+  const [isPicInPic, togglePicInPic] = useToggle()
+
   return {
     showModelList,
     showNavControls,
     hasLoadedModel,
+    isPicInPic,
 
     toggleShowModelList,
     toggleShowNavControls,
+    togglePicInPic,
   }
 })
 
