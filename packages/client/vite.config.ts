@@ -163,7 +163,7 @@ export default defineConfig({
       '@vueuse/head',
       'three/examples/js/libs/ammo.wasm',
       'consola',
-      '@mediapipe/holistic',
+      'kalidokit',
     ],
     exclude: ['vue-demi'],
   },

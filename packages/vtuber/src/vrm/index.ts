@@ -1,5 +1,6 @@
 import consola from 'consola'
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { createEventHook } from '@vueuse/core'
 export * from './animate'
 
 export function useVrm() {

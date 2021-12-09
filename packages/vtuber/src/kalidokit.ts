@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, unref } from 'vue'
 import consola from 'consola'
 import * as THREE from 'three'
 import { VRM, VRMUtils } from '@pixiv/three-vrm'
@@ -7,12 +7,15 @@ import type { MaybeRef } from '@vueuse/shared'
 
 import type * as mpHolistic from '@mediapipe/holistic'
 
-import { isDev } from '@vtuber/shared'
 import type * as CameraUtils from '@mediapipe/camera_utils'
 import { drawResults, useHolistic } from './mediapipe'
 import { animateVRM, useVrm } from './vrm'
 
 interface VtuberOptions {
+  /**
+   * 是否使用 CDN
+   */
+  cdn?: boolean
   /**
    * 初始化时使用的 VRM 模型链接
    */
@@ -34,7 +37,6 @@ interface VtuberOptions {
    * 显示控制面板
    */
   displayControlPanel?: boolean
-
 }
 
 /**
@@ -200,10 +202,10 @@ export function useVtuber(options: VtuberOptions) {
       // Use `Mediapipe` utils to get camera - lower resolution = higher fps
       // const { Camera } = await import('@mediapipe/camera_utils')
       let cameraUtils: typeof CameraUtils
-      if (isDev)
-        cameraUtils = (await import('@mediapipe/camera_utils')).default
-      else
+      if (options.cdn)
         cameraUtils = window as any
+      else
+        cameraUtils = (await import('@mediapipe/camera_utils')).default
 
       const camera = new cameraUtils.Camera(videoEl, {
         onFrame: async() => {

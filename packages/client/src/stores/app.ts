@@ -3,10 +3,14 @@ import { useToggle } from '@vueuse/core'
 
 export const useAppStore = defineStore('app', () => {
   const [showModelList, toggleShowModelList] = useToggle()
+  const [showNavControls, toggleShowNavControls] = useToggle(true)
 
   return {
     showModelList,
+    showNavControls,
+
     toggleShowModelList,
+    toggleShowNavControls,
   }
 })
 

@@ -1,7 +1,7 @@
 # vtuber
 
 [![CI](https://github.com/YunYouJun/vtuber/actions/workflows/ci.yml/badge.svg)](https://github.com/YunYouJun/vtuber/actions/workflows/ci.yml)
-[![GitHub deployments](https://img.shields.io/github/deployments/YunYouJun/vtuber/production)](https://vercel.com/yunyoujun/vtuber)
+[![GitHub deployments](https://img.shields.io/github/deployments/YunYouJun/vtuber/production?label=vercel&logo=vercel&logoColor=white)](https://vercel.com/yunyoujun/vtuber)
 
 从一开始的 Vtuber。
 

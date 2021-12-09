@@ -11,7 +11,8 @@ export const useVtuberStore = defineStore('vtuber', () => {
    */
   const [showWebcam, toggleShowWebcam] = useToggle(true)
 
-  const curModelUrl = ref('/models/vrm/alicia-solid.vrm')
+  // const curModelUrl = ref('/models/vrm/alicia-solid.vrm')
+  const curModelUrl = ref('/models/vrm/xiao-el.vrm')
 
   /**
    * 模型加载百分比

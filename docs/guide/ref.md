@@ -38,6 +38,10 @@ VRM 格式（Instead of MMD）
 - [Ashtra | VRoid Hub](https://hub.vroid.com/en/characters/6617701103638326208/models/8892157442595230149)
 - [Mono Cat | VRoid Hub](https://hub.vroid.com/characters/6063135800223582444/models/7944384963815387539)
 
+### 建模
+
+- [VRoid Studio](https://vroid.com/en/studio)
+
 ## VRM 相关
 
 - [vrm 官网](https://vrm.dev/en/)

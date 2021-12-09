@@ -1,19 +1,38 @@
 {
-  "name": "vtuber",
+  "name": "use-vtuber",
   "version": "0.0.1",
   "type": "module",
   "author": "YunYouJun <me@yunyoujun.cn>",
   "repository": "https://github.com/YunYouJun/vtuber.git",
   "license": "MIT",
-  "devDependencies": {
-    "consola": "^2.15.3"
+  "main": "dist/index.js",
+  "module": "dist/index.cjs",
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
   },
-  "dependencies": {
-    "@pixiv/three-vrm": "^0.6.7",
-    "kalidokit": "^1.0.5",
+  "devDependencies": {
     "@mediapipe/camera_utils": "^0.3.1632432234",
     "@mediapipe/control_utils": "^0.6.1629159505",
     "@mediapipe/drawing_utils": "^0.3.1620248257",
-    "@mediapipe/holistic": "^0.5.1635989137"
+    "@mediapipe/holistic": "^0.5.1635989137",
+    "@types/three": "^0.135.0",
+    "consola": "^2.15.3",
+    "three": "0.135.0",
+    "tsup": "^5.10.3"
+  },
+  "scripts": {
+    "build": "tsup",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@pixiv/three-vrm": "^0.6.7",
+    "kalidokit": "^1.0.5"
   }
 }

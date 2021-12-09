@@ -27,8 +27,8 @@
   },
   "homepage": "https://vtuber.yunyoujun.cn",
   "devDependencies": {
-    "@antfu/eslint-config": "^0.12.1",
-    "eslint": "^8.4.0",
+    "@antfu/eslint-config": "^0.12.2",
+    "eslint": "^8.4.1",
     "pnpm": "^6.23.6",
     "typescript": "^4.5.2"
   }

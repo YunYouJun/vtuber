@@ -1,3 +1,4 @@
 {
-  "name": "@vtuber/shared"
+  "name": "@vtuber/shared",
+  "private": true
 }

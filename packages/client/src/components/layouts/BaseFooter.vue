@@ -1,13 +1,13 @@
 <template>
-  <hr class="m-2" />
-  <vue-about-me :copyright="copyright" :is-dark="isDark"></vue-about-me>
+  <hr class="m-2">
+  <vue-about-me :copyright="copyright" :is-dark="isDark" />
 </template>
 
 <script setup lang="ts">
 import VueAboutMe from 'vue-about-me'
 import 'vue-about-me/style.css'
 
-import { isDark } from '~/logic'
+import { isDark } from '~/composables'
 import pkg from '~/../../../package.json'
 
 const copyright = {

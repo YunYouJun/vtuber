@@ -1,14 +1,15 @@
 import type * as m from '@mediapipe/holistic'
-import { isDev } from '@vtuber/shared'
 // import * as mpHolistic from '@mediapipe/holistic'
 // import * as mpHolistic from '../../node_modules/@mediapipe/holistic/holistic.js'
 
-export async function useHolistic() {
+export async function useHolistic(options: {
+  cdn?: boolean
+} = { cdn: false }) {
   let mpHolistic: typeof m
-  if (isDev)
-    mpHolistic = (await import('@mediapipe/holistic')).default
-  else
+  if (options.cdn)
     mpHolistic = window as any
+  else
+    mpHolistic = (await import('@mediapipe/holistic')).default
 
   const config: m.HolisticConfig = {
     locateFile: (file) => {

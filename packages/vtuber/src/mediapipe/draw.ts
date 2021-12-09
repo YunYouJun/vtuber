@@ -2,19 +2,17 @@
 import type * as MpHolistic from '@mediapipe/holistic'
 import type * as DrawingUtils from '@mediapipe/drawing_utils'
 
-import { isDev } from '@vtuber/shared'
-
-export async function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoElement, results: MpHolistic.Results) {
+export async function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoElement, results: MpHolistic.Results, cdn = false) {
   let drawingUtils: typeof DrawingUtils
   let mpHolistic: typeof MpHolistic
 
-  if (isDev) {
-    mpHolistic = (await import('@mediapipe/holistic')).default
-    drawingUtils = (await import('@mediapipe/drawing_utils')).default
-  }
-  else {
+  if (cdn) {
     drawingUtils = window as any
     mpHolistic = window as any
+  }
+  else {
+    mpHolistic = (await import('@mediapipe/holistic')).default
+    drawingUtils = (await import('@mediapipe/drawing_utils')).default
   }
 
   canvas.width = video.videoWidth

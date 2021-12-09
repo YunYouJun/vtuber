@@ -1,3 +1,3 @@
 # Todo
 
-- face-api.js 迁移至 mediapipe holistic
+- [ ] add ammo 物理引擎 for vrm model

@@ -2,23 +2,19 @@
   <nav class="text-xl my-5">
     <router-link
       active-class="text-blue-500"
-      class="icon-btn mx-2"
+      class="icon-btn mx-1"
       to="/"
       :title="t('button.home')"
     >
-      <i-ri-home-2-line />
+      <i-ri-body-scan-line />
     </router-link>
 
     <router-link class="icon-btn mx-2" to="/2d">
       <i-ri-camera-line />
     </router-link>
 
-    <router-link class="icon-btn mx-2" to="/3d">
-      <i-ri-body-scan-line />
-    </router-link>
-
     <router-link
-      class="icon-btn mx-2"
+      class="icon-btn mx-1"
       active-class="text-blue-500"
       to="/about"
       :title="t('button.about')"
@@ -27,7 +23,7 @@
     </router-link>
 
     <a
-      class="icon-btn mx-2"
+      class="icon-btn mx-1"
       rel="noreferrer"
       :href="pkg.repository.url"
       target="_blank"
@@ -35,11 +31,9 @@
     >
       <i-ri-github-line />
     </a>
-  </nav>
 
-  <nav>
     <button
-      class="icon-btn mx-2 !outline-none"
+      class="icon-btn mx-1 !outline-none"
       :title="t('button.toggle_dark')"
       @click="toggleDark()"
     >
@@ -47,7 +41,7 @@
       <i-ri-sun-line v-else />
     </button>
 
-    <a class="icon-btn mx-2" :title="t('button.toggle_langs')" @click="toggleLocales">
+    <a class="icon-btn mx-1" :title="t('button.toggle_langs')" @click="toggleLocales">
       <i-ri-translate />
     </a>
   </nav>
@@ -55,13 +49,7 @@
 
 <script setup lang="ts">
 import * as pkg from '~/../package.json'
-import { isDark, toggleDark } from '~/logic'
-
-export interface NavItem {
-  name: string
-  title: string
-  to: string
-}
+import { isDark, toggleDark } from '~/composables'
 
 const { t, availableLocales, locale } = useI18n()
 

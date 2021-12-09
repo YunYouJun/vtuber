@@ -4,6 +4,7 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
+    AboutInfo: typeof import('./components/internals/AboutInfo.vue')['default']
     BaseFooter: typeof import('./components/layouts/BaseFooter.vue')['default']
     BaseHeader: typeof import('./components/layouts/BaseHeader.vue')['default']
     DetectionControls: typeof import('./components/internals/DetectionControls.vue')['default']
@@ -53,6 +54,7 @@ declare module 'vue' {
     IRiSunLine: typeof import('~icons/ri/sun-line')['default']
     IRiTapeLine: typeof import('~icons/ri/tape-line')['default']
     IRiTranslate: typeof import('~icons/ri/translate')['default']
+    IRiUploadLine: typeof import('~icons/ri/upload-line')['default']
     IRiUserLine: typeof import('~icons/ri/user-line')['default']
     IRiUserSearchLine: typeof import('~icons/ri/user-search-line')['default']
     IRiZoomIn: typeof import('~icons/ri/zoom-in')['default']
