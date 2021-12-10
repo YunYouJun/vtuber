@@ -55,6 +55,9 @@ function getGuideSidebar() {
         { text: "开始", link: "/guide/start" },
         { text: "扩展功能", link: "/guide/extensions" },
         { text: "参考", link: "/guide/ref" },
+        { text: "细节", link: "/guide/details" },
+        { text: "解决方案", link: "/guide/solutions" },
+        { text: "FAQ", link: "/guide/faq" },
       ],
     },
   ];
