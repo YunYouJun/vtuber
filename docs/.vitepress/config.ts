@@ -53,6 +53,7 @@ function getGuideSidebar() {
       children: [
         { text: "Why Web VTuber?", link: "/guide/index" },
         { text: "开始", link: "/guide/start" },
+        { text: "VRM", link: "/guide/vrm" },
         { text: "扩展功能", link: "/guide/extensions" },
         { text: "参考", link: "/guide/ref" },
         { text: "细节", link: "/guide/details" },

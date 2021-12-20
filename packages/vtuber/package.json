@@ -25,7 +25,7 @@
     "@types/three": "^0.135.0",
     "consola": "^2.15.3",
     "three": "0.135.0",
-    "tsup": "^5.11.0"
+    "tsup": "^5.11.6"
   },
   "scripts": {
     "build": "tsup",
@@ -33,6 +33,6 @@
   },
   "dependencies": {
     "@pixiv/three-vrm": "^0.6.7",
-    "kalidokit": "1.1.1"
+    "kalidokit": "1.1.2"
   }
 }

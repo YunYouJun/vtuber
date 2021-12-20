@@ -90,12 +90,6 @@
 
         <UploadButton />
 
-        <!-- <VerticalDivider />
-        <IconButton :active="webcamStore.fitHeight" @click="webcamStore.toggleFitHeight">
-          <i-ri-pause-line v-if="isActionPlaying" />
-          <i-ri-play-line v-else />
-        </IconButton> -->
-
         <VerticalDivider />
 
         <AboutInfo />

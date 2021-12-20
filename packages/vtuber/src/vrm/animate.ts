@@ -6,21 +6,38 @@ import type { VRM } from '@pixiv/three-vrm'
 import { VRMSchema } from '@pixiv/three-vrm'
 import type { Results } from '@mediapipe/holistic'
 
-/* VRM Character Animator */
-export const animateVRM = (vrm: VRM, videoEl: HTMLVideoElement, results: Results) => {
-  if (!vrm)
-    return
+interface BaseAnimateVrmOptions {
+  vrm: VRM
+}
 
-  // Import Helper Functions from Kalidokit
-  // const remap = Kalidokit.Utils.remap
-  const clamp = Kalidokit.Utils.clamp
-  const lerp = Kalidokit.Vector.lerp
+export interface KalidokitAnimateOptions extends BaseAnimateVrmOptions {
+  type: 'kalidokit'
+  videoEl: HTMLVideoElement
+  results: Results
+}
+
+export interface AnimateResults {
+  riggedPose?: Partial<Kalidokit.TPose>
+  riggedLeftHand?: Partial<Kalidokit.THand<'Left'>>
+  riggedRightHand?: Partial<Kalidokit.THand<'Right'>>
+  riggedFace?: Partial<Kalidokit.TFace>
+}
+
+export interface CustomAnimateOptions extends BaseAnimateVrmOptions {
+  type?: 'custom' | ''
+  results: AnimateResults
+}
+
+export type AnimateVrmOptions = KalidokitAnimateOptions | CustomAnimateOptions
+
+/* VRM Character Animator */
+export const animateVRM = (options: AnimateVrmOptions) => {
+  const { vrm } = options
+
+  if (!vrm) return
 
   // Animate Rotation Helper function
   const rigRotation = (name: keyof typeof VRMSchema.HumanoidBoneName, rotation = { x: 0, y: 0, z: 0 }, dampener = 1, lerpAmount = 0.3) => {
-    if (!vrm)
-      return
-
     const Part = vrm.humanoid?.getBoneNode(VRMSchema.HumanoidBoneName[name])
     if (!Part)
       return
@@ -35,9 +52,6 @@ export const animateVRM = (vrm: VRM, videoEl: HTMLVideoElement, results: Results
 
   // Animate Position Helper Function
   const rigPosition = (name: keyof typeof VRMSchema.HumanoidBoneName, position = { x: 0, y: 0, z: 0 }, dampener = 1, lerpAmount = 0.3) => {
-    if (!vrm)
-      return
-
     const Part = vrm.humanoid?.getBoneNode(VRMSchema.HumanoidBoneName[name])
     if (!Part)
       return
@@ -46,8 +60,14 @@ export const animateVRM = (vrm: VRM, videoEl: HTMLVideoElement, results: Results
     Part.position.lerp(vector, lerpAmount) // interpolate
   }
 
+  // Import Helper Functions from Kalidokit
+  // const remap = Kalidokit.Utils.remap
+  const clamp = Kalidokit.Utils.clamp
+  const lerp = Kalidokit.Vector.lerp
+
   const oldLookTarget = new THREE.Euler()
-  const rigFace = (riggedFace: any) => {
+
+  const rigFace = (riggedFace: Kalidokit.TFace) => {
     if (!vrm)
       return
 
@@ -61,10 +81,12 @@ export const animateVRM = (vrm: VRM, videoEl: HTMLVideoElement, results: Results
 
     // Simple example without winking. Interpolate based on old blendshape, then stabilize blink with `Kalidokit` helper function.
     // for VRM, 1 is closed, 0 is open.
-    riggedFace.eye.l = lerp(clamp(1 - riggedFace.eye.l, 0, 1), Blendshape.getValue(PresetName.Blink), 0.5)
-    riggedFace.eye.r = lerp(clamp(1 - riggedFace.eye.r, 0, 1), Blendshape.getValue(PresetName.Blink), 0.5)
-    riggedFace.eye = Kalidokit.Face.stabilizeBlink(riggedFace.eye, riggedFace.head.y)
-    Blendshape.setValue(PresetName.Blink, riggedFace.eye.l)
+    if (riggedFace.eye) {
+      riggedFace.eye.l = lerp(clamp(1 - riggedFace.eye.l, 0, 1), Blendshape.getValue(PresetName.Blink), 0.5)
+      riggedFace.eye.r = lerp(clamp(1 - riggedFace.eye.r, 0, 1), Blendshape.getValue(PresetName.Blink), 0.5)
+      riggedFace.eye = Kalidokit.Face.stabilizeBlink(riggedFace.eye, riggedFace.head.y)
+      Blendshape.setValue(PresetName.Blink, riggedFace.eye.l)
+    }
 
     // Interpolate and set mouth blendshapes
     Blendshape.setValue(PresetName.I, lerp(riggedFace.mouth.shape.I, Blendshape.getValue(PresetName.I), 0.5))
@@ -75,54 +97,84 @@ export const animateVRM = (vrm: VRM, videoEl: HTMLVideoElement, results: Results
 
     // PUPILS
     // interpolate pupil and keep a copy of the value
-    const lookTarget = new THREE.Euler(
-      lerp(oldLookTarget.x, riggedFace.pupil.y, 0.4),
-      lerp(oldLookTarget.y, riggedFace.pupil.x, 0.4),
-      0,
-      'XYZ',
-    )
-    oldLookTarget.copy(lookTarget)
-    vrm.lookAt?.applyer?.lookAt(lookTarget)
+    if (riggedFace.pupil) {
+      const lookTarget = new THREE.Euler(
+        lerp(oldLookTarget.x, riggedFace.pupil.y, 0.4),
+        lerp(oldLookTarget.y, riggedFace.pupil.x, 0.4),
+        0,
+        'XYZ',
+      )
+      oldLookTarget.copy(lookTarget)
+      vrm.lookAt?.applyer?.lookAt(lookTarget)
+    }
   }
 
   // Take the results from `Holistic` and animate character based on its Face, Pose, and Hand Keypoints.
-  let riggedPose, riggedLeftHand, riggedRightHand, riggedFace
+  let riggedPose: Kalidokit.TPose | undefined
+  let riggedLeftHand: Kalidokit.THand<'Left'> | undefined
+  let riggedRightHand: Kalidokit.THand<'Right'> | undefined
+  let riggedFace: Kalidokit.TFace | undefined
 
-  const faceLandmarks = results.faceLandmarks
-  // Pose 3D Landmarks are with respect to Hip distance in meters
-  const pose3DLandmarks = (results as any).ea
-  // Pose 2D landmarks are with respect to videoWidth and videoHeight
-  const pose2DLandmarks = results.poseLandmarks
-  // Be careful, hand landmarks may be reversed
-  const leftHandLandmarks = results.rightHandLandmarks
-  const rightHandLandmarks = results.leftHandLandmarks
+  if (options.type === 'kalidokit') {
+    const { videoEl, results } = options
 
-  // Animate Face
-  if (faceLandmarks) {
-    riggedFace = Kalidokit.Face.solve(faceLandmarks, {
-      runtime: 'mediapipe',
-      video: videoEl,
-    })
-    rigFace(riggedFace)
+    const faceLandmarks = results.faceLandmarks
+    // Pose 3D Landmarks are with respect to Hip distance in meters
+    const pose3DLandmarks = (results as any).ea
+    // Pose 2D landmarks are with respect to videoWidth and videoHeight
+    const pose2DLandmarks = results.poseLandmarks
+    // Be careful, hand landmarks may be reversed
+    const leftHandLandmarks = results.rightHandLandmarks
+    const rightHandLandmarks = results.leftHandLandmarks
+
+    // Animate Face
+    if (faceLandmarks) {
+      riggedFace = Kalidokit.Face.solve(faceLandmarks, {
+        runtime: 'mediapipe',
+        video: videoEl,
+      })
+    }
+
+    // Animate Pose
+    if (pose2DLandmarks && pose3DLandmarks) {
+      riggedPose = Kalidokit.Pose.solve(pose3DLandmarks, pose2DLandmarks, {
+        runtime: 'mediapipe',
+        video: videoEl,
+      })
+    }
+
+    // Animate Hands
+    if (leftHandLandmarks)
+      riggedLeftHand = Kalidokit.Hand.solve(leftHandLandmarks, 'Left')
+    if (rightHandLandmarks)
+      riggedRightHand = Kalidokit.Hand.solve(rightHandLandmarks, 'Right')
+  }
+  else {
+    const { results } = options
+    riggedFace = results.riggedFace
+    riggedPose = results.riggedPose
+    riggedLeftHand = results.riggedLeftHand
+    riggedRightHand = results.riggedRightHand
   }
 
-  // Animate Pose
-  if (pose2DLandmarks && pose3DLandmarks) {
-    riggedPose = Kalidokit.Pose.solve(pose3DLandmarks, pose2DLandmarks, {
-      runtime: 'mediapipe',
-      video: videoEl,
-    })
+  // rotate by data
+  if (riggedFace)
+    rigFace(riggedFace)
+
+  if (riggedPose) {
     rigRotation('Hips', riggedPose.Hips.rotation, 0.7)
-    rigPosition(
-      'Hips',
-      {
-        x: -riggedPose.Hips.worldPosition.x, // Reverse direction
-        y: riggedPose.Hips.worldPosition.y + 1, // Add a bit of height
-        z: -riggedPose.Hips.worldPosition.z, // Reverse direction
-      },
-      1,
-      0.07,
-    )
+    if (riggedPose.Hips.worldPosition) {
+      rigPosition(
+        'Hips',
+        {
+          x: -riggedPose.Hips.worldPosition.x, // Reverse direction
+          y: riggedPose.Hips.worldPosition.y + 1, // Add a bit of height
+          z: -riggedPose.Hips.worldPosition.z, // Reverse direction
+        },
+        1,
+        0.07,
+      )
+    }
 
     rigRotation('Chest', riggedPose.Spine, 0.25, 0.3)
     rigRotation('Spine', riggedPose.Spine, 0.45, 0.3)
@@ -138,15 +190,15 @@ export const animateVRM = (vrm: VRM, videoEl: HTMLVideoElement, results: Results
     rigRotation('RightLowerLeg', riggedPose.RightLowerLeg, 1, 0.3)
   }
 
-  // Animate Hands
-  if (leftHandLandmarks) {
-    riggedLeftHand = Kalidokit.Hand.solve(leftHandLandmarks, 'Left')
-    rigRotation('LeftHand', {
-      // Combine pose rotation Z and hand rotation X Y
-      z: riggedPose.LeftHand.z,
-      y: riggedLeftHand.LeftWrist.y,
-      x: riggedLeftHand.LeftWrist.x,
-    })
+  if (riggedLeftHand) {
+    if (riggedPose) {
+      rigRotation('LeftHand', {
+        // Combine pose rotation Z and hand rotation X Y
+        z: riggedPose.LeftHand.z,
+        y: riggedLeftHand.LeftWrist.y,
+        x: riggedLeftHand.LeftWrist.x,
+      })
+    }
     rigRotation('LeftRingProximal', riggedLeftHand.LeftRingProximal)
     rigRotation('LeftRingIntermediate', riggedLeftHand.LeftRingIntermediate)
     rigRotation('LeftRingDistal', riggedLeftHand.LeftRingDistal)
@@ -163,14 +215,16 @@ export const animateVRM = (vrm: VRM, videoEl: HTMLVideoElement, results: Results
     rigRotation('LeftLittleIntermediate', riggedLeftHand.LeftLittleIntermediate)
     rigRotation('LeftLittleDistal', riggedLeftHand.LeftLittleDistal)
   }
-  if (rightHandLandmarks) {
-    riggedRightHand = Kalidokit.Hand.solve(rightHandLandmarks, 'Right')
-    rigRotation('RightHand', {
-      // Combine Z axis from pose hand and X/Y axis from hand wrist rotation
-      z: riggedPose.RightHand.z,
-      y: riggedRightHand.RightWrist.y,
-      x: riggedRightHand.RightWrist.x,
-    })
+
+  if (riggedRightHand) {
+    if (riggedPose) {
+      rigRotation('RightHand', {
+        // Combine Z axis from pose hand and X/Y axis from hand wrist rotation
+        z: riggedPose.RightHand.z,
+        y: riggedRightHand.RightWrist.y,
+        x: riggedRightHand.RightWrist.x,
+      })
+    }
     rigRotation('RightRingProximal', riggedRightHand.RightRingProximal)
     rigRotation('RightRingIntermediate', riggedRightHand.RightRingIntermediate)
     rigRotation('RightRingDistal', riggedRightHand.RightRingDistal)

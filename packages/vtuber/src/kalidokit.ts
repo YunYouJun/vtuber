@@ -1,7 +1,7 @@
 import { ref, unref } from 'vue'
 import consola from 'consola'
 import * as THREE from 'three'
-import { VRM, VRMUtils } from '@pixiv/three-vrm'
+import type { VRM } from '@pixiv/three-vrm'
 
 import { useStorage } from '@vueuse/core'
 import type { MaybeRef } from '@vueuse/shared'
@@ -9,9 +9,12 @@ import type { MaybeRef } from '@vueuse/shared'
 import type * as mpHolistic from '@mediapipe/holistic'
 
 import type * as CameraUtils from '@mediapipe/camera_utils'
+import { VRMSchema } from '@pixiv/three-vrm'
 import { drawResults, useHolistic } from './mediapipe'
+import type { AnimateResults } from './vrm'
 import { animateVRM, useVrm } from './vrm'
 import { useThree } from './three'
+import type { ParsedLipTracksData } from './lip/parse'
 
 export interface VtuberOptions {
   /**
@@ -69,10 +72,16 @@ export function useVtuber(options: VtuberOptions) {
   // Main Render Loop
   const clock = new THREE.Clock()
 
+  let mixer: THREE.AnimationMixer
+
   three.onAnimate(() => {
+    const delta = clock.getDelta()
+    if (mixer)
+      mixer.update(delta)
+
     if (currentVrm) {
       // Update model to render physics
-      currentVrm.update(clock.getDelta())
+      currentVrm.update(delta)
     }
   })
 
@@ -115,6 +124,48 @@ export function useVtuber(options: VtuberOptions) {
     },
 
     /**
+     * play animation by data
+     * @param data
+     * @returns
+     */
+    playCustomAnimation(data: ParsedLipTracksData) {
+      const animateLip = (vrm: VRM) => {
+        if (!vrm.blendShapeProxy) return
+
+        function generateLipTrack(name: 'A' | 'I' | 'O' | 'U' | 'E') {
+          const trackName = vrm.blendShapeProxy!.getBlendShapeTrackName(VRMSchema.BlendShapePresetName[name])
+
+          const lipTrack = new THREE.NumberKeyframeTrack(
+            trackName!,
+            data.times,
+            data.tracks[name],
+          )
+
+          return lipTrack
+        }
+
+        const lipATrack = generateLipTrack('A')
+        const lipITrack = generateLipTrack('I')
+        const lipOTrack = generateLipTrack('O')
+        const lipUTrack = generateLipTrack('U')
+        const lipETrack = generateLipTrack('E')
+
+        const clip = new THREE.AnimationClip(
+          'lip', // name
+          data.times[data.times.length - 1], // duration
+          [lipATrack, lipITrack, lipOTrack, lipUTrack, lipETrack], // tracks
+        )
+
+        mixer = new THREE.AnimationMixer(vrm.scene)
+        const action = mixer.clipAction(clip)
+        action.setLoop(THREE.LoopOnce, 0)
+        action.play()
+      }
+
+      animateLip(currentVrm)
+    },
+
+    /**
      * 初始化 Holistic 检测
      * @returns
      */
@@ -143,7 +194,12 @@ export function useVtuber(options: VtuberOptions) {
           drawResults(canvasEl, videoEl, results, options.cdn)
 
         // Animate model
-        animateVRM(currentVrm, videoEl, results)
+        animateVRM({
+          type: 'kalidokit',
+          vrm: currentVrm,
+          videoEl,
+          results,
+        })
       }
 
       holistic = await useHolistic({

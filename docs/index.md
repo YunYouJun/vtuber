@@ -5,8 +5,9 @@ heroIconClass: i-ri-ghost-line
 heroAlt: Logo image
 heroText: Vtuber
 tagline: 从一开始的 Vtuber
-actionText: Go Go Go!
-actionLink: /guide/
+actions:
+  - text: Go Go Go!
+    link: /guide/
 features:
   - title: 废话连篇
     details: 怎么做的同时也说说为什么这么做

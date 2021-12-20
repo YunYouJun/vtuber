@@ -29,12 +29,19 @@
   >
     <i-ri-list-ordered />
   </IconButton> -->
+
+  <VerticalDivider />
+  <IconButton @click="playCustomAnimation">
+    <!-- <i-ri-pause-line v-if="isActionPlaying" /> -->
+    <i-ri-play-line />
+  </IconButton>
 </template>
 
 <script setup lang="ts">
 // import { ElMessage } from 'element-plus'
 // import { convertRecordedFrameToFrameTrack } from 'vtuber/parse'
 // import { downloadObjectAsJson } from 'vtuber/utils'
+import { parseLipData } from 'vtuber/lip/parse'
 import { useAppStore } from '~/stores/app'
 import { useMediapipeStore } from '~/stores/mediapipe'
 import { useVtuberStore } from '~/stores/vtuber'
@@ -105,4 +112,15 @@ watch(() => vtbStore.loadPercent, () => {
 //     })
 //   }
 // }
+
+const playCustomAnimation = async() => {
+  const lipsData = await fetch('/data/english.json').then(res => res.json())
+  const data = parseLipData(lipsData)
+
+  const audio = new Audio('/audios/english.wav')
+  audio.play()
+
+  if (vtbStore.instance)
+    vtbStore.instance.playCustomAnimation(data)
+}
 </script>
