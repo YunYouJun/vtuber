@@ -1,11 +1,15 @@
-import "vitepress-theme-you/css";
-import YouTheme from "vitepress-theme-you";
+import type { Theme } from "vitepress";
+import { VPTheme } from "vitepress-theme-you";
 
 import "./styles/index.scss";
 import "./styles/katex.scss";
 
-import 'uno.css'
+import "uno.css";
 
-export default {
-  ...YouTheme,
-};
+const theme: Theme = Object.assign({}, VPTheme, {
+  enhanceApp: ({ app }) => {
+    // ...
+  },
+});
+
+export default theme;

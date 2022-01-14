@@ -12,6 +12,8 @@
 
 ![Preview](./docs/public/gif/preview-1.gif)
 
+目前正在进行的工作：尽管 Three.js 的使用十分广泛，但从代码质量与类型提示上来看，我更喜欢 [Babylon.js](https://github.com/BabylonJS/Babylon.js)，因此我会将其图形渲染部分逐渐使用 Babylon 进行重构。（Please `packages/client/src/pages/babylon.vue`）
+
 ## Usage
 
 ```bash

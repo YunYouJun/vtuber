@@ -1,6 +1,9 @@
 import { UserConfig } from "vitepress";
+// @ts-ignore
+import baseConfig from 'vitepress-theme-you/config'
 
 const config: UserConfig = {
+  extends: baseConfig,
   title: "Docs for Vtuber",
   description: "从一开始的 Vtuber",
   themeConfig: {

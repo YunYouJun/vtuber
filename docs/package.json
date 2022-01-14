@@ -6,12 +6,12 @@
     "serve": "vitepress serve ."
   },
   "devDependencies": {
-    "@unocss/preset-icons": "^0.16.4",
+    "@unocss/preset-icons": "^0.22.2",
     "markdown-it-katex": "^2.0.3",
-    "unocss": "^0.16.4",
-    "vitepress": "^0.20.9"
+    "unocss": "^0.22.2",
+    "vitepress": "^0.21.4"
   },
   "dependencies": {
-    "vitepress-theme-you": "^0.0.18"
+    "vitepress-theme-you": "^0.0.31"
   }
 }
