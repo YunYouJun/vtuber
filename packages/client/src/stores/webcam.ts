@@ -18,6 +18,7 @@ const { stream, enabled } = useUserMedia({
 export const useWebcamStore = defineStore('webcam', () => {
   const toggleEnabled = useToggle(enabled)
   const [isFlipped, toggleIsFlipped] = useToggle()
+  const [show, toggleShow] = useToggle(true)
 
   // 摄像头画面是否铺满
   const fitHeight = useStorage(`${namespace}-fitHeight`, false)
@@ -26,12 +27,14 @@ export const useWebcamStore = defineStore('webcam', () => {
   return {
     stream,
     enabled,
+    show,
 
     isFlipped,
     fitHeight,
     toggleEnabled,
     toggleIsFlipped,
     toggleFitHeight,
+    toggleShow,
   }
 })
 

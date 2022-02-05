@@ -162,7 +162,6 @@ export default defineConfig({
       'vue-router',
       '@vueuse/core',
       '@vueuse/head',
-      'three/examples/js/libs/ammo.wasm',
       'consola',
       'kalidokit',
     ],

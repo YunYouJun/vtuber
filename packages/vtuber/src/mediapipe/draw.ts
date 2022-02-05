@@ -101,26 +101,26 @@ export async function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoEle
     })
 
     // 眼睛眉毛
-    // drawConnectors(
-    //   canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_RIGHT_EYE,
-    //   { color: 'rgb(0,217,231)' })
-    // drawConnectors(
-    //   canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_RIGHT_EYEBROW,
-    //   { color: 'rgb(0,217,231)' })
-    // drawConnectors(
-    //   canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_LEFT_EYE,
-    //   { color: 'rgb(255,138,0)' })
-    // drawConnectors(
-    //   canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_LEFT_EYEBROW,
-    //   { color: 'rgb(255,138,0)' })
+    drawingUtils.drawConnectors(
+      canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_RIGHT_EYE,
+      { color: 'rgb(0,217,231)' })
+    drawingUtils.drawConnectors(
+      canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_RIGHT_EYEBROW,
+      { color: 'rgb(0,217,231)' })
+    drawingUtils.drawConnectors(
+      canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_LEFT_EYE,
+      { color: 'rgb(255,138,0)' })
+    drawingUtils.drawConnectors(
+      canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_LEFT_EYEBROW,
+      { color: 'rgb(255,138,0)' })
 
     // 轮廓
     drawingUtils.drawConnectors(
       canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_FACE_OVAL,
       { color: '#E0E0E0', lineWidth: 4 })
-    // drawConnectors(
-    //   canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_LIPS,
-    //   { color: '#E0E0E0', lineWidth: 5 })
+    drawingUtils.drawConnectors(
+      canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_LIPS,
+      { color: '#E0E0E0', lineWidth: 5 })
   }
 
   function drawHandLandmarks() {

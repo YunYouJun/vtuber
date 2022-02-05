@@ -57,6 +57,15 @@
         </IconButton>
 
         <IconButton
+          :active="webcamStore.show"
+          :title="webcamStore.show ? '隐藏' : '显示'"
+          @click="webcamStore.toggleShow()"
+        >
+          <i-ri-eye-line v-if="persist" title="显示" />
+          <i-ri-eye-close-line v-else title="隐藏" />
+        </IconButton>
+
+        <IconButton
           :active="webcamStore.isFlipped"
           title="水平翻转"
           @click="() => {webcamStore.toggleIsFlipped()}"
@@ -66,7 +75,7 @@
 
         <IconButton
           :active="webcamStore.fitHeight"
-          title="!webcamStore.fitHeight ? '放大' : '缩小'"
+          :title="!webcamStore.fitHeight ? '放大' : '缩小'"
           @click="() => {webcamStore.toggleFitHeight()}"
         >
           <i-ri-zoom-in-line v-if="!webcamStore.fitHeight" />

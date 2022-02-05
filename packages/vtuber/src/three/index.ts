@@ -41,7 +41,7 @@ export function useThree(vrmCanvasRef: VtuberOptions['vrmCanvasRef']) {
       // light.castShadow = true
       // scene.add(light)
 
-      const directionalLight = new THREE.DirectionalLight(0x887766)
+      const directionalLight = new THREE.DirectionalLight(0xFFFFFF)
       directionalLight.position.set(-1, 1, 1).normalize()
       scene.add(directionalLight)
 

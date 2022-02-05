@@ -72,8 +72,18 @@ useEventListener('resize', fixPosistion)
 onMounted(fixPosistion)
 
 const isRounded = ref(true)
-// 摄像头画面是否铺满
-const fitHeight = ref(false)
+
+const videoClass = computed(() => {
+  const classes = []
+  if (isRounded.value) {
+    classes.push('object-cover')
+    classes.push('rounded-full')
+  }
+  if (!webcamStore.show) {
+    classes.push('invisible')
+  }
+  return classes
+})
 </script>
 
 <template>
@@ -98,7 +108,7 @@ const fitHeight = ref(false)
         muted
         volume="0"
         class="transform rotate-y-180"
-        :class="isRounded ? ['object-cover', 'rounded-full'] : ''"
+        :class="videoClass"
         :style="webcamStore.fitHeight ? { height: '100%' } : { width: '100%' }"
       />
 

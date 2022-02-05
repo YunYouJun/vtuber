@@ -22,9 +22,9 @@
     "@mediapipe/control_utils": "^0.6.1629159505",
     "@mediapipe/drawing_utils": "^0.3.1620248257",
     "@mediapipe/holistic": "^0.5.1635989137",
-    "@types/three": "^0.136.1",
+    "@types/three": "^0.137.0",
     "consola": "^2.15.3",
-    "three": "0.136.0",
+    "three": "0.137.5",
     "tsup": "^5.11.11"
   },
   "scripts": {
@@ -33,6 +33,6 @@
   },
   "dependencies": {
     "@pixiv/three-vrm": "^0.6.7",
-    "kalidokit": "1.1.4"
+    "kalidokit": "1.1.5"
   }
 }

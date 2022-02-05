@@ -11,6 +11,7 @@ declare module 'vue' {
     FaceCanvas: typeof import('./components/internals/FaceCanvas.vue')['default']
     'ICarbon:maximize': typeof import('~icons/carbon/maximize')['default']
     'ICarbon:minimize': typeof import('~icons/carbon/minimize')['default']
+    ICarbonDicomOverlay: typeof import('~icons/carbon/dicom-overlay')['default']
     IconButton: typeof import('./components/global/IconButton.vue')['default']
     'IMdi:flipHorizontal': typeof import('~icons/mdi/flip-horizontal')['default']
     'IMdi:video': typeof import('~icons/mdi/video')['default']
