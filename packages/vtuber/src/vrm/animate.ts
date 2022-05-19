@@ -1,4 +1,3 @@
-// @ts-ignore
 import * as Kalidokit from 'kalidokit'
 import * as THREE from 'three'
 
@@ -34,7 +33,8 @@ export type AnimateVrmOptions = KalidokitAnimateOptions | CustomAnimateOptions
 export const animateVRM = (options: AnimateVrmOptions) => {
   const { vrm } = options
 
-  if (!vrm) return
+  if (!vrm)
+    return
 
   // Animate Rotation Helper function
   const rigRotation = (name: keyof typeof VRMSchema.HumanoidBoneName, rotation = { x: 0, y: 0, z: 0 }, dampener = 1, lerpAmount = 0.3) => {
@@ -77,7 +77,8 @@ export const animateVRM = (options: AnimateVrmOptions) => {
     const Blendshape = vrm.blendShapeProxy
     const PresetName = VRMSchema.BlendShapePresetName
 
-    if (!Blendshape) return
+    if (!Blendshape)
+      return
 
     // Simple example without winking. Interpolate based on old blendshape, then stabilize blink with `Kalidokit` helper function.
     // for VRM, 1 is closed, 0 is open.

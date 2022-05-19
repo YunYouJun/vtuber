@@ -1,35 +1,37 @@
 {
+  "name": "@vtuber/monorepo",
+  "private": true,
+  "packageManager": "pnpm@7.1.2",
   "directories": {
     "doc": "docs"
   },
-  "scripts": {
-    "dev": "pnpm dev -C packages/client",
-    "build": "pnpm run build:client",
-    "serve": "pnpm run preview -C packages/client",
-    "build:client": "pnpm build -C packages/client",
-    "docs:dev": "pnpm dev -C docs",
-    "docs:build": "pnpm build -C docs",
-    "docs:serve": "pnpm serve -C docs",
-    "lint": "eslint \"**/*.{vue,ts,js}\" --fix"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/YunYouJun/vtuber.git"
-  },
+  "license": "ISC",
   "author": {
     "name": "YunYouJun",
     "url": "https://www.yunyoujun.cn",
     "email": "me@yunyoujun.cn"
   },
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YunYouJun/vtuber.git"
+  },
+  "scripts": {
+    "dev": "pnpm -C packages/client dev",
+    "build": "pnpm run build:client",
+    "serve": "pnpm -C packages/client run preview",
+    "build:client": "pnpm -C packages/client build",
+    "docs:dev": "pnpm -C docs dev",
+    "docs:build": "pnpm -C docs build",
+    "docs:serve": "pnpm -C docs serve",
+    "lint": "eslint ."
+  },
   "bugs": {
     "url": "https://github.com/YunYouJun/vtuber/issues"
   },
   "homepage": "https://vtuber.yunyoujun.cn",
   "devDependencies": {
-    "@antfu/eslint-config": "^0.16.0",
-    "eslint": "^8.6.0",
-    "pnpm": "^6.26.1",
-    "typescript": "^4.5.4"
+    "@antfu/eslint-config": "^0.23.1",
+    "eslint": "^8.15.0",
+    "typescript": "^4.6.4"
   }
 }

@@ -1,3 +1,95 @@
+<script lang="ts" setup>
+import { useVtuber } from 'vtuber'
+import { isDev } from '@vtuber/shared'
+import { useWebcamStore } from '~/stores/webcam'
+import { useVtuberStore } from '~/stores/vtuber'
+import { useAppStore } from '~/stores/app'
+import { checkModelFormat } from '~/utils/vrm'
+const app = useAppStore()
+
+const webcamStore = useWebcamStore()
+
+const webCamera = ref()
+
+const vtbStore = useVtuberStore()
+
+useHead({
+  meta: [{
+    name: 'description',
+    content: '3D Vtuber Base on kalidokit & mediapipe',
+  }],
+  script: !isDev
+    ? [
+        {
+          src: 'https://cdn.jsdelivr.net/npm/@mediapipe/holistic/holistic.js',
+          crossorigin: 'anonymous',
+        },
+        {
+          src: 'https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js',
+          crossorigin: 'anonymous',
+        },
+        {
+          src: 'https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js',
+          crossorigin: 'anonymous',
+        },
+      ]
+    : [],
+})
+
+const mpCanvasRef = ref<HTMLCanvasElement>()
+const vrmCanvasRef = ref<HTMLCanvasElement>()
+
+const videoRef = computed(() => webCamera.value?.video)
+
+const vtuber = useVtuber({
+  vrmUrl: vtbStore.curModelUrl,
+  mpCanvasRef,
+  vrmCanvasRef,
+  videoRef,
+  cdn: !isDev,
+})
+
+vtbStore.setInstance(vtuber)
+
+watch(() => vtbStore.curModelUrl, (vrmUrl: string) => {
+  vtuber.vrm.load(vrmUrl)
+})
+
+onMounted(async () => {
+  await vtuber.initVRM()
+  app.hasLoadedModel = true
+})
+
+const showDragStyle = ref(false)
+/**
+ * 拖拽
+ */
+const onDragEnter = (e: DragEvent) => {
+  e.preventDefault()
+  showDragStyle.value = true
+}
+
+const onDragOver = (e: DragEvent) => {
+  e.preventDefault()
+}
+
+const onDragLeave = (e: DragEvent) => {
+  e.preventDefault()
+  showDragStyle.value = false
+}
+
+const onDrop = (e: DragEvent) => {
+  e.preventDefault()
+  showDragStyle.value = false
+
+  const fileList = e.dataTransfer?.files
+  if (!fileList?.length)
+    return
+  if (checkModelFormat(fileList[0]))
+    vtuber.vrm.load(URL.createObjectURL(fileList[0]))
+}
+</script>
+
 <template>
   <div class="preview flex justify-center items-center h-full">
     <ToggleVrm v-if="app.showModelList" class="z-1" />
@@ -42,97 +134,6 @@
 
   <OpenAnimation />
 </template>
-
-<script lang="ts" setup>
-import { useVtuber } from 'vtuber'
-import { isDev } from '@vtuber/shared'
-import { useWebcamStore } from '~/stores/webcam'
-import { useVtuberStore } from '~/stores/vtuber'
-import { useAppStore } from '~/stores/app'
-import { checkModelFormat } from '~/utils/vrm'
-const app = useAppStore()
-
-const webcamStore = useWebcamStore()
-
-const webCamera = ref()
-
-const vtbStore = useVtuberStore()
-
-useHead({
-  meta: [{
-    name: 'description',
-    content: '3D Vtuber Base on kalidokit & mediapipe',
-  }],
-  script: !isDev
-    ? [
-      {
-        src: 'https://cdn.jsdelivr.net/npm/@mediapipe/holistic/holistic.js',
-        crossorigin: 'anonymous',
-      },
-      {
-        src: 'https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js',
-        crossorigin: 'anonymous',
-      },
-      {
-        src: 'https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js',
-        crossorigin: 'anonymous',
-      },
-    ]
-    : [],
-})
-
-const mpCanvasRef = ref<HTMLCanvasElement>()
-const vrmCanvasRef = ref<HTMLCanvasElement>()
-
-const videoRef = computed(() => webCamera.value?.video)
-
-const vtuber = useVtuber({
-  vrmUrl: vtbStore.curModelUrl,
-  mpCanvasRef,
-  vrmCanvasRef,
-  videoRef,
-  cdn: !isDev,
-})
-
-vtbStore.setInstance(vtuber)
-
-watch(() => vtbStore.curModelUrl, (vrmUrl: string) => {
-  vtuber.vrm.load(vrmUrl)
-})
-
-onMounted(async() => {
-  await vtuber.initVRM()
-  app.hasLoadedModel = true
-})
-
-const showDragStyle = ref(false)
-/**
- * 拖拽
- */
-const onDragEnter = (e: DragEvent) => {
-  e.preventDefault()
-  showDragStyle.value = true
-}
-
-const onDragOver = (e: DragEvent) => {
-  e.preventDefault()
-}
-
-const onDragLeave = (e: DragEvent) => {
-  e.preventDefault()
-  showDragStyle.value = false
-}
-
-const onDrop = (e: DragEvent) => {
-  e.preventDefault()
-  showDragStyle.value = false
-
-  const fileList = e.dataTransfer?.files
-  if (!fileList?.length) return
-  if (checkModelFormat(fileList[0]))
-    vtuber.vrm.load(URL.createObjectURL(fileList[0]))
-}
-</script>
 
 <route lang="yaml">
 meta:

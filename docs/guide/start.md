@@ -58,19 +58,19 @@ Python 里有 [NumPy](https://numpy.org/)，JavaScript 里就用 [mathjs](https:
 ```ts
 const browCenter = points[FaceMap.brow.left[2]]
   .add(points[FaceMap.brow.right[2]])
-  .div({ x: 2, y: 2 });
+  .div({ x: 2, y: 2 })
 ```
 
 鼻子中心
 
 ```ts
-const noseCenter = points[FaceMap.nose.nostrils[2]];
+const noseCenter = points[FaceMap.nose.nostrils[2]]
 ```
 
 下巴中心
 
 ```ts
-const jawCenter = points[FaceMap.jaw[2]];
+const jawCenter = points[FaceMap.jaw[2]]
 ```
 
 当转头时，三个点相连，应当是一个三角形。
@@ -78,13 +78,13 @@ const jawCenter = points[FaceMap.jaw[2]];
 我们暂且将眉毛中心到下巴中心这条最长的线称之为 `中线`，眉毛中心到鼻子中心的这条线称之为 `上斜线`。
 
 ```ts
-const midLine = browCenter.sub(jawCenter);
+const midLine = browCenter.sub(jawCenter)
 // 上斜边
-const topLine = browCenter.sub(noseCenter);
+const topLine = browCenter.sub(noseCenter)
 
 // 转化为 Three.js 里的向量以使用叉乘
-const midLineVector = new THREE.Vector2(midLine.x, midLine.y);
-const topLineVector = new THREE.Vector2(topLine.x, topLine.y);
+const midLineVector = new THREE.Vector2(midLine.x, midLine.y)
+const topLineVector = new THREE.Vector2(topLine.x, topLine.y)
 ```
 
 中线与上斜线进行 [叉乘(向量积)](https://baike.baidu.com/item/%E5%90%91%E9%87%8F%E7%A7%AF)，则可以得到以这两个向量为边的平行四边形面积。
@@ -95,9 +95,9 @@ const topLineVector = new THREE.Vector2(topLine.x, topLine.y);
 
 ```ts
 // 旋转头部模型的 Y 轴
-const rotationY =
-    midlineVector.cross(topLineVector) / (midLineLength * midLineLength);
-...
+const rotationY
+    = midlineVector.cross(topLineVector) / (midLineLength * midLineLength)
+// ...
 const ratio = 5
 head.rotation.y = rotationY * ratio
 ```

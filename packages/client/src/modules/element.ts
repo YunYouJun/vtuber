@@ -1,5 +1,5 @@
-import { ElMain, ElHeader, ElContainer, ElProgress } from 'element-plus'
-import { UserModule } from '~/types'
+import { ElContainer, ElHeader, ElMain, ElProgress } from 'element-plus'
+import type { UserModule } from '~/types'
 
 const components = [ElMain, ElHeader, ElContainer, ElProgress]
 

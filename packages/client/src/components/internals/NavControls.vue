@@ -1,3 +1,65 @@
+<script setup lang="ts">
+import { useVtuberStore } from '~/stores/vtuber'
+import { useWebcamStore } from '~/stores/webcam'
+import { isDark, toggleDark } from '~/composables'
+import { useAppStore } from '~/stores/app'
+
+withDefaults(defineProps<{
+  persist: boolean
+}>(), {
+  persist: true,
+})
+
+const { t } = useI18n()
+
+const app = useAppStore()
+
+const vtbStore = useVtuberStore()
+const webcamStore = useWebcamStore()
+
+const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
+
+// 根据已记录的数据，播放动作
+// const isActionPlaying = ref(false)
+
+const root = ref<HTMLDivElement>()
+
+/**
+ * 显示圆形窗口时，则默认打开摄像头
+ */
+const toggleWebcam = () => {
+  if (!vtbStore.showWebcam)
+    webcamStore.enabled = true
+  vtbStore.toggleShowWebcam()
+}
+
+const pipVideoRef = ref<HTMLVideoElement>()
+
+const togglePictureInPicture = () => {
+  if (app.isPicInPic) {
+    document.exitPictureInPicture()
+    app.isPicInPic = false
+    if (pipVideoRef.value)
+      pipVideoRef.value.srcObject = null
+  }
+  else {
+    const vrmCanvas = document.getElementsByClassName('vrm-canvas')[0]
+    if (!pipVideoRef.value)
+      return
+    const stream = (vrmCanvas as HTMLCanvasElement).captureStream()
+    pipVideoRef.value.srcObject = stream
+
+    setTimeout(() => {
+      if (!pipVideoRef.value)
+        return
+      pipVideoRef.value.requestPictureInPicture()
+
+      app.isPicInPic = true
+    }, 400)
+  }
+}
+</script>
+
 <template>
   <div
     class="
@@ -50,7 +112,7 @@
         <IconButton
           :active="webcamStore.enabled"
           title="切换摄像状态"
-          @click="() => {webcamStore.toggleEnabled()}"
+          @click="() => { webcamStore.toggleEnabled() }"
         >
           <i-mdi:video v-if="webcamStore.enabled" />
           <i-mdi:video-off v-else />
@@ -68,7 +130,7 @@
         <IconButton
           :active="webcamStore.isFlipped"
           title="水平翻转"
-          @click="() => {webcamStore.toggleIsFlipped()}"
+          @click="() => { webcamStore.toggleIsFlipped() }"
         >
           <i-mdi:flip-horizontal />
         </IconButton>
@@ -76,7 +138,7 @@
         <IconButton
           :active="webcamStore.fitHeight"
           :title="!webcamStore.fitHeight ? '放大' : '缩小'"
-          @click="() => {webcamStore.toggleFitHeight()}"
+          @click="() => { webcamStore.toggleFitHeight() }"
         >
           <i-ri-zoom-in-line v-if="!webcamStore.fitHeight" />
           <i-ri-zoom-out-line v-else />
@@ -108,62 +170,3 @@
     <video ref="pipVideoRef" class="invisible pointer-events-none absolute right-0 bottom-0" autoplay playsinline muted />
   </div>
 </template>
-
-<script setup lang="ts">
-import { useVtuberStore } from '~/stores/vtuber'
-import { useWebcamStore } from '~/stores/webcam'
-import { isDark, toggleDark } from '~/composables'
-import { useAppStore } from '~/stores/app'
-
-const { t } = useI18n()
-
-const app = useAppStore()
-
-const vtbStore = useVtuberStore()
-const webcamStore = useWebcamStore()
-
-const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
-
-withDefaults(defineProps<{
-  persist: boolean
-}>(), {
-  persist: true,
-})
-
-// 根据已记录的数据，播放动作
-// const isActionPlaying = ref(false)
-
-const root = ref<HTMLDivElement>()
-
-/**
- * 显示圆形窗口时，则默认打开摄像头
- */
-const toggleWebcam = () => {
-  if (!vtbStore.showWebcam) webcamStore.enabled = true
-  vtbStore.toggleShowWebcam()
-}
-
-const pipVideoRef = ref<HTMLVideoElement>()
-
-const togglePictureInPicture = () => {
-  if (app.isPicInPic) {
-    document.exitPictureInPicture()
-    app.isPicInPic = false
-    if (pipVideoRef.value)
-      pipVideoRef.value.srcObject = null
-  }
-  else {
-    const vrmCanvas = document.getElementsByClassName('vrm-canvas')[0]
-    if (!pipVideoRef.value) return
-    const stream = (vrmCanvas as HTMLCanvasElement).captureStream()
-    pipVideoRef.value.srcObject = stream
-
-    setTimeout(() => {
-      if (!pipVideoRef.value) return
-      pipVideoRef.value.requestPictureInPicture()
-
-      app.isPicInPic = true
-    }, 400)
-  }
-}
-</script>

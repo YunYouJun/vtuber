@@ -22,7 +22,8 @@ export async function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoEle
   canvas.width = video.videoWidth
   canvas.height = video.videoHeight
   const canvasCtx = canvas.getContext('2d')
-  if (!canvasCtx) return
+  if (!canvasCtx)
+    return
 
   // Remove landmarks we don't want to draw.
   // removeLandmarks(results)
@@ -34,7 +35,8 @@ export async function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoEle
    * 绘制瞳孔
    */
   function drawPupil() {
-    if (!canvasCtx) return
+    if (!canvasCtx)
+      return
     if (results.faceLandmarks && results.faceLandmarks.length === 478) {
       drawingUtils.drawLandmarks(canvasCtx, [results.faceLandmarks[468], results.faceLandmarks[468 + 5]], {
         color: '#ffe603',
@@ -48,7 +50,8 @@ export async function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoEle
    * @returns
    */
   function drawPoseLandmarks() {
-    if (!canvasCtx) return
+    if (!canvasCtx)
+      return
     drawingUtils.drawConnectors(canvasCtx, results.poseLandmarks, mpHolistic.POSE_CONNECTIONS, {
       color: 'white',
       lineWidth: 4,
@@ -92,7 +95,8 @@ export async function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoEle
    * 绘制面部标记
    */
   function drawFaceLandmarks() {
-    if (!canvasCtx) return
+    if (!canvasCtx)
+      return
 
     // 网格
     drawingUtils.drawConnectors(canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_TESSELATION, {
@@ -124,7 +128,8 @@ export async function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoEle
   }
 
   function drawHandLandmarks() {
-    if (!canvasCtx) return
+    if (!canvasCtx)
+      return
     drawingUtils.drawConnectors(canvasCtx, results.leftHandLandmarks, mpHolistic.HAND_CONNECTIONS, {
       color: '#ff000099',
       lineWidth: 4,

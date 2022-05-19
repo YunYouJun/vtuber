@@ -1,3 +1,10 @@
+<script setup lang="ts">
+withDefaults(defineProps<{ active?: boolean; title?: string }>(), {
+  title: '',
+  active: false,
+})
+</script>
+
 <template>
   <button
     class="vtb-icon-button tooltip m-1 shadow hover:shadow-lg"
@@ -9,13 +16,6 @@
     <span v-if="title" class="tooltip-text whitespace-nowrap" text="sm">{{ title }}</span>
   </button>
 </template>
-
-<script setup lang="ts">
-withDefaults(defineProps<{ active?: boolean; title?: string }>(), {
-  title: '',
-  active: false,
-})
-</script>
 
 <style lang="scss">
 .vtb-icon-button {

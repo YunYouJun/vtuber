@@ -22,7 +22,7 @@
       "~/*": ["packages/client/src/*"],
       "@vtuber/*": ["packages/*/src"],
       "vtuber": ["packages/vtuber/src/index"],
-      "vtuber/*": ["packages/vtuber/src/*"],
+      "vtuber/*": ["packages/vtuber/src/*"]
     }
   },
   "include": ["docs/.vitepress", "packages/*/src", "packages/global.d.ts"],

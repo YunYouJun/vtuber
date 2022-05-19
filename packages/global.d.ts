@@ -1,4 +1,4 @@
-import { DetectResult } from 'vtuber/parse'
+import type { DetectResult } from 'vtuber/parse'
 
 declare global {
   interface Window {
@@ -11,7 +11,7 @@ declare global {
      * faceapi 相关
      */
     face: {
-      points?: {x: number; y: number}[]
+      points?: { x: number; y: number }[]
     }
 
     /**

@@ -1,8 +1,3 @@
-<template>
-  <hr class="m-2">
-  <vue-about-me :copyright="copyright" :is-dark="isDark" />
-</template>
-
 <script setup lang="ts">
 import VueAboutMe from 'vue-about-me'
 import 'vue-about-me/style.css'
@@ -17,3 +12,8 @@ const copyright = {
   link: 'https://sponsors.yunyoujun.cn',
 }
 </script>
+
+<template>
+  <hr class="m-2">
+  <vue-about-me :copyright="copyright" :is-dark="isDark" />
+</template>

@@ -35,7 +35,7 @@ export function createControlPanel(params: {
           holistic.reset()
         },
         onFrame:
-          async(input: controls.InputImage, size: controls.Rectangle) => {
+          async (input: controls.InputImage, size: controls.Rectangle) => {
             const aspect = size.height / size.width
             let width: number, height: number
             if (window.innerWidth > window.innerHeight) {

@@ -11,7 +11,6 @@ useHead({
 
 if (isClient)
   self.face = {}
-
 </script>
 
 <template>

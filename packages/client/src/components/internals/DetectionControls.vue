@@ -1,42 +1,3 @@
-<template>
-  <IconButton :active="mpStore.detecting" title="捕捉身体" @click="startDetecting">
-    <i-ri-body-scan-line :class="detectLoading ? 'animate-spin' : ''" />
-  </IconButton>
-  <IconButton :active="vtbStore.loadPercent === 100" title="加载人物模型" :disabled="loading" @click="initVRM">
-    <i-ri-file-user-line :class="loading ? 'animate-spin' : ''" />
-  </IconButton>
-  <IconButton :active="app.showModelList" title="切换人物" @click="() => {app.toggleShowModelList()}">
-    <i-ri-user-search-line />
-  </IconButton>
-  <!-- <IconButton @click="downloadRecordedPointsFrames">
-    <i-ri-download-line />
-  </IconButton>
-  <IconButton :active="faceStore.options.debug" @click="faceStore.toggleDebug">
-    <i-ri-bug-line />
-  </IconButton>
-
-  <IconButton
-    :active="faceStore.options.withFaceLandmarks"
-    title="标记"
-    @click="faceStore.toggleFaceLandmarks"
-  >
-    <i-ri-bookmark-line />
-  </IconButton>
-  <IconButton
-    :active="faceStore.options.withLandmarkIndex"
-    title="索引"
-    @click="faceStore.toggleLandmarkIndex"
-  >
-    <i-ri-list-ordered />
-  </IconButton> -->
-
-  <VerticalDivider />
-  <IconButton @click="playCustomAnimation">
-    <!-- <i-ri-pause-line v-if="isActionPlaying" /> -->
-    <i-ri-play-line />
-  </IconButton>
-</template>
-
 <script setup lang="ts">
 // import { ElMessage } from 'element-plus'
 // import { convertRecordedFrameToFrameTrack } from 'vtuber/parse'
@@ -61,8 +22,9 @@ const detectLoading = ref(false)
    * 开始检测
    * @returns
    */
-const startDetecting = async() => {
-  if (!vtbStore.instance) return
+const startDetecting = async () => {
+  if (!vtbStore.instance)
+    return
 
   mpStore.detecting = true
   detectLoading.value = true
@@ -113,7 +75,7 @@ watch(() => vtbStore.loadPercent, () => {
 //   }
 // }
 
-const playCustomAnimation = async() => {
+const playCustomAnimation = async () => {
   const lipsData = await fetch('/data/english.json').then(res => res.json())
   const data = parseLipData(lipsData)
 
@@ -124,3 +86,42 @@ const playCustomAnimation = async() => {
     vtbStore.instance.playCustomAnimation(data)
 }
 </script>
+
+<template>
+  <IconButton :active="mpStore.detecting" title="捕捉身体" @click="startDetecting">
+    <i-ri-body-scan-line :class="detectLoading ? 'animate-spin' : ''" />
+  </IconButton>
+  <IconButton :active="vtbStore.loadPercent === 100" title="加载人物模型" :disabled="loading" @click="initVRM">
+    <i-ri-file-user-line :class="loading ? 'animate-spin' : ''" />
+  </IconButton>
+  <IconButton :active="app.showModelList" title="切换人物" @click="() => { app.toggleShowModelList() }">
+    <i-ri-user-search-line />
+  </IconButton>
+  <!-- <IconButton @click="downloadRecordedPointsFrames">
+    <i-ri-download-line />
+  </IconButton>
+  <IconButton :active="faceStore.options.debug" @click="faceStore.toggleDebug">
+    <i-ri-bug-line />
+  </IconButton>
+
+  <IconButton
+    :active="faceStore.options.withFaceLandmarks"
+    title="标记"
+    @click="faceStore.toggleFaceLandmarks"
+  >
+    <i-ri-bookmark-line />
+  </IconButton>
+  <IconButton
+    :active="faceStore.options.withLandmarkIndex"
+    title="索引"
+    @click="faceStore.toggleLandmarkIndex"
+  >
+    <i-ri-list-ordered />
+  </IconButton> -->
+
+  <VerticalDivider />
+  <IconButton @click="playCustomAnimation">
+    <!-- <i-ri-pause-line v-if="isActionPlaying" /> -->
+    <i-ri-play-line />
+  </IconButton>
+</template>

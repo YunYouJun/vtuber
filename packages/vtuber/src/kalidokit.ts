@@ -11,7 +11,6 @@ import type * as mpHolistic from '@mediapipe/holistic'
 import type * as CameraUtils from '@mediapipe/camera_utils'
 import { VRMSchema } from '@pixiv/three-vrm'
 import { drawResults, useHolistic } from './mediapipe'
-import type { AnimateResults } from './vrm'
 import { animateVRM, useVrm } from './vrm'
 import { useThree } from './three'
 import type { ParsedLipTracksData } from './lip/parse'
@@ -88,7 +87,8 @@ export function useVtuber(options: VtuberOptions) {
   const vrm = useVrm()
   vrm.onLoad((value) => {
     scene.add(value.scene)
-    if (currentVrm) scene.remove(currentVrm.scene)
+    if (currentVrm)
+      scene.remove(currentVrm.scene)
     currentVrm = value
     currentVrm.scene.rotation.y = Math.PI // Rotate model 180deg to face camera
   })
@@ -110,16 +110,19 @@ export function useVtuber(options: VtuberOptions) {
      * VRM CHARACTER SETUP
      */
     initScene() {
-      if (!scene) scene = three.loadScene()
+      if (!scene)
+        scene = three.loadScene()
     },
 
     vrm,
 
     async initVRM(vrmOptions?: { url?: string }) {
-      if (!scene) this.initScene()
+      if (!scene)
+        this.initScene()
 
       const vrmUrl = (vrmOptions && vrmOptions.url) || options.vrmUrl
-      if (vrmUrl) await this.vrm.load(vrmUrl)
+      if (vrmUrl)
+        await this.vrm.load(vrmUrl)
       else consola.error('缺少 VRM 模型链接')
     },
 
@@ -130,7 +133,8 @@ export function useVtuber(options: VtuberOptions) {
      */
     playCustomAnimation(data: ParsedLipTracksData) {
       const animateLip = (vrm: VRM) => {
-        if (!vrm.blendShapeProxy) return
+        if (!vrm.blendShapeProxy)
+          return
 
         function generateLipTrack(name: 'A' | 'I' | 'O' | 'U' | 'E') {
           const trackName = vrm.blendShapeProxy!.getBlendShapeTrackName(VRMSchema.BlendShapePresetName[name])
@@ -170,7 +174,8 @@ export function useVtuber(options: VtuberOptions) {
      * @returns
      */
     async initHolistic() {
-      if (holistic) consola.info('Holistic 实例已存在，重新实例化')
+      if (holistic)
+        consola.info('Holistic 实例已存在，重新实例化')
 
       // createVtuber(options)
       const canvasEl = unref(mpCanvasRef)
@@ -212,11 +217,12 @@ export function useVtuber(options: VtuberOptions) {
       // Use `Mediapipe` utils to get camera - lower resolution = higher fps
       // const { Camera } = await import('@mediapipe/camera_utils')
       let cameraUtils: typeof CameraUtils
-      if (options.cdn) cameraUtils = window as any
+      if (options.cdn)
+        cameraUtils = window as any
       else cameraUtils = (await import('@mediapipe/camera_utils')).default
 
       const camera = new cameraUtils.Camera(videoEl, {
-        onFrame: async() => {
+        onFrame: async () => {
           await holistic.send({ image: videoEl })
         },
       })

@@ -1,8 +1,7 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { useToggle } from '@vueuse/core'
 
-import { useVtuber } from 'vtuber'
-import { isDev, namespace } from '@vtuber/shared'
+import type { useVtuber } from 'vtuber'
 
 export const useVtuberStore = defineStore('vtuber', () => {
   const instance = ref<ReturnType<typeof useVtuber>>()

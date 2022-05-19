@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { Point } from 'face-api.js'
 import { FaceMap } from './face'
-import { IKeyframeTrack, RecordedFrame } from '~/stores/face'
+import type { IKeyframeTrack, RecordedFrame } from '~/stores/face'
 
 /**
  * 解析后的检测结果
@@ -99,7 +99,8 @@ export function convertRecordedFrameToFrameTrack(data: RecordedFrame[]) {
  * 根据 dlib 68 点位置，生成解析后的结果
  */
 export function generateResultFromPoints(points: Point[]): DetectResult | undefined {
-  if (!points || !points.length) return
+  if (!points || !points.length)
+    return
 
   const head = {
     rotation: {

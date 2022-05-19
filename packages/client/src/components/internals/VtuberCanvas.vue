@@ -1,9 +1,3 @@
-<template>
-  <div class="vtuber-container">
-    <canvas ref="vtuberCanvasRef" width="640" height="360" />
-  </div>
-</template>
-
 <script setup lang="ts">
 // import { initVtuber } from 'vtuber/mmd'
 const facePoints = computed(() => self.face.points)
@@ -20,11 +14,13 @@ onMounted(() => {
 
 function init() {
   const canvas = vtuberCanvasRef.value
-  if (!canvas) return
+  if (!canvas)
+    return
   ctx = canvas.getContext('2d')
   // setInterval
   setInterval(() => {
-    if (!ctx) return
+    if (!ctx)
+      return
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     if (facePoints.value && facePoints.value[30]) {
@@ -39,7 +35,8 @@ function init() {
 }
 
 function drawVtuber() {
-  if (!ctx) return
+  if (!ctx)
+    return
   const center = centerPoint.value
 
   const eyeHeight = 12
@@ -82,6 +79,12 @@ function drawVtuber() {
   ctx.stroke()
 }
 </script>
+
+<template>
+  <div class="vtuber-container">
+    <canvas ref="vtuberCanvasRef" width="640" height="360" />
+  </div>
+</template>
 
 <style lang="scss">
 .vtuber-container {

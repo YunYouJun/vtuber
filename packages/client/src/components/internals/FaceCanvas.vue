@@ -1,3 +1,11 @@
+<script setup lang="ts">
+const canvas = ref<HTMLCanvasElement | null>(null)
+
+defineExpose({
+  canvas,
+})
+</script>
+
 <template>
   <canvas
     id="overlay"
@@ -16,13 +24,5 @@
     "
     width="640"
     height="480"
-  ></canvas>
+  />
 </template>
-
-<script setup lang="ts">
-const canvas = ref<HTMLCanvasElement | null>(null)
-
-defineExpose({
-  canvas,
-})
-</script>

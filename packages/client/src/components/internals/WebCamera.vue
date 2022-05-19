@@ -24,7 +24,8 @@ defineExpose({
 
 watchEffect(() => {
   // if (video.value) video.value.srcObject = stream.value!
-  if (video.value) video.value.srcObject = webcamStore.stream!
+  if (video.value)
+    video.value.srcObject = webcamStore.stream!
 }, { flush: 'post' })
 
 const { style: containerStyle } = useDraggable(
@@ -79,9 +80,9 @@ const videoClass = computed(() => {
     classes.push('object-cover')
     classes.push('rounded-full')
   }
-  if (!webcamStore.show) {
+  if (!webcamStore.show)
     classes.push('invisible')
-  }
+
   return classes
 })
 </script>

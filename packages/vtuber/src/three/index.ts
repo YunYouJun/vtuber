@@ -18,13 +18,15 @@ export function useThree(vrmCanvasRef: VtuberOptions['vrmCanvasRef']) {
         alpha: true,
       }
       // 是否绑定到对应 Canvas 还是新建
-      if (vrmCanvasEl) webglRendererParams.canvas = vrmCanvasEl
+      if (vrmCanvasEl)
+        webglRendererParams.canvas = vrmCanvasEl
 
       const renderer = new THREE.WebGLRenderer(webglRendererParams)
       renderer.setSize(window.innerWidth, window.innerHeight)
       renderer.setPixelRatio(window.devicePixelRatio)
 
-      if (!vrmCanvasEl) document.body.appendChild(renderer.domElement)
+      if (!vrmCanvasEl)
+        document.body.appendChild(renderer.domElement)
 
       // camera
       const aspect = window.innerWidth / window.innerHeight
