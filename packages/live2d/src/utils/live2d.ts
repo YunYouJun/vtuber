@@ -1,28 +1,28 @@
 import * as PIXI from 'pixi.js'
 
-import { Live2DModel } from 'pixi-live2d-display'
+import * as pixiLive2dDisplay from 'pixi-live2d-display'
 
 // Kalidokit provides a simple easing function
 // (linear interpolation) used for animation smoothness
 // you can use a more advanced easing function if you want
 // todo change to npm
 
-import { Face, Utils, Vector } from 'kalidokit'
+import { isClient } from '@vueuse/core'
 import { drawResults } from './mediapipe'
 import { getVideoElement } from './helper'
+const { Live2DModel } = pixiLive2dDisplay
 
-window.PIXI = PIXI
-// const {
-//   Face,
-//   Vector: { lerp },
-//   Utils: { clamp },
-// } = Kalidokit
+if (isClient)
+  window.PIXI = PIXI
+
+const {
+  Face,
+  Vector: { lerp },
+  Utils: { clamp },
+} = window.Kalidokit
 
 // const { lerp } = Vector
 // const { clamp } = Utils
-
-const { lerp } = Vector
-const { clamp } = Utils
 
 // Url to Live2D
 const modelUrl = 'https://cdn.jsdelivr.net/gh/YunYouJun/yun/live2d/小云.model3.json'
@@ -80,7 +80,7 @@ const rigFace = (result, lerpAmount = 0.7) => {
 
     // Simple example without winking.
     // Interpolate based on old blendshape, then stabilize blink with `Kalidokit` helper function.
-    const stabilizedEyes = Face.stabilizeBlink(
+    const stabilizedEyes = Kalidokit.Face.stabilizeBlink(
       {
         l: lerp(result.eye.l, coreModel.getParameterValueById('ParamEyeLOpen'), 0.7),
         r: lerp(result.eye.r, coreModel.getParameterValueById('ParamEyeROpen'), 0.7),
@@ -114,7 +114,7 @@ const animateLive2DModel = (points) => {
 
   if (points) {
     // use kalidokit face solver
-    riggedFace = Face.solve(points, {
+    riggedFace = Kalidokit.Face.solve(points, {
       runtime: 'mediapipe',
       video: videoElement,
     })
