@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="apple-touch-icon" href="/pwa-192x192.png">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#00aba9">
+  <meta name="msapplication-TileColor" content="#00aba9">
+  <script>
+    (function () {
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      const setting = localStorage.getItem('vueuse-color-scheme') || 'auto'
+      if (setting === 'dark' || (prefersDark && setting !== 'light'))
+        document.documentElement.classList.toggle('dark', true)
+    })()
+  </script>
+
+  <!--     Live2D SDK  -->
+  <script src="https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/dylanNew/live2d/webgl/Live2D/lib/live2d.min.js"></script>
+
+  <!--     Mediapipe or Tensorflow.js -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"
+    crossorigin="anonymous"
+  ></script>
+
+  <!--     Mediapipe Drawing Tools -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
+    crossorigin="anonymous"
+  ></script>
+  <!--     Mediapipe Camera Tools -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"
+    crossorigin="anonymous"
+  ></script>
+  <!--     Kalidokit Kinematic Solver -->
+  <script src="https://cdn.jsdelivr.net/npm/kalidokit@1.1/dist/kalidokit.umd.js"></script>
+</head>
+<body class="font-sans">
+  <div id="app"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
