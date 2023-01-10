@@ -10,7 +10,6 @@
     "preview": "vite preview",
     "preview-https": "serve dist",
     "test": "vitest",
-    "test:e2e": "cypress open",
     "test:unit": "vitest",
     "typecheck": "vue-tsc --noEmit"
   },
@@ -35,7 +34,6 @@
     "@vue/test-utils": "^2.2.6",
     "critters": "^0.0.16",
     "cross-env": "^7.0.3",
-    "cypress": "^12.0.2",
     "eslint": "^8.29.0",
     "https-localhost": "^4.7.1",
     "kalidokit": "1.1.5",
