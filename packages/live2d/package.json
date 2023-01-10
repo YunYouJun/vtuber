@@ -41,6 +41,7 @@
     "markdown-it-shiki": "^0.7.2",
     "pixi-live2d-display": "^0.4.0",
     "pixi.js": "^7.0.5",
+    "sass": "^1.51.0",
     "shiki": "^0.12.1",
     "typescript": "^4.9.4",
     "unocss": "^0.48.3",
