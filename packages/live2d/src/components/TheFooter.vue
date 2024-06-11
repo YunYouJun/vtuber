@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { t, availableLocales, locale } = useI18n()
 
-const toggleLocales = () => {
+function toggleLocales() {
   // change to some real logic
   const locales = availableLocales
   locale.value = locales[(locales.indexOf(locale.value) + 1) % locales.length]
@@ -9,24 +9,24 @@ const toggleLocales = () => {
 </script>
 
 <template>
-  <nav text-xl mt-6>
-    <RouterLink class="icon-btn mx-2" to="/" :title="t('button.home')">
+  <nav mt-6 text-xl>
+    <RouterLink class="mx-2 icon-btn" to="/" :title="t('button.home')">
       <div i-carbon-campsite />
     </RouterLink>
 
-    <button class="icon-btn mx-2 !outline-none" :title="t('button.toggle_dark')" @click="toggleDark()">
+    <button class="mx-2 icon-btn !outline-none" :title="t('button.toggle_dark')" @click="toggleDark()">
       <div i="carbon-sun dark:carbon-moon" />
     </button>
 
-    <a class="icon-btn mx-2" :title="t('button.toggle_langs')" @click="toggleLocales()">
+    <a class="mx-2 icon-btn" :title="t('button.toggle_langs')" @click="toggleLocales()">
       <div i-carbon-language />
     </a>
 
-    <RouterLink class="icon-btn mx-2" to="/about" :title="t('button.about')">
+    <RouterLink class="mx-2 icon-btn" to="/about" :title="t('button.about')">
       <div i-carbon-dicom-overlay />
     </RouterLink>
 
-    <a class="icon-btn mx-2" rel="noreferrer" href="https://github.com/YunYouJun/vtuber/blob/main/packages/live2d" target="_blank" title="GitHub">
+    <a class="mx-2 icon-btn" rel="noreferrer" href="https://github.com/YunYouJun/vtuber/blob/main/packages/live2d" target="_blank" title="GitHub">
       <div i-carbon-logo-github />
     </a>
   </nav>

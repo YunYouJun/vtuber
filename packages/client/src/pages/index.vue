@@ -5,6 +5,7 @@ import { useWebcamStore } from '~/stores/webcam'
 import { useVtuberStore } from '~/stores/vtuber'
 import { useAppStore } from '~/stores/app'
 import { checkModelFormat } from '~/utils/vrm'
+
 const app = useAppStore()
 
 const webcamStore = useWebcamStore()
@@ -64,21 +65,21 @@ const showDragStyle = ref(false)
 /**
  * 拖拽
  */
-const onDragEnter = (e: DragEvent) => {
+function onDragEnter(e: DragEvent) {
   e.preventDefault()
   showDragStyle.value = true
 }
 
-const onDragOver = (e: DragEvent) => {
+function onDragOver(e: DragEvent) {
   e.preventDefault()
 }
 
-const onDragLeave = (e: DragEvent) => {
+function onDragLeave(e: DragEvent) {
   e.preventDefault()
   showDragStyle.value = false
 }
 
-const onDrop = (e: DragEvent) => {
+function onDrop(e: DragEvent) {
   e.preventDefault()
   showDragStyle.value = false
 
@@ -91,10 +92,10 @@ const onDrop = (e: DragEvent) => {
 </script>
 
 <template>
-  <div class="preview flex justify-center items-center h-full">
+  <div class="preview h-full flex items-center justify-center">
     <ToggleVrm v-if="app.showModelList" class="z-1" />
 
-    <div class="max-w-500px inline-flex z-1">
+    <div class="z-1 max-w-500px inline-flex">
       <el-progress v-if="vtbStore.loadPercent !== 100" type="circle" :percentage="vtbStore.loadPercent" />
     </div>
     <WebCamera
@@ -104,27 +105,19 @@ const onDrop = (e: DragEvent) => {
     >
       <canvas
         ref="mpCanvasRef"
-        class="
-          absolute
-          left-0
-          right-0
-          w-full
-          pointer-events-none
-          transform
-          rotate-y-180
-        "
+        class="pointer-events-none absolute left-0 right-0 w-full rotate-y-180 transform"
         :style="webcamStore.fitHeight ? { height: '100%' } : { width: '100%' }"
       />
     </WebCamera>
     <canvas
       ref="vrmCanvasRef"
-      class="vrm-canvas absolute w-full h-full"
+      class="vrm-canvas absolute h-full w-full"
       @dragenter="onDragEnter"
       @dragover="onDragOver"
       @dragleave="onDragLeave"
       @drop="onDrop"
     />
-    <div class="absolute top-0 h-1/2 w-full flex justify-center items-center z-10 pointer-events-none" :class="showDragStyle ? ['bg-gray-500 bg-opacity-30 border border-4 border-black border-dashed'] : ''" text="2xl black">
+    <div class="pointer-events-none absolute top-0 z-10 h-1/2 w-full flex items-center justify-center" :class="showDragStyle ? ['bg-gray-500 bg-opacity-30 border border-4 border-black border-dashed'] : ''" text="2xl black">
       <span v-show="showDragStyle">Drag .vrm file</span>
     </div>
   </div>

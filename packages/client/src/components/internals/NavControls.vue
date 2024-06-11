@@ -27,7 +27,7 @@ const root = ref<HTMLDivElement>()
 /**
  * 显示圆形窗口时，则默认打开摄像头
  */
-const toggleWebcam = () => {
+function toggleWebcam() {
   if (!vtbStore.showWebcam)
     webcamStore.enabled = true
   vtbStore.toggleShowWebcam()
@@ -35,7 +35,7 @@ const toggleWebcam = () => {
 
 const pipVideoRef = ref<HTMLVideoElement>()
 
-const togglePictureInPicture = () => {
+function togglePictureInPicture() {
   if (app.isPicInPic) {
     document.exitPictureInPicture()
     app.isPicInPic = false
@@ -62,19 +62,11 @@ const togglePictureInPicture = () => {
 
 <template>
   <div
-    class="
-      absolute
-      bottom-0
-      transition
-      duration-300
-      hover:(opacity-100 bg-gray-200 bg-opacity-50)
-      shadow-dark-900
-      w-full
-    "
+    class="absolute bottom-0 w-full shadow-dark-900 transition duration-300 hover:(bg-gray-200 bg-opacity-50 opacity-100)"
     :class="persist ? 'opacity-100' : 'opacity-0'"
   >
     <nav ref="root" class="flex flex-col shadow-xl">
-      <div class="flex flex-wrap-reverse justify-center text-xl p-2 gap-1">
+      <div class="flex flex-wrap-reverse justify-center gap-1 p-2 text-xl">
         <IconButton
           :active="persist"
           :title="persist ? '隐藏' : '显示'"
@@ -167,6 +159,6 @@ const togglePictureInPicture = () => {
       </div>
     </nav>
 
-    <video ref="pipVideoRef" class="invisible pointer-events-none absolute right-0 bottom-0" autoplay playsinline muted />
+    <video ref="pipVideoRef" class="pointer-events-none invisible absolute bottom-0 right-0" autoplay muted playsinline />
   </div>
 </template>

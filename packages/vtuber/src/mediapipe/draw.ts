@@ -1,9 +1,7 @@
 // import { POSE_CONNECTIONS, FACEMESH_TESSELATION, HAND_CONNECTIONS, FACEMESH_FACE_OVAL } from '@mediapipe/holistic'
 import type * as MpHolistic from '@mediapipe/holistic'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 // import * as mpHolistic from '@mediapipe/holistic'
 import type * as DrawingUtils from '@mediapipe/drawing_utils'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 // import * as drawingUtils from '@mediapipe/drawing_utils'
 
 export async function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoElement, results: MpHolistic.Results, cdn = false) {
@@ -47,7 +45,6 @@ export async function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoEle
 
   /**
    * 绘制姿势标记
-   * @returns
    */
   function drawPoseLandmarks() {
     if (!canvasCtx)
@@ -106,25 +103,43 @@ export async function drawResults(canvas: HTMLCanvasElement, video: HTMLVideoEle
 
     // 眼睛眉毛
     drawingUtils.drawConnectors(
-      canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_RIGHT_EYE,
-      { color: 'rgb(0,217,231)' })
+      canvasCtx,
+      results.faceLandmarks,
+      mpHolistic.FACEMESH_RIGHT_EYE,
+      { color: 'rgb(0,217,231)' },
+    )
     drawingUtils.drawConnectors(
-      canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_RIGHT_EYEBROW,
-      { color: 'rgb(0,217,231)' })
+      canvasCtx,
+      results.faceLandmarks,
+      mpHolistic.FACEMESH_RIGHT_EYEBROW,
+      { color: 'rgb(0,217,231)' },
+    )
     drawingUtils.drawConnectors(
-      canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_LEFT_EYE,
-      { color: 'rgb(255,138,0)' })
+      canvasCtx,
+      results.faceLandmarks,
+      mpHolistic.FACEMESH_LEFT_EYE,
+      { color: 'rgb(255,138,0)' },
+    )
     drawingUtils.drawConnectors(
-      canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_LEFT_EYEBROW,
-      { color: 'rgb(255,138,0)' })
+      canvasCtx,
+      results.faceLandmarks,
+      mpHolistic.FACEMESH_LEFT_EYEBROW,
+      { color: 'rgb(255,138,0)' },
+    )
 
     // 轮廓
     drawingUtils.drawConnectors(
-      canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_FACE_OVAL,
-      { color: '#E0E0E0', lineWidth: 4 })
+      canvasCtx,
+      results.faceLandmarks,
+      mpHolistic.FACEMESH_FACE_OVAL,
+      { color: '#E0E0E0', lineWidth: 4 },
+    )
     drawingUtils.drawConnectors(
-      canvasCtx, results.faceLandmarks, mpHolistic.FACEMESH_LIPS,
-      { color: '#E0E0E0', lineWidth: 5 })
+      canvasCtx,
+      results.faceLandmarks,
+      mpHolistic.FACEMESH_LIPS,
+      { color: '#E0E0E0', lineWidth: 5 },
+    )
   }
 
   function drawHandLandmarks() {
@@ -187,7 +202,8 @@ export function removeLandmarks(results: MpHolistic.Results) {
 export function connect(
   ctx: CanvasRenderingContext2D,
   connectors:
-  Array<[MpHolistic.NormalizedLandmark, MpHolistic.NormalizedLandmark]>):
+  Array<[MpHolistic.NormalizedLandmark, MpHolistic.NormalizedLandmark]>,
+):
   void {
   const canvas = ctx.canvas
   for (const connector of connectors) {
@@ -195,8 +211,9 @@ export function connect(
     const to = connector[1]
     if (from && to) {
       if (from.visibility && to.visibility
-        && (from.visibility < 0.1 || to.visibility < 0.1))
+        && (from.visibility < 0.1 || to.visibility < 0.1)) {
         continue
+      }
 
       ctx.beginPath()
       ctx.moveTo(from.x * canvas.width, from.y * canvas.height)

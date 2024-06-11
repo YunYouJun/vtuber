@@ -1,22 +1,27 @@
 {
   "name": "@vtuber/monorepo",
   "private": true,
-  "packageManager": "pnpm@7.1.2",
+  "packageManager": "pnpm@9.3.0",
   "directories": {
     "doc": "docs"
   },
-  "license": "ISC",
   "author": {
     "name": "YunYouJun",
     "url": "https://www.yunyoujun.cn",
     "email": "me@yunyoujun.cn"
   },
+  "license": "ISC",
+  "homepage": "https://vtuber.yunyoujun.cn",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/YunYouJun/vtuber.git"
   },
+  "bugs": {
+    "url": "https://github.com/YunYouJun/vtuber/issues"
+  },
   "scripts": {
     "dev": "pnpm -C packages/client dev",
+    "live2d:dev": "pnpm -C packages/live2d dev",
     "build": "pnpm run build:client",
     "serve": "pnpm -C packages/client run preview",
     "build:client": "pnpm -C packages/client build",
@@ -25,13 +30,11 @@
     "docs:serve": "pnpm -C docs serve",
     "lint": "eslint ."
   },
-  "bugs": {
-    "url": "https://github.com/YunYouJun/vtuber/issues"
-  },
-  "homepage": "https://vtuber.yunyoujun.cn",
   "devDependencies": {
-    "@antfu/eslint-config": "^0.23.1",
-    "eslint": "^8.15.0",
-    "typescript": "^4.6.4"
+    "@antfu/eslint-config": "^2.21.0",
+    "@unocss/eslint-plugin": "^0.60.4",
+    "eslint": "^9.4.0",
+    "eslint-plugin-format": "^0.1.1",
+    "typescript": "^5.4.5"
   }
 }

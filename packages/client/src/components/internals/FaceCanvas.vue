@@ -10,18 +10,7 @@ defineExpose({
   <canvas
     id="overlay"
     ref="canvas"
-    class="
-      absolute
-      left-0
-      top-0
-      object-cover
-      w-full
-      h-full
-      rounded-full
-      pointer-events-none
-      transform
-      rotate-y-180
-    "
+    class="pointer-events-none absolute left-0 top-0 h-full w-full rotate-y-180 transform rounded-full object-cover"
     width="640"
     height="480"
   />

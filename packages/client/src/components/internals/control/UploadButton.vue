@@ -5,11 +5,11 @@ import { checkModelFormat } from '~/utils/vrm'
 const vtbStore = useVtuberStore()
 
 const uploadRef = ref()
-const triggerUpload = () => {
+function triggerUpload() {
   uploadRef.value.click()
 }
 // 上传文件
-const onFileChange = (e: Event) => {
+function onFileChange(e: Event) {
   const fileList = (e.target as any).files
   if (!fileList[0])
     return

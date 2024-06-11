@@ -1,5 +1,5 @@
 <script setup lang="ts">
-withDefaults(defineProps<{ active?: boolean; title?: string }>(), {
+withDefaults(defineProps<{ active?: boolean, title?: string }>(), {
   title: '',
   active: false,
 })
@@ -75,7 +75,7 @@ withDefaults(defineProps<{ active?: boolean; title?: string }>(), {
 
 /* Tooltip arrow */
 .tooltip .tooltip-text::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 100%;
   left: 50%;

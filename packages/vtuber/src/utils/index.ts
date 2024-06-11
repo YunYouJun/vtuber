@@ -17,7 +17,7 @@ export function getScript(url: string, callback: Function) {
  * @param json
  * @param filename
  */
-export function downloadObjectAsJson(json: Object, filename: string) {
+export function downloadObjectAsJson(json: object, filename: string) {
   const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(json))}`
   const downloadAnchorNode = document.createElement('a')
   downloadAnchorNode.setAttribute('href', dataStr)

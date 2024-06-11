@@ -47,7 +47,6 @@ export interface VtuberOptions {
 /**
  * Composition API 形式
  * @param options
- * @returns
  */
 export function useVtuber(options: VtuberOptions) {
   const {
@@ -129,7 +128,6 @@ export function useVtuber(options: VtuberOptions) {
     /**
      * play animation by data
      * @param data
-     * @returns
      */
     playCustomAnimation(data: ParsedLipTracksData) {
       const animateLip = (vrm: VRM) => {
@@ -171,7 +169,6 @@ export function useVtuber(options: VtuberOptions) {
 
     /**
      * 初始化 Holistic 检测
-     * @returns
      */
     async initHolistic() {
       if (holistic)

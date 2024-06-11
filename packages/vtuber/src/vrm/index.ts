@@ -1,6 +1,7 @@
 import consola from 'consola'
 import { createEventHook } from '@vueuse/core'
 import { VRM, VRMUtils } from '@pixiv/three-vrm'
+
 export * from './animate'
 
 export function useVrm() {

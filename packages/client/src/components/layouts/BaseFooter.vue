@@ -15,5 +15,5 @@ const copyright = {
 
 <template>
   <hr class="m-2">
-  <vue-about-me :copyright="copyright" :is-dark="isDark" />
+  <VueAboutMe :copyright="copyright" :is-dark="isDark" />
 </template>

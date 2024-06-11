@@ -100,13 +100,13 @@ section {
   background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
   color: white;
   z-index: 2;
-    /* border-radius: 40px; */
+  /* border-radius: 40px; */
 }
 p {
   color: white;
   padding: 8px 16px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue",
-      sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   margin: 0;
 }
 .preview a {

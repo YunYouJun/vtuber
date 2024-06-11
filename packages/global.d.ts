@@ -11,7 +11,7 @@ declare global {
      * faceapi 相关
      */
     face: {
-      points?: { x: number; y: number }[]
+      points?: { x: number, y: number }[]
     }
 
     /**

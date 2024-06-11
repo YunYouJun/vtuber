@@ -2,18 +2,18 @@
   "name": "use-vtuber",
   "type": "module",
   "version": "0.0.1",
-  "license": "MIT",
   "author": "YunYouJun <me@yunyoujun.cn>",
+  "license": "MIT",
   "repository": "https://github.com/YunYouJun/vtuber.git",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
   "main": "dist/index.js",
   "module": "dist/index.cjs",
   "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
-    }
-  },
   "files": [
     "dist"
   ],
@@ -26,13 +26,13 @@
     "kalidokit": "1.1.5"
   },
   "devDependencies": {
-    "@mediapipe/camera_utils": "^0.3.1640029074",
-    "@mediapipe/control_utils": "^0.6.1629159505",
-    "@mediapipe/drawing_utils": "^0.3.1620248257",
-    "@mediapipe/holistic": "^0.5.1635989137",
-    "@types/three": "^0.140.0",
-    "consola": "^2.15.3",
+    "@mediapipe/camera_utils": "^0.3.1675466862",
+    "@mediapipe/control_utils": "^0.6.1675466023",
+    "@mediapipe/drawing_utils": "^0.3.1675466124",
+    "@mediapipe/holistic": "^0.5.1675471629",
+    "@types/three": "^0.165.0",
+    "consola": "^3.2.3",
     "three": "0.140.2",
-    "tsup": "^5.12.8"
+    "tsup": "^8.1.0"
   }
 }

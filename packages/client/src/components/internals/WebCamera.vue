@@ -91,14 +91,7 @@ const videoClass = computed(() => {
   <div class="fixed z-10 cursor-move" :style="containerStyle">
     <div
       ref="frame"
-      class="
-        flex
-        justify-center
-        items-center
-        shadow-lg
-        bg-gray-400 bg-opacity-10
-        overflow-hidden
-      "
+      class="flex items-center justify-center overflow-hidden bg-gray-400 bg-opacity-10 shadow-lg"
       :class="isRounded ? ['object-cover', 'rounded-full'] : ''"
       :style="frameStyle"
     >
@@ -108,7 +101,7 @@ const videoClass = computed(() => {
         autoplay
         muted
         volume="0"
-        class="transform rotate-y-180"
+        class="rotate-y-180 transform"
         :class="videoClass"
         :style="webcamStore.fitHeight ? { height: '100%' } : { width: '100%' }"
       />
@@ -118,18 +111,7 @@ const videoClass = computed(() => {
 
     <div
       ref="handler"
-      class="
-        bg-gray-100
-        absolute
-        bottom-0
-        right-0
-        rounded-full
-        shadow shadow
-        z-30
-        hover:opacity-100
-        dark:(border
-        border-true-gray-700)
-      "
+      class="absolute bottom-0 right-0 z-30 rounded-full bg-gray-100 shadow shadow dark:(border border-true-gray-700) hover:opacity-100"
       :style="handleStyle"
       :class="[
         handlerDown ? '!opacity-100' : '',

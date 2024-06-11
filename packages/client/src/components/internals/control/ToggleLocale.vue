@@ -3,7 +3,7 @@ const { t, availableLocales, locale } = useI18n()
 
 const isEn = computed(() => locale.value === 'en')
 
-const toggleLocales = () => {
+function toggleLocales() {
   // change to some real logic
   const locales = availableLocales
   locale.value = locales[(locales.indexOf(locale.value) + 1) % locales.length]

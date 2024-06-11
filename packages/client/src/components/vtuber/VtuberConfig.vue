@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const options = [{ label: 'a', value: 'a' }]
+// const options = [{ label: 'a', value: 'a' }]
 </script>
 
 <template>

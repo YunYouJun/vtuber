@@ -19,10 +19,9 @@ const loading = ref(false)
 const detectLoading = ref(false)
 
 /**
-   * 开始检测
-   * @returns
-   */
-const startDetecting = async () => {
+ * 开始检测
+ */
+async function startDetecting() {
   if (!vtbStore.instance)
     return
 
@@ -32,7 +31,7 @@ const startDetecting = async () => {
   detectLoading.value = false
 }
 
-const initVRM = () => {
+function initVRM() {
   if (vtbStore.instance) {
     loading.value = true
     vtbStore.instance.initVRM()
@@ -75,7 +74,7 @@ watch(() => vtbStore.loadPercent, () => {
 //   }
 // }
 
-const playCustomAnimation = async () => {
+async function playCustomAnimation() {
   const lipsData = await fetch('/data/english.json').then(res => res.json())
   const data = parseLipData(lipsData)
 

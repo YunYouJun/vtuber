@@ -57,11 +57,14 @@ export function createControlPanel(params: {
         discrete: ['Lite', 'Full', 'Heavy'],
       }),
       new controls.Toggle(
-        { title: 'Smooth Landmarks', field: 'smoothLandmarks' }),
+        { title: 'Smooth Landmarks', field: 'smoothLandmarks' },
+      ),
       new controls.Toggle(
-        { title: 'Enable Segmentation', field: 'enableSegmentation' }),
+        { title: 'Enable Segmentation', field: 'enableSegmentation' },
+      ),
       new controls.Toggle(
-        { title: 'Smooth Segmentation', field: 'smoothSegmentation' }),
+        { title: 'Smooth Segmentation', field: 'smoothSegmentation' },
+      ),
       new controls.Slider({
         title: 'Min Detection Confidence',
         field: 'minDetectionConfidence',

@@ -73,7 +73,6 @@ export interface ParsedLipTracksData {
 /**
  * parse data from lip-sync
  * @param data
- * @returns
  */
 export function parseLipData(data: LipData) {
   const tracks: LipShapeTrack = {

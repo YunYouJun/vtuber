@@ -3,11 +3,11 @@ import * as pkg from '~/../package.json'
 
 const { t } = useI18n()
 
-const openGithub = () => {
+function openGithub() {
   window.open(pkg.repository.url)
 }
 
-const openDocs = () => {
+function openDocs() {
   window.open('https://docs.vtuber.yunyoujun.cn')
 }
 </script>

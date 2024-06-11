@@ -10,7 +10,7 @@ useHead({
 })
 
 if (isClient)
-  self.face = {}
+  globalThis.face = {}
 </script>
 
 <template>

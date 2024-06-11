@@ -32,7 +32,6 @@ type AssetsUrl = {
 
 const assetsUrl: any = {}
 
-// eslint-disable-next-line no-restricted-syntax
 for (const assetName in assetsMap) {
   assetsUrl[assetName as AssetName] = {
     cdn: cdnServer + assetsMap[assetName as AssetName],

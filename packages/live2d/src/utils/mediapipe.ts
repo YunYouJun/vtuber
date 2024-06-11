@@ -1,7 +1,7 @@
 import { getVideoElement } from './helper'
 
 // draw connectors and landmarks on output canvas
-export const drawResults = async (points) => {
+export async function drawResults(points) {
   const guideCanvas = document.querySelector('canvas.guides') as HTMLCanvasElement
   const videoElement = getVideoElement()
 

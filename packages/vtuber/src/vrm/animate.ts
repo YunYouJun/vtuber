@@ -30,7 +30,7 @@ export interface CustomAnimateOptions extends BaseAnimateVrmOptions {
 export type AnimateVrmOptions = KalidokitAnimateOptions | CustomAnimateOptions
 
 /* VRM Character Animator */
-export const animateVRM = (options: AnimateVrmOptions) => {
+export function animateVRM(options: AnimateVrmOptions) {
   const { vrm } = options
 
   if (!vrm)

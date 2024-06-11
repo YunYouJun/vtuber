@@ -10,13 +10,14 @@ import * as pixiLive2dDisplay from 'pixi-live2d-display'
 import { isClient } from '@vueuse/core'
 import { drawResults } from './mediapipe'
 import { getVideoElement } from './helper'
+
 const { Live2DModel } = pixiLive2dDisplay
 
 if (isClient)
   window.PIXI = PIXI
 
 const {
-  Face,
+  // Face,
   Vector: { lerp },
   Utils: { clamp },
 } = window.Kalidokit
@@ -27,15 +28,17 @@ const {
 // Url to Live2D
 const modelUrl = 'https://cdn.jsdelivr.net/gh/YunYouJun/yun/live2d/小云.model3.json'
 
-let currentModel, facemesh
+let currentModel: any
+let facemesh: any
 
 // update live2d model internal state
-const rigFace = (result, lerpAmount = 0.7) => {
+function rigFace(result: any, lerpAmount = 0.7) {
   if (!currentModel || !result)
     return
   const coreModel = currentModel.internalModel.coreModel
 
-  currentModel.internalModel.motionManager.update = (...args) => {
+  // @ts-expect-error argument type
+  currentModel.internalModel.motionManager.update = (..._args) => {
     // disable default blink animation
     currentModel.internalModel.eyeBlink = undefined
 
@@ -104,7 +107,7 @@ const rigFace = (result, lerpAmount = 0.7) => {
   }
 }
 
-const animateLive2DModel = (points) => {
+function animateLive2DModel(points) {
   const videoElement = getVideoElement()
 
   if (!currentModel || !points)
@@ -122,13 +125,13 @@ const animateLive2DModel = (points) => {
   }
 }
 
-const onResults = (results) => {
+function onResults(results) {
   drawResults(results.multiFaceLandmarks[0])
   animateLive2DModel(results.multiFaceLandmarks[0])
 }
 
 // start camera using mediapipe camera utils
-const startCamera = async () => {
+async function startCamera() {
   // Use `Mediapipe` utils to get camera - lower resolution = higher fps
   // const { Camera } = await import('@mediapipe/camera_utils')
   const videoElement = getVideoElement()
@@ -166,7 +169,7 @@ export async function main() {
     currentModel.offsetY = e.data.global.y - currentModel.position.y
     currentModel.dragging = true
   })
-  currentModel.on('pointerup', (e) => {
+  currentModel.on('pointerup', (_e: any) => {
     currentModel.dragging = false
   })
   currentModel.on('pointermove', (e) => {
@@ -175,7 +178,7 @@ export async function main() {
   })
 
   // Add mousewheel events to scale model
-  document.querySelector('#live2d').addEventListener('wheel', (e) => {
+  document.querySelector('#live2d')?.addEventListener('wheel', (e) => {
     e.preventDefault()
     currentModel.scale.set(clamp(currentModel.scale.x + event.deltaY * -0.001, -0.5, 10))
   })

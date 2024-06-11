@@ -1,3 +1,3 @@
 <template>
-  <div class="w-1px m-2 opacity-50 bg-current" />
+  <div class="m-2 w-1px bg-current opacity-50" />
 </template>
