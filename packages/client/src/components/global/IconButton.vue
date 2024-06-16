@@ -7,7 +7,7 @@ withDefaults(defineProps<{ active?: boolean, title?: string }>(), {
 
 <template>
   <button
-    class="vtb-icon-button tooltip m-1 shadow hover:shadow-lg"
+    class="vtb-icon-button tooltip m-1 shadow-sm hover:shadow-lg"
     :class="[active ? 'is-active' : '']"
     :title="title"
     :aria-label="title"

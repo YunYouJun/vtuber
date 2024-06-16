@@ -62,7 +62,7 @@ function togglePictureInPicture() {
 
 <template>
   <div
-    class="absolute bottom-0 w-full shadow-dark-900 transition duration-300 hover:(bg-gray-200 bg-opacity-50 opacity-100)"
+    class="fixed bottom-0 left-0 w-full shadow-dark-900 transition duration-300 hover:(bg-gray-200 bg-opacity-50 opacity-100)"
     :class="persist ? 'opacity-100' : 'opacity-0'"
   >
     <nav ref="root" class="flex flex-col shadow-xl">

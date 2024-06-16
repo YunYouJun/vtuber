@@ -91,7 +91,7 @@ const videoClass = computed(() => {
   <div class="fixed z-10 cursor-move" :style="containerStyle">
     <div
       ref="frame"
-      class="flex items-center justify-center overflow-hidden bg-gray-400 bg-opacity-10 shadow-lg"
+      class="flex items-center justify-center overflow-hidden bg-dark-300 bg-opacity-30 shadow-lg"
       :class="isRounded ? ['object-cover', 'rounded-full'] : ''"
       :style="frameStyle"
     >
@@ -111,7 +111,7 @@ const videoClass = computed(() => {
 
     <div
       ref="handler"
-      class="absolute bottom-0 right-0 z-30 rounded-full bg-gray-100 shadow shadow dark:(border border-true-gray-700) hover:opacity-100"
+      class="absolute bottom-0 right-0 z-30 rounded-full bg-gray-100 shadow dark:(border border-gray-300) hover:opacity-100"
       :style="handleStyle"
       :class="[
         handlerDown ? '!opacity-100' : '',
