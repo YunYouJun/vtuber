@@ -1,7 +1,6 @@
 <template>
-  <main class="min-h-screen p-1 text-center text-gray-700 dark:text-gray-200">
-    <BaseHeader />
+  <main class="h-full w-full text-center text-gray-700 dark:text-gray-200">
     <router-view />
-    <BaseFooter />
+    <!-- <BaseFooter /> -->
   </main>
 </template>

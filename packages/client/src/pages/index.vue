@@ -92,7 +92,7 @@ function onDrop(e: DragEvent) {
 </script>
 
 <template>
-  <div class="preview h-full flex items-center justify-center">
+  <div class="preview h-full w-full flex items-center justify-center">
     <ToggleVrm v-if="app.showModelList" class="z-1" />
 
     <div class="z-1 max-w-500px inline-flex">
@@ -111,7 +111,7 @@ function onDrop(e: DragEvent) {
     </WebCamera>
     <canvas
       ref="vrmCanvasRef"
-      class="vrm-canvas absolute h-full w-full"
+      class="vrm-canvas h-full w-full"
       @dragenter="onDragEnter"
       @dragover="onDragOver"
       @dragleave="onDragLeave"

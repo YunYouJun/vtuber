@@ -1,5 +1,6 @@
 {
   "name": "@vtuber/client",
+  "type": "module",
   "version": "0.0.1",
   "private": true,
   "author": {
@@ -21,14 +22,14 @@
     "preview-https": "serve dist"
   },
   "dependencies": {
-    "@vueuse/core": "^10.10.1",
+    "@vueuse/core": "^10.11.0",
     "@vueuse/head": "^2.0.0",
     "element-plus": "^2.7.5",
     "nprogress": "^0.2.0",
     "pinia": "^2.1.7",
     "prism-theme-vars": "^0.2.5",
     "three": "0.140.2",
-    "vue": "^3.4.27",
+    "vue": "^3.4.29",
     "vue-about-me": "^1.2.7",
     "vue-i18n": "^9.13.1",
     "vue-router": "^4.3.3"
@@ -36,7 +37,7 @@
   "devDependencies": {
     "@iconify-json/carbon": "^1.1.35",
     "@iconify-json/mdi": "^1.1.66",
-    "@iconify-json/ri": "^1.1.20",
+    "@iconify-json/ri": "^1.1.21",
     "@intlify/vite-plugin-vue-i18n": "^7.0.0",
     "@mediapipe/camera_utils": "^0.3.1675466862",
     "@mediapipe/control_utils": "^0.6.1675466023",
@@ -53,12 +54,13 @@
     "https-localhost": "^4.7.1",
     "markdown-it-link-attributes": "^4.0.1",
     "markdown-it-prism": "^2.3.0",
-    "sass": "^1.77.4",
+    "sass": "^1.77.5",
     "typescript": "^5.4.5",
+    "unocss": "^0.61.0",
     "unplugin-auto-import": "^0.17.6",
     "unplugin-icons": "^0.19.0",
     "unplugin-vue-components": "^0.27.0",
-    "vite": "^5.2.13",
+    "vite": "^5.3.1",
     "vite-plugin-inspect": "^0.8.4",
     "vite-plugin-md": "^0.21.5",
     "vite-plugin-pages": "^0.32.2",
