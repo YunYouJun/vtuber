@@ -26,7 +26,7 @@ const {
 // const { clamp } = Utils
 
 // Url to Live2D
-const modelUrl = 'https://cdn.jsdelivr.net/gh/YunYouJun/yun/live2d/小云.model3.json'
+const modelUrl = 'https://cdn.jsdelivr.net/npm/@yunyoujun/live2d@1.0.0/小云.model3.json'
 
 let currentModel: any
 let facemesh: any
