@@ -3,6 +3,7 @@
 [![GitHub Repo stars](https://img.shields.io/github/stars/YunYouJun/vtuber?style=social)](https://github.com/YunYouJun/vtuber)
 
 [![CI](https://github.com/YunYouJun/vtuber/actions/workflows/ci.yml/badge.svg)](https://github.com/YunYouJun/vtuber/actions/workflows/ci.yml)
+
 [![GitHub deployments](https://img.shields.io/github/deployments/YunYouJun/vtuber/production?label=vercel&logo=vercel&logoColor=white)](https://vercel.com/yunyoujun/vtuber)
 
 这里有个 [在线示例](https://vtuber.yunyoujun.cn)，会随着文档的内容更新而不断延伸下去，但是不得不承认线上还是挺卡的。

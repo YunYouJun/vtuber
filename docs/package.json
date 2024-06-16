@@ -1,12 +1,13 @@
 {
   "name": "@vtuber/docs",
+  "type": "module",
   "scripts": {
     "dev": "vitepress dev . --open",
     "build": "vitepress build .",
     "serve": "vitepress serve ."
   },
   "dependencies": {
-    "vitepress-theme-you": "^0.0.33"
+    "vitepress-theme-you": "^0.1.0-alpha.1"
   },
   "devDependencies": {
     "@unocss/preset-icons": "^0.61.0",

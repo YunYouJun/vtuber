@@ -1,29 +1,34 @@
-import type { UserConfig } from 'vitepress'
-import baseConfig from 'vitepress-theme-you/config'
-
+import type { DefaultTheme } from 'vitepress'
+import { defineConfig } from 'vitepress'
 import mk from 'markdown-it-katex'
+// eslint-disable-next-line antfu/no-import-node-modules-by-path
+import { baseConfig } from '../node_modules/vitepress-theme-you/src/config'
 
-const config: UserConfig = {
+export default defineConfig({
   extends: baseConfig,
 
   title: 'Docs for Vtuber',
   description: '从一开始的 Vtuber',
+
   themeConfig: {
-    repo: 'YunYouJun/vtuber',
-    logo: '/favicon.svg',
-    iconClass: 'i-ri-ghost-line',
+    logo: {
+      light: '/favicon.svg',
+      dark: '/favicon.dark.svg',
+    },
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/YunYouJun/vitepress-theme-you' },
+    ],
 
-    docsBranch: 'main',
-    docsDir: 'docs',
-
-    editLinks: true,
-    editLinkText: '帮助咱们改善文档！',
-    lastUpdated: '上次更新',
+    // iconClass: 'i-ri-ghost-line',
 
     nav: [{ text: '在线示例', link: 'https://vtuber.yunyoujun.cn' }],
 
     sidebar: {
       '/guide/': getGuideSidebar(),
+    },
+
+    footer: {
+      copyright: 'Copyright © 2020 YunYouJun',
     },
   },
 
@@ -37,18 +42,16 @@ const config: UserConfig = {
       md.use(mk)
     },
   },
-}
-
-export default config
+})
 
 /**
  * 获取导航侧边栏
  */
-function getGuideSidebar() {
+function getGuideSidebar(): DefaultTheme.SidebarItem[] {
   return [
     {
       text: '指南',
-      children: [
+      items: [
         { text: 'Why Web VTuber?', link: '/guide/index' },
         { text: '开始', link: '/guide/start' },
         { text: 'VRM', link: '/guide/vrm' },
