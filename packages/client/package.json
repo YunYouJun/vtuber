@@ -54,6 +54,7 @@
     "https-localhost": "^4.7.1",
     "markdown-it-link-attributes": "^4.0.1",
     "markdown-it-prism": "^2.3.0",
+    "radix-vue": "^1.8.3",
     "sass": "^1.77.5",
     "typescript": "^5.4.5",
     "unocss": "^0.61.0",

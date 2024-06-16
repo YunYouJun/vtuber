@@ -20,6 +20,7 @@ export function useVrm() {
         'three/examples/jsm/loaders/GLTFLoader.js'
       )
 
+      // @TODO: abort wrapper
       return new Promise((resolve, reject) => {
         const loader = new GLTFLoader()
         loader.crossOrigin = 'anonymous'
@@ -41,6 +42,13 @@ export function useVrm() {
           },
 
           (error) => {
+            progressEvent.trigger(
+              new ProgressEvent('error', {
+                lengthComputable: true,
+                loaded: 0,
+                total: 1,
+              }),
+            )
             console.error(error)
             reject(error)
           },

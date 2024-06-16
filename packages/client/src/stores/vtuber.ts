@@ -22,8 +22,14 @@ export const useVtuberStore = defineStore('vtuber', () => {
   const loadPercent = computed(() => {
     const progress = instance.value && unref(instance.value.loadModelProgress)
     let percent = 0
-    if (progress)
-      percent = Math.floor(progress.loaded / progress.total * 100)
+    if (progress) {
+      if (progress.type === 'error') {
+        percent = -1
+      }
+      else {
+        percent = Math.floor(progress.loaded / progress.total * 100)
+      }
+    }
     return percent
   })
 
